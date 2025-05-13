@@ -1,1 +1,56 @@
 <!-- Dashboard page -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard | AI Real Estate Assistant</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body>
+  <header>
+    <h1>AI Real Estate Assistant</h1>
+  </header>
+
+  <section class="filters">
+    <h3>Search Filters</h3>
+    <select>
+      <option>Suburb</option>
+    </select>
+    <select>
+      <option>Property Type</option>
+    </select>
+    <input type="number" placeholder="Max Price">
+    <button>Search</button>
+  </section>
+
+  <section class="recommendations">
+    <h3>Recommended Listings</h3>
+    <div class="card-list">
+      <div class="card">Property 1</div>
+      <div class="card">Property 2</div>
+    </div>
+  </section>
+
+  <section class="evaluation">
+    <h3>Investment Evaluation</h3>
+    <canvas id="roiChart" width="400" height="200"></canvas>
+  </section>
+
+  <section class="map">
+    <h3>Property Map</h3>
+    <div class="map-placeholder">[Map Here]</div>
+  </section>
+
+  <section class="chat-assistant">
+    <h3>Chat Assistant</h3>
+    <div class="chat-box" id="chatBox"></div>
+    <input type="text" id="chatInput" placeholder="Ask something...">
+    <button onclick="sendMessage()">Send</button>
+  </section>
+
+  <script src="scripts/chat.js"></script>
+</body>
+
+</html>
