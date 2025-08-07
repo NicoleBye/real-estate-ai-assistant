@@ -92,3 +92,9 @@ ALTER TABLE properties
 ALTER COLUMN postcode TYPE VARCHAR(10); 
 ALTER TABLE preferences 
 ALTER COLUMN postcode TYPE VARCHAR(10); 
+
+CREATE TABLE ad_properties (
+    ad_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    property_id UUID NOT NULL REFERENCES properties(property_id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT NOW()
+);
