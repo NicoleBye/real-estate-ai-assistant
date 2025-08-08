@@ -5,24 +5,28 @@ import {
   Bot, 
   Sparkles, 
   Home, 
-  User
+  User,
+  DollarSign,
+  MapPin,
+  Camera
 } from 'lucide-react';
 
 const Homepage = () => {
   const [user, setUser] = useState(null);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(true); // 默认打开聊天窗口
+  const [isChatOpen, setIsChatOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [chatMessage, setChatMessage] = useState('');
+  const [activeTab, setActiveTab] = useState('Rent'); // Changed default to Rent
   const [chatHistory, setChatHistory] = useState([
     { type: 'bot', message: 'Hi! I\'m your AI property assistant. How can I help you find your perfect property today?' }
   ]);
 
-  const mainFeatures = ['Properties', 'New Homes', 'Commercial', 'Agents', 'Market Data', 'Resources'];
+  const mainFeatures = ['Properties', 'New Homes', 'Commercial', 'Agents'];
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      alert(`Searching for: ${searchQuery}`);
+      alert(`Searching for ${activeTab.toLowerCase()} properties: ${searchQuery}`);
     }
   };
 
@@ -41,6 +45,38 @@ const Homepage = () => {
       action();
     }
   };
+
+  // Get appropriate form fields based on active tab
+  const getFormFields = () => {
+    switch(activeTab) {
+      case 'Buy':
+        return {
+          priceLabel: 'Price Range',
+          priceOptions: ['Any price', 'Under $500k', '$500k - $1M', '$1M - $2M', '$2M+'],
+          typeLabel: 'Property Type',
+          typeOptions: ['All types', 'House', 'Apartment', 'Townhouse', 'Land'],
+          placeholder: 'Enter suburb, postcode or keyword...'
+        };
+      case 'Rent':
+        return {
+          priceLabel: 'Weekly Rent',
+          priceOptions: ['Any price', 'Under $400/week', '$400-$600/week', '$600-$800/week', '$800+/week'],
+          typeLabel: 'Property Type',
+          typeOptions: ['All types', 'House', 'Apartment', 'Townhouse', 'Studio'],
+          placeholder: 'Where would you like to live?'
+        };
+      default:
+        return {
+          priceLabel: 'Price Range',
+          priceOptions: ['Any price'],
+          typeLabel: 'Property Type',
+          typeOptions: ['All types'],
+          placeholder: 'Enter location...'
+        };
+    }
+  };
+
+  const formFields = getFormFields();
 
   return (
     <div style={{ minHeight: '100vh', width: '100vw', backgroundColor: '#ffffff', margin: 0, padding: 0, position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, overflowY: 'auto', overflowX: 'hidden' }}>
@@ -90,55 +126,67 @@ const Homepage = () => {
         backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 1200 800\'%3E%3Crect width=\'1200\' height=\'800\' fill=\'%23f0f9ff\'/%3E%3Cpath d=\'M0 400L200 350L400 380L600 320L800 360L1000 340L1200 380V800H0V400Z\' fill=\'%23dbeafe\' opacity=\'0.8\'/%3E%3Cpath d=\'M0 500L200 450L400 480L600 420L800 460L1000 440L1200 480V800H0V500Z\' fill=\'%23bfdbfe\' opacity=\'0.6\'/%3E%3C/svg%3E")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        padding: '80px 0',
-        minHeight: '600px',
+        padding: '120px 0 160px 0',
+        minHeight: '85vh',
         width: '100%',
-        position: 'relative'
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center'
       }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem' }}>
-          <div style={{ textAlign: 'center', marginBottom: '64px' }}>
-            <h1 style={{ fontSize: '48px', fontWeight: 'bold', color: '#ffffff', marginBottom: '24px', margin: '0 0 24px 0', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>Find Your Perfect Property</h1>
-            <p style={{ fontSize: '20px', color: '#f1f5f9', margin: '0', textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Discover amazing homes, apartments and commercial properties</p>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', width: '100%' }}>
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <h1 style={{ fontSize: '56px', fontWeight: 'bold', color: '#ffffff', marginBottom: '24px', margin: '0 0 24px 0', textShadow: '2px 2px 4px rgba(0,0,0,0.5)', lineHeight: '1.1' }}>Find Your Dream Home Today</h1>
+            <p style={{ fontSize: '22px', color: '#f1f5f9', margin: '0', textShadow: '1px 1px 2px rgba(0,0,0,0.5)', maxWidth: '600px', margin: '0 auto' }}>We connect people with spaces that feel like home</p>
           </div>
 
-          {/* Enhanced Search Section */}
-          <div style={{ backgroundColor: '#ffffff', borderRadius: '24px', padding: '48px', maxWidth: '900px', margin: '0 auto', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}>
-            {/* Search Tabs */}
-            <div style={{ display: 'flex', marginBottom: '32px', backgroundColor: '#f8fafc', borderRadius: '12px', padding: '4px' }}>
-              {['Buy', 'Rent', 'Sell'].map((tab) => (
+          {/* Search Tabs - Outside the main box */}
+          <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '16px', maxWidth: '1000px', margin: '0 auto 16px auto' }}>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              {['Rent', 'Buy'].map((tab) => (
                 <button 
                   key={tab} 
+                  onClick={() => setActiveTab(tab)}
                   style={{ 
-                    flex: 1, 
                     padding: '12px 24px', 
-                    backgroundColor: tab === 'Buy' ? '#2563eb' : 'transparent',
-                    color: tab === 'Buy' ? '#ffffff' : '#64748b',
+                    backgroundColor: tab === activeTab ? '#1f2937' : '#ffffff',
+                    color: tab === activeTab ? '#ffffff' : '#374151',
                     border: 'none',
                     borderRadius: '8px',
                     cursor: 'pointer',
                     fontWeight: '500',
-                    fontSize: '16px'
+                    fontSize: '16px',
+                    transition: 'all 0.2s ease',
+                    minWidth: '80px',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
                   }}
                 >
                   {tab}
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Enhanced Search Section */}
+          <div style={{ backgroundColor: '#ffffff', borderRadius: '20px', padding: '32px', maxWidth: '1000px', margin: '0 auto', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}>
+
+            {/* Dynamic content based on active tab - removed Sell section */}
 
             {/* Search Form */}
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr auto', gap: '16px', alignItems: 'end' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr auto', gap: '12px', alignItems: 'end' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '8px' }}>Location</label>
+                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '6px' }}>
+                  Location
+                </label>
                 <input 
                   type="text" 
                   value={searchQuery} 
                   onChange={(e) => setSearchQuery(e.target.value)} 
-                  placeholder="Enter suburb, postcode or keyword..." 
+                  placeholder={formFields.placeholder}
                   style={{ 
                     width: '100%', 
-                    padding: '16px', 
-                    border: '2px solid #e5e7eb', 
-                    borderRadius: '12px', 
+                    padding: '14px', 
+                    border: '1px solid #d1d5db', 
+                    borderRadius: '8px', 
                     fontSize: '16px', 
                     backgroundColor: '#ffffff', 
                     boxSizing: 'border-box', 
@@ -149,84 +197,177 @@ const Homepage = () => {
               </div>
               
               <div>
-                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '8px' }}>Price Range</label>
+                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '6px' }}>
+                  {formFields.typeLabel}
+                </label>
                 <select style={{ 
                   width: '100%', 
-                  padding: '16px', 
-                  border: '2px solid #e5e7eb', 
-                  borderRadius: '12px', 
+                  padding: '14px', 
+                  border: '1px solid #d1d5db', 
+                  borderRadius: '8px', 
                   fontSize: '16px', 
                   backgroundColor: '#ffffff', 
                   boxSizing: 'border-box', 
-                  outline: 'none'
+                  outline: 'none',
+                  appearance: 'none',
+                  backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%236b7280\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 12px center',
+                  backgroundSize: '16px'
                 }}>
-                  <option>Any price</option>
-                  <option>Under $500k</option>
-                  <option>$500k - $1M</option>
-                  <option>$1M - $2M</option>
-                  <option>$2M+</option>
+                  {formFields.typeOptions.map((option, i) => (
+                    <option key={i}>{option}</option>
+                  ))}
                 </select>
               </div>
               
               <div>
-                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '8px' }}>Property Type</label>
+                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '6px' }}>
+                  {formFields.priceLabel}
+                </label>
                 <select style={{ 
                   width: '100%', 
-                  padding: '16px', 
-                  border: '2px solid #e5e7eb', 
-                  borderRadius: '12px', 
+                  padding: '14px', 
+                  border: '1px solid #d1d5db', 
+                  borderRadius: '8px', 
                   fontSize: '16px', 
                   backgroundColor: '#ffffff', 
                   boxSizing: 'border-box', 
-                  outline: 'none'
+                  outline: 'none',
+                  appearance: 'none',
+                  backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%236b7280\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 12px center',
+                  backgroundSize: '16px'
                 }}>
-                  <option>All types</option>
-                  <option>House</option>
-                  <option>Apartment</option>
-                  <option>Townhouse</option>
-                  <option>Land</option>
+                  {formFields.priceOptions.map((option, i) => (
+                    <option key={i}>{option}</option>
+                  ))}
                 </select>
               </div>
               
               <button 
                 onClick={handleSearch} 
                 style={{ 
-                  backgroundColor: '#2563eb', 
+                  backgroundColor: '#1f2937', 
                   color: 'white', 
-                  padding: '16px 32px', 
-                  borderRadius: '12px', 
+                  padding: '14px 28px', 
+                  borderRadius: '8px', 
                   border: 'none', 
                   cursor: 'pointer',
                   fontSize: '16px',
                   fontWeight: '500',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
+                  transition: 'background-color 0.2s',
+                  minWidth: '100px'
                 }}
               >
-                <Search style={{ width: '20px', height: '20px' }} />
                 Search
               </button>
             </div>
             
-            {/* Quick Location Buttons */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center', marginTop: '32px' }}>
-              {['Bondi', 'Sydney CBD', 'Surry Hills', 'Newtown', 'Paddington', 'Manly', 'Parramatta'].map((suburb) => (
-                <button key={suburb} onClick={() => setSearchQuery(suburb)} style={{ backgroundColor: '#f8fafc', color: '#374151', padding: '8px 16px', borderRadius: '20px', fontSize: '14px', border: '1px solid #e2e8f0', cursor: 'pointer', fontWeight: '500', transition: 'all 0.2s' }}>
-                  {suburb}
-                </button>
-              ))}
-            </div>
+            {/* Quick Location Buttons - Removed to keep clean design */}
           </div>
         </div>
       </section>
 
-      {/* Featured Properties Section */}
+      {/* Smart Property Solutions Section - MOVED BEFORE Featured Properties */}
+      <section style={{ backgroundColor: '#ffffff', padding: '100px 0', width: '100%' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem' }}>
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: '64px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(59, 130, 246, 0.1)', padding: '6px 14px', borderRadius: '16px', marginBottom: '20px', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
+              <Sparkles style={{ width: '14px', height: '14px', color: '#3b82f6' }} />
+              <span style={{ fontSize: '12px', fontWeight: '500', color: '#3b82f6', textTransform: 'uppercase', letterSpacing: '1px' }}>AI-POWERED</span>
+            </div>
+            <h2 style={{ fontSize: '36px', fontWeight: 'bold', color: '#111827', marginBottom: '16px', margin: '0 0 16px 0', lineHeight: '1.1' }}>
+              Why Choose Us
+            </h2>
+            <p style={{ fontSize: '16px', color: '#6b7280', margin: '0', maxWidth: '600px', margin: '0 auto' }}>
+              AI-driven insights, personalized recommendations, and predictive analytics
+            </p>
+          </div>
+
+          {/* Three Column Layout */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '40px' }}>
+            {[
+              {
+                icon: <Bot size={32} />,
+                title: 'AI Personal Assistant',
+                description: 'Instant property recommendations and market insights available 24/7',
+                color: '#3b82f6'
+              },
+              {
+                icon: <Sparkles size={32} />,
+                title: 'Smart Recommendations',
+                description: 'Personalized property suggestions based on your preferences and budget',
+                color: '#8b5cf6'
+              },
+              {
+                icon: <Search size={32} />,
+                title: 'Price Prediction AI',
+                description: 'Advanced algorithms predict future property values and optimal timing',
+                color: '#06b6d4'
+              }
+            ].map((service, i) => (
+              <div key={i} style={{
+                textAlign: 'center',
+                padding: '0',
+                transition: 'transform 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-4px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}>
+                {/* Icon */}
+                <div style={{
+                  width: '72px',
+                  height: '72px',
+                  backgroundColor: service.color,
+                  borderRadius: '18px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 24px auto',
+                  color: 'white',
+                  boxShadow: `0 6px 20px ${service.color}20`
+                }}>
+                  {service.icon}
+                </div>
+                
+                {/* Title */}
+                <h3 style={{
+                  fontSize: '20px',
+                  fontWeight: '600',
+                  color: '#111827',
+                  marginBottom: '12px',
+                  margin: '0 0 12px 0'
+                }}>
+                  {service.title}
+                </h3>
+                
+                {/* Description */}
+                <p style={{
+                  fontSize: '14px',
+                  color: '#6b7280',
+                  lineHeight: '1.5',
+                  margin: '0'
+                }}>
+                  {service.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Properties Section - NOW AFTER Smart Solutions */}
       <section style={{ backgroundColor: '#f8fafc', padding: '80px 0', width: '100%' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem' }}>
           <div style={{ textAlign: 'center', marginBottom: '64px' }}>
-            <h2 style={{ fontSize: '36px', fontWeight: 'bold', color: '#111827', marginBottom: '16px', margin: '0 0 16px 0' }}>Featured Properties</h2>
-            <p style={{ fontSize: '18px', color: '#6b7280', margin: '0' }}>Discover the latest premium properties in top locations</p>
+            <h2 style={{ fontSize: '36px', fontWeight: 'bold', color: '#111827', marginBottom: '16px', margin: '0 0 16px 0' }}>Trending Properties</h2>
+            <p style={{ fontSize: '18px', color: '#6b7280', margin: '0' }}>Discover what's hot on the market right now</p>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
@@ -260,123 +401,205 @@ const Homepage = () => {
         </div>
       </section>
 
-      {/* Cities Section */}
-      <section style={{ backgroundColor: '#f8fafc', padding: '60px 0 140px 0', width: '100%' }}>
+      {/* Latest Housing News Section */}
+      <section style={{ backgroundColor: '#ffffff', padding: '80px 0', width: '100%' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem' }}>
-          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <h2 style={{ fontSize: '28px', fontWeight: '600', color: '#111827', marginBottom: '8px', margin: '0 0 8px 0' }}>Explore Cities</h2>
-            <p style={{ fontSize: '16px', color: '#6b7280', margin: '0' }}>Find properties across Australia</p>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <h2 style={{ fontSize: '36px', fontWeight: 'bold', color: '#111827', marginBottom: '16px', margin: '0 0 16px 0' }}>Latest Housing News</h2>
+            <p style={{ fontSize: '16px', color: '#6b7280', margin: '0' }}>Stay informed with the latest property market insights</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '20px', maxWidth: '1000px', margin: '0 auto' }}>
-            {[
-              { 
-                name: 'Sydney', 
-                listings: '15,240', 
-                gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-              },
-              { 
-                name: 'Melbourne', 
-                listings: '12,890', 
-                gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
-              },
-              { 
-                name: 'Brisbane', 
-                listings: '8,450', 
-                gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
-              },
-              { 
-                name: 'Perth', 
-                listings: '6,720', 
-                gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
-              },
-              { 
-                name: 'Adelaide', 
-                listings: '4,830', 
-                gradient: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)'
-              },
-              { 
-                name: 'Gold Coast', 
-                listings: '3,950', 
-                gradient: 'linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)'
-              }
-            ].map((city, i) => (
-              <div 
-                key={i} 
-                style={{ 
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  transition: 'transform 0.2s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                {/* Smaller Circular Container */}
-                <div style={{ 
-                  width: '100px',
-                  height: '100px',
-                  borderRadius: '50%', 
-                  background: city.gradient,
-                  position: 'relative',
-                  marginBottom: '12px',
-                  overflow: 'hidden',
-                  boxShadow: '0 6px 16px rgba(0, 0, 0, 0.1)',
-                  transition: 'box-shadow 0.2s ease'
-                }}>
-                  {/* City icon */}
-                  <div style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    zIndex: 2
+          {/* Auto-carousel Container */}
+          <div style={{ 
+            overflow: 'hidden',
+            position: 'relative',
+            width: '100%'
+          }}>
+            <div 
+              id="news-carousel"
+              style={{ 
+                display: 'flex', 
+                gap: '24px',
+                animation: 'scroll 20s linear infinite',
+                width: 'calc(280px * 12 + 24px * 11)' // 6 cards x 2 + gaps
+              }}
+            >
+              {/* Duplicate the array for seamless loop */}
+              {[...Array(2)].map((_, duplicateIndex) => 
+                [
+                  { 
+                    title: 'Melbourne House Prices Rise 4.8% in Q1 2025', 
+                    date: 'March 15, 2025',
+                    category: 'Market Update',
+                    image: '#3b82f6',
+                    excerpt: 'Melbourne property market continues strong momentum with record-breaking Q1 growth across suburbs...'
+                  },
+                  { 
+                    title: 'New Housing Policy Reforms Take Effect', 
+                    date: 'March 12, 2025',
+                    category: 'Policy News',
+                    image: '#10b981',
+                    excerpt: 'Federal government introduces major housing affordability reforms impacting first-time buyers...'
+                  },
+                  { 
+                    title: 'South Yarra Leads Melbourne Investment Returns', 
+                    date: 'March 10, 2025',
+                    category: 'Area Spotlight',
+                    image: '#f59e0b',
+                    excerpt: 'Premium suburb delivers exceptional returns as infrastructure upgrades drive demand...'
+                  },
+                  { 
+                    title: 'RBA Holds Rates Steady for Q1 2025', 
+                    date: 'March 8, 2025',
+                    category: 'Finance',
+                    image: '#ef4444',
+                    excerpt: 'Central bank maintains current rates amid stable inflation and property market conditions...'
+                  },
+                  { 
+                    title: 'St Kilda Waterfront Development Approved', 
+                    date: 'March 6, 2025',
+                    category: 'Development',
+                    image: '#8b5cf6',
+                    excerpt: 'Major beachfront project set to transform St Kilda with luxury residences and retail...'
+                  },
+                  { 
+                    title: 'Melbourne CBD Population Growth Hits Record', 
+                    date: 'March 4, 2025',
+                    category: 'City Growth',
+                    image: '#06b6d4',
+                    excerpt: 'Post-pandemic recovery sees CBD living reach all-time highs with new resident influx...'
+                  }
+                ].map((article, i) => (
+                  <article key={`${duplicateIndex}-${i}`} style={{ 
+                    backgroundColor: '#ffffff', 
+                    borderRadius: '12px', 
+                    overflow: 'hidden', 
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)', 
+                    transition: 'transform 0.2s, box-shadow 0.2s',
+                    cursor: 'pointer',
+                    minWidth: '280px',
+                    width: '280px',
+                    flexShrink: 0
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.12)';
+                    // Pause animation on hover
+                    document.getElementById('news-carousel').style.animationPlayState = 'paused';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+                    // Resume animation
+                    document.getElementById('news-carousel').style.animationPlayState = 'running';
                   }}>
-                    <Home style={{ width: '30px', height: '30px', color: 'white', opacity: 0.9 }} />
-                  </div>
-
-                  {/* Subtle decorative gradient */}
-                  <div style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: '30%',
-                    background: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 100%)',
-                    zIndex: 1
-                  }} />
-                </div>
-
-                {/* City Info */}
-                <div>
-                  <h3 style={{ 
-                    fontSize: '16px', 
-                    fontWeight: '600', 
-                    color: '#111827',
-                    marginBottom: '4px', 
-                    margin: '0 0 4px 0'
-                  }}>
-                    {city.name}
-                  </h3>
-                  <p style={{ 
-                    fontSize: '12px', 
-                    color: '#6b7280',
-                    margin: '0'
-                  }}>
-                    {city.listings} listings
-                  </p>
-                </div>
-              </div>
-            ))}
+                    {/* Article Image */}
+                    <div style={{ 
+                      height: '140px', 
+                      backgroundColor: article.image, 
+                      position: 'relative',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <Home style={{ width: '40px', height: '40px', color: 'white', opacity: 0.3 }} />
+                      {/* Category Badge */}
+                      <div style={{
+                        position: 'absolute',
+                        top: '12px',
+                        left: '12px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        color: '#374151',
+                        padding: '4px 8px',
+                        borderRadius: '8px',
+                        fontSize: '10px',
+                        fontWeight: '500'
+                      }}>
+                        {article.category}
+                      </div>
+                    </div>
+                    
+                    {/* Article Content */}
+                    <div style={{ padding: '16px' }}>
+                      <div style={{ marginBottom: '8px' }}>
+                        <time style={{ 
+                          fontSize: '12px', 
+                          color: '#6b7280',
+                          fontWeight: '500'
+                        }}>
+                          {article.date}
+                        </time>
+                      </div>
+                      
+                      <h3 style={{ 
+                        fontSize: '14px', 
+                        fontWeight: '600', 
+                        color: '#111827', 
+                        marginBottom: '8px', 
+                        margin: '0 0 8px 0',
+                        lineHeight: '1.3',
+                        height: '36px',
+                        overflow: 'hidden',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical'
+                      }}>
+                        {article.title}
+                      </h3>
+                      
+                      <p style={{ 
+                        fontSize: '12px', 
+                        color: '#6b7280', 
+                        lineHeight: '1.4',
+                        margin: '0 0 12px 0',
+                        height: '32px',
+                        overflow: 'hidden',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical'
+                      }}>
+                        {article.excerpt}
+                      </p>
+                      
+                      {/* Read More Link */}
+                      <div>
+                        <span style={{
+                          fontSize: '12px',
+                          color: '#2563eb',
+                          fontWeight: '500',
+                          cursor: 'pointer'
+                        }}>
+                          Read more →
+                        </span>
+                      </div>
+                    </div>
+                  </article>
+                ))
+              )}
+            </div>
           </div>
         </div>
+
+        {/* Auto-carousel Animation */}
+        <style>
+          {`
+            @keyframes scroll {
+              0% {
+                transform: translateX(0);
+              }
+              100% {
+                transform: translateX(calc(-280px * 6 - 24px * 6));
+              }
+            }
+            
+            #news-carousel:hover {
+              animation-play-state: paused;
+            }
+          `}
+        </style>
       </section>
+
+      {/* Cities Section - Removed and replaced with Housing News */}
 
       {/* Floating AI Assistant Button */}
       <div style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 100 }}>
@@ -409,7 +632,6 @@ const Homepage = () => {
           <Bot style={{ width: '32px', height: '32px', color: 'white' }} />
           <Sparkles style={{ width: '18px', height: '18px', color: 'white', position: 'absolute', top: '8px', right: '8px' }} />
           
-          {/* Notification dot */}
           {!isChatOpen && (
             <div style={{
               position: 'absolute',
@@ -425,7 +647,6 @@ const Homepage = () => {
           )}
         </button>
         
-        {/* Floating hint text */}
         {!isChatOpen && (
           <div style={{
             position: 'absolute',
@@ -456,7 +677,6 @@ const Homepage = () => {
         )}
       </div>
 
-      {/* Add CSS animations */}
       <style>
         {`
           @keyframes pulse {
@@ -474,6 +694,17 @@ const Homepage = () => {
           @keyframes slideIn {
             from { opacity: 0; transform: translateX(10px); }
             to { opacity: 0.9; transform: translateX(0); }
+          }
+          
+          @keyframes slideUp {
+            from { 
+              opacity: 0; 
+              transform: translateY(20px); 
+            }
+            to { 
+              opacity: 1; 
+              transform: translateY(0); 
+            }
           }
         `}
       </style>
@@ -495,7 +726,6 @@ const Homepage = () => {
           flexDirection: 'column',
           animation: 'slideUp 0.4s ease-out'
         }}>
-          {/* Chat Header */}
           <div style={{ 
             padding: '24px', 
             borderBottom: '1px solid #e5e7eb',
@@ -630,22 +860,6 @@ const Homepage = () => {
         </div>
       )}
 
-      {/* Add animation for chat window */}
-      <style>
-        {`
-          @keyframes slideUp {
-            from { 
-              opacity: 0; 
-              transform: translateY(20px); 
-            }
-            to { 
-              opacity: 1; 
-              transform: translateY(0); 
-            }
-          }
-        `}
-      </style>
-
       {/* Login Modal */}
       {isLoginOpen && (
         <div style={{ position: 'fixed', top: '0', left: '0', right: '0', bottom: '0', backgroundColor: 'rgba(255, 255, 255, 0.95)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: '50' }}>
@@ -685,3 +899,4 @@ const Homepage = () => {
 };
 
 export default Homepage;
+                
