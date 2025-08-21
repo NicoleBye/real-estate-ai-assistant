@@ -129,6 +129,10 @@ const BuyPropertiesPage = () => {
           <span>{property.bathrooms} bath</span>
           <span>•</span>
           <span>{property.parking} car</span>
+          <span>•</span>
+          <span>{property.parking} area</span>
+          <span>•</span>
+          <span>{property.parking} propertyType</span>
         </div>
       </div>
     </div>
