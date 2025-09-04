@@ -1,12 +1,23 @@
 import { useState } from 'react';
-import { Mail, Lock, Eye, EyeOff, Check, Sparkles, ArrowRight } from 'lucide-react';
+import Logo from '../components/logo';
+import { Mail, Lock, Eye, EyeOff, Check, ArrowRight } from 'lucide-react';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+  // Check URL to determine initial user type
+  const getInitialUserType = () => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('type') === 'agent' ? 'agent' : 'user';
+    }
+    return 'user';
+  };
 
+  const [userType, setUserType] = useState(getInitialUserType());
+  
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -25,8 +36,10 @@ const LoginPage = () => {
 
     if (!email) newErrors.email = 'Email is required';
     else if (!/^\S+@\S+\.\S+$/.test(email)) newErrors.email = 'Invalid email format';
+    else if (email.length > 100) newErrors.email = 'Email must be less than 100 characters';
+    
     if (!password) newErrors.password = 'Password is required';
-    else if (password.length < 6) newErrors.password = 'Password must be at least 6 characters';
+    else if (password.length < 8) newErrors.password = 'Password must be at least 8 characters';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -37,17 +50,46 @@ const LoginPage = () => {
     if (!validate()) return;
     setIsLoading(true);
 
+    // Prepare login data for backend
+    const loginData = {
+      email: formData.email.toLowerCase().trim(),
+      password: formData.password,
+      rememberMe: rememberMe
+    };
+
+    console.log('Login data to be sent to backend:', loginData);
+
     // Simulate API call
     await new Promise((res) => setTimeout(res, 1500));
     
     setShowSuccess(true);
     setTimeout(() => {
-      alert('Login successful! Redirecting to dashboard...');
+      // Backend will return user role, then redirect accordingly
+      // For demo purposes, using userType state
+      switch(userType) {
+        case 'user':
+          window.location.href = '/user';
+          break;
+        case 'agent':
+          window.location.href = '/agent';
+          break;
+        default:
+          window.location.href = '/';
+      }
     }, 1500);
   };
 
   const handleForgotPassword = () => {
     alert('Forgot password functionality would be implemented here');
+  };
+
+
+  const handleRegisterClick = () => {
+    if (userType === 'agent') {
+      window.location.href = '/register?type=agent';
+    } else {
+      window.location.href = '/register';
+    }
   };
 
   if (showSuccess) {
@@ -74,27 +116,55 @@ const LoginPage = () => {
         <div className="max-w-md w-full relative z-10">
           <div className="bg-white rounded-3xl shadow-2xl p-8 backdrop-blur-sm bg-opacity-95">
             <div className="text-center mb-8">
-              <div className="flex items-center justify-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-white" />
-                </div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Propzy
-                </h1>
+              <div className="mb-4">
+                <Logo size="large" clickable={false} />
               </div>
-              <h2 className="text-2xl font-semibold text-gray-800 mb-2">Welcome back</h2>
+              
+              {/* User Type Selection */}
+              <div className="flex bg-gray-100 rounded-xl p-1 mb-6">
+                <button
+                  onClick={() => setUserType('user')}
+                  className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
+                    userType === 'user' 
+                      ? 'bg-white text-blue-600 shadow-sm' 
+                      : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                >
+                  User Login
+                </button>
+                <button
+                  onClick={() => setUserType('agent')}
+                  className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
+                    userType === 'agent' 
+                      ? 'bg-white text-green-600 shadow-sm' 
+                      : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                >
+                  Agent Login
+                </button>
+              </div>
+              
+              <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+                Welcome back{userType === 'agent' ? ', Agent' : ''}
+              </h2>
               <p className="text-sm text-gray-600">
                 Don't have an account?{' '}
                 <button 
-                  onClick={() => alert('Redirecting to register page...')} 
+                  onClick={() => {
+                    if (userType === 'agent') {
+                      window.location.href = '/register?type=agent';
+                    } else {
+                      window.location.href = '/register';
+                    }
+                  }}
                   className="text-blue-600 hover:text-blue-700 font-medium hover:underline bg-transparent transition-colors"
                 >
-                  Sign up here
+                  {userType === 'agent' ? 'Apply here' : 'Sign up here'}
                 </button>
               </p>
             </div>
 
-            <div className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="relative">
                 <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                 <input
@@ -103,6 +173,7 @@ const LoginPage = () => {
                   placeholder="Email address"
                   value={formData.email}
                   onChange={handleChange}
+                  maxLength={100}
                   className={`w-full pl-10 pr-4 py-3 border-2 ${errors.email ? 'border-red-300' : 'border-gray-200'} bg-white text-gray-900 placeholder-gray-500 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300`}
                 />
                 {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
@@ -157,9 +228,12 @@ const LoginPage = () => {
 
               <button
                 type="submit"
-                onClick={handleSubmit}
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+                className={`w-full font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 ${
+                  userType === 'agent' 
+                    ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white' 
+                    : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white'
+                }`}
               >
                 {isLoading ? (
                   <>
@@ -173,7 +247,7 @@ const LoginPage = () => {
                   </>
                 )}
               </button>
-            </div>
+            </form>
           </div>
         </div>
       </div>

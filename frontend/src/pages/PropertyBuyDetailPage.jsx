@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Area, AreaChart } from 'recharts';
 import { Bed, Bath, Car, Ruler, Home } from 'lucide-react';
+import Logo from '../components/logo'; 
+import UserMenu from '../components/UserMenu';
+import PropertyCard from '../components/PropertyCard';
+
 
 const PropertyBuyDetailPage = () => {
   const [isFavorited, setIsFavorited] = useState(false);
@@ -11,18 +15,29 @@ const PropertyBuyDetailPage = () => {
   const [interestRate, setInterestRate] = useState(6.5);
   const [loanTerm, setLoanTerm] = useState(30);
 
+  // Property data using database schema fields
   const property = {
-    title: "Luxury CBD Penthouse",
-    price: 850000,
-    address: "456 Collins Street, Melbourne VIC 3000",
+    property_id: "550e8400-e29b-41d4-a716-446655440001",
+    suburb: "Melbourne",
+    address: "456 Collins Street",
+    postcode: "3000",
+    listing_type: "buy",
+    property_type: "Apartment",
+    method: "Private Sale",
+    seller: "Premium Real Estate",
+    distance: 0.1,
+    sale_date: "2025-02-15",
+    buy_price: 850000,
+    rent_price: null,
     bedrooms: 3,
     bathrooms: 2,
-    parking: 2,
-    area: 120,
-    internalArea: 105,
-    propertyType: "Apartment",
-    councilRates: 2800,
-    strata: 4200,
+    carspaces: 2,
+    landsize: null,
+    year_built: 2020,
+    latitude: -37.8136,
+    longitude: 144.9631,
+    image_url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    created_at: "2025-01-01T10:00:00Z",
     images: [
       "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
@@ -34,44 +49,52 @@ const PropertyBuyDetailPage = () => {
 
   const similarProperties = [
     {
-      id: 2,
-      title: "Modern Southbank Apartment", 
-      price: 720000,
-      location: "Southbank Promenade, Southbank",
+      property_id: "550e8400-e29b-41d4-a716-446655440002",
+      suburb: "Southbank",
+      address: "100 Southbank Promenade",
+      postcode: "3006",
+      buy_price: 720000,
       bedrooms: 2,
       bathrooms: 2,
-      image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+      property_type: "Apartment",
+      image_url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
     },
     {
-      id: 3,
-      title: "Contemporary Townhouse",
-      price: 680000,
-      location: "Smith Street, Collingwood", 
+      property_id: "550e8400-e29b-41d4-a716-446655440003",
+      suburb: "Collingwood",
+      address: "789 Smith Street",
+      postcode: "3066",
+      buy_price: 680000,
       bedrooms: 3,
       bathrooms: 2,
-      image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+      property_type: "Townhouse",
+      image_url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
     },
     {
-      id: 4,
-      title: "Luxury Richmond Apartment",
-      price: 950000,
-      location: "Bridge Road, Richmond", 
+      property_id: "550e8400-e29b-41d4-a716-446655440004",
+      suburb: "Richmond",
+      address: "123 Bridge Road",
+      postcode: "3121",
+      buy_price: 950000,
       bedrooms: 3,
       bathrooms: 2,
-      image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+      property_type: "Apartment",
+      image_url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
     },
     {
-      id: 5,
-      title: "Modern Carlton Loft",
-      price: 780000,
-      location: "Lygon Street, Carlton", 
+      property_id: "550e8400-e29b-41d4-a716-446655440005",
+      suburb: "Carlton",
+      address: "456 Lygon Street",
+      postcode: "3053",
+      buy_price: 780000,
       bedrooms: 2,
       bathrooms: 1,
-      image: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+      property_type: "Apartment",
+      image_url: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
     }
   ];
 
-  const currentPrice = property.price;
+  const currentPrice = property.buy_price;
   const annualGrowthRate = 0.08;
 
   const calculateMortgage = () => {
@@ -118,7 +141,7 @@ const PropertyBuyDetailPage = () => {
   };
 
   const calculatePricePrediction = (years) => {
-    const basePrice = property.price;
+    const basePrice = property.buy_price;
     const predictedPrice = basePrice * Math.pow(1 + annualGrowthRate, years);
     const totalGain = predictedPrice - basePrice;
     const growthPercentage = ((predictedPrice / basePrice - 1) * 100).toFixed(1);
@@ -139,38 +162,27 @@ const PropertyBuyDetailPage = () => {
     return `$${(price / 1000).toFixed(0)}K`;
   };
 
-  const PropertyCard = ({ property }) => (
-    <div style={{ backgroundColor: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', cursor: 'pointer' }}>
-      <div style={{ position: 'relative' }}>
-        <img 
-          src={property.image} 
-          alt={property.title}
-          style={{ width: '100%', height: '192px', objectFit: 'cover' }}
-        />
-      </div>
-      
-      <div style={{ padding: '16px' }}>
-        <div style={{ fontSize: '20px', fontWeight: '600', color: 'black', marginBottom: '8px' }}>
-          ${property.price.toLocaleString()}
-        </div>
-        
-        <h3 style={{ fontWeight: '500', color: 'black', marginBottom: '4px', fontSize: '16px', margin: '0 0 4px 0' }}>{property.title}</h3>
-        <p style={{ fontSize: '14px', color: '#666', marginBottom: '12px', margin: '0 0 12px 0' }}>{property.location}</p>
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '14px', color: '#666' }}>
-          <span>{property.bedrooms} beds</span>
-          <span>•</span>
-          <span>{property.bathrooms} bath</span>
-        </div>
-      </div>
-    </div>
-  );
+  const formatSettlementDate = (saleDate) => {
+    const date = new Date(saleDate);
+    const now = new Date();
+    const diffTime = date - now;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays <= 0) {
+      return "Available now";
+    } else if (diffDays <= 30) {
+      return `Settlement ${diffDays} days`;
+    } else {
+      return "Settlement flexible";
+    }
+  };
 
   return (
     <div style={{ width: '100vw', minHeight: '100vh', backgroundColor: 'white', margin: 0, padding: 0 }}>
       <div style={{ width: '100%', padding: '24px', boxSizing: 'border-box' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           
+          {/* Header */}
           <div style={{ backgroundColor: 'white', borderBottom: '1px solid #e5e5e5', padding: '16px 0', marginBottom: '32px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <button style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: 'transparent', border: 'none', color: '#666', fontSize: '16px', cursor: 'pointer' }}>
@@ -198,36 +210,25 @@ const PropertyBuyDetailPage = () => {
             </div>
           </div>
 
+          {/* Image Gallery */}
           <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '16px', height: '500px', marginBottom: '48px' }}>
             <div style={{ position: 'relative', height: '100%' }}>
               <img 
                 src={property.images[0]} 
-                alt={property.title}
+                alt={`${property.property_type} in ${property.suburb}`}
                 style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '12px' }}
               />
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', height: '100%' }}>
-              <div style={{ position: 'relative' }}>
-                <img 
-                  src={property.images[1]} 
-                  alt=""
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
-                />
-              </div>
-              <div style={{ position: 'relative' }}>
-                <img 
-                  src={property.images[2]} 
-                  alt=""
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
-                />
-              </div>
-              <div style={{ position: 'relative' }}>
-                <img 
-                  src={property.images[3]} 
-                  alt=""
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
-                />
-              </div>
+              {property.images.slice(1, 4).map((img, index) => (
+                <div key={index} style={{ position: 'relative' }}>
+                  <img 
+                    src={img} 
+                    alt=""
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
+                  />
+                </div>
+              ))}
               <div style={{ position: 'relative' }}>
                 <img 
                   src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
@@ -243,17 +244,22 @@ const PropertyBuyDetailPage = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr', gap: '32px' }}>
             
+            {/* Main Content */}
             <div>
               <div style={{ fontSize: '48px', fontWeight: 'bold', color: 'black', marginBottom: '16px' }}>
-                ${property.price.toLocaleString()}
+                ${property.buy_price.toLocaleString()}
               </div>
               
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: 'black', margin: 0 }}>{property.title}</h1>
+                <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: 'black', margin: 0 }}>
+                  {property.property_type} in {property.suburb}
+                </h1>
                 <div style={{ width: '24px', height: '24px', backgroundColor: '#10b981', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '12px', fontWeight: 'bold' }}>✓</div>
               </div>
               
-              <p style={{ color: '#666', marginBottom: '24px', fontSize: '16px' }}>{property.address}</p>
+              <p style={{ color: '#666', marginBottom: '24px', fontSize: '16px' }}>
+                {property.address}, {property.suburb} VIC {property.postcode}
+              </p>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '32px', marginBottom: '24px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -266,22 +272,24 @@ const PropertyBuyDetailPage = () => {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <Car style={{ width: '16px', height: '16px', color: '#666' }} />
-                  <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.parking}</span>
+                  <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.carspaces}</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <Ruler style={{ width: '16px', height: '16px', color: '#666' }} />
-                  <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.area}m²</span>
-                </div>
+                {property.landsize && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <Ruler style={{ width: '16px', height: '16px', color: '#666' }} />
+                    <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.landsize}m²</span>
+                  </div>
+                )}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <Home style={{ width: '16px', height: '16px', color: '#666' }} />
-                  <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.propertyType}</span>
+                  <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.property_type}</span>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '24px', fontSize: '14px', color: '#666', marginBottom: '32px' }}>
-                <span><strong>Council Rates:</strong> ${property.councilRates.toLocaleString()}/year</span>
-                <span><strong>Strata:</strong> ${property.strata.toLocaleString()}/year</span>
-                <span><strong>Internal area:</strong> {property.internalArea}m²</span>
+              <div style={{ display: 'flex', gap: '24px', fontSize: '14px', color: '#666', marginBottom: '32px', flexWrap: 'wrap' }}>
+                <span><strong>Distance from CBD:</strong> {property.distance}km</span>
+                <span><strong>Sale Method:</strong> {property.method}</span>
+                <span><strong>Agent:</strong> {property.seller}</span>
               </div>
 
               {/* About Property */}
@@ -302,32 +310,34 @@ const PropertyBuyDetailPage = () => {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 40px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid #f3f4f6' }}>
                     <span style={{ color: '#666', fontSize: '14px' }}>Property Type</span>
-                    <span style={{ color: 'black', fontWeight: '500' }}>Apartment</span>
+                    <span style={{ color: 'black', fontWeight: '500' }}>{property.property_type}</span>
                   </div>
                   
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid #f3f4f6' }}>
                     <span style={{ color: '#666', fontSize: '14px' }}>Land Size</span>
-                    <span style={{ color: 'black', fontWeight: '500' }}>N/A</span>
+                    <span style={{ color: 'black', fontWeight: '500' }}>
+                      {property.landsize ? `${property.landsize}m²` : 'N/A'}
+                    </span>
                   </div>
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid #f3f4f6' }}>
                     <span style={{ color: '#666', fontSize: '14px' }}>Built Year</span>
-                    <span style={{ color: 'black', fontWeight: '500' }}>2020</span>
+                    <span style={{ color: 'black', fontWeight: '500' }}>{property.year_built}</span>
                   </div>
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid #f3f4f6' }}>
-                    <span style={{ color: '#666', fontSize: '14px' }}>Condition</span>
-                    <span style={{ color: '#10b981', fontWeight: '500' }}>Brand New</span>
+                    <span style={{ color: '#666', fontSize: '14px' }}>Sale Method</span>
+                    <span style={{ color: 'black', fontWeight: '500' }}>{property.method}</span>
                   </div>
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid #f3f4f6' }}>
-                    <span style={{ color: '#666', fontSize: '14px' }}>Council Rates</span>
-                    <span style={{ color: 'black', fontWeight: '500' }}>$2800/year</span>
+                    <span style={{ color: '#666', fontSize: '14px' }}>Settlement</span>
+                    <span style={{ color: 'black', fontWeight: '500' }}>{formatSettlementDate(property.sale_date)}</span>
                   </div>
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid #f3f4f6' }}>
-                    <span style={{ color: '#666', fontSize: '14px' }}>Strata Fees</span>
-                    <span style={{ color: 'black', fontWeight: '500' }}>$4200/year</span>
+                    <span style={{ color: '#666', fontSize: '14px' }}>Distance from CBD</span>
+                    <span style={{ color: 'black', fontWeight: '500' }}>{property.distance}km</span>
                   </div>
                 </div>
               </div>
@@ -389,6 +399,7 @@ const PropertyBuyDetailPage = () => {
                 </div>
               </div>
 
+              {/* Price Prediction */}
               <div style={{ 
                 backgroundColor: 'white', 
                 border: '1px solid #e5e5e5', 
@@ -419,18 +430,6 @@ const PropertyBuyDetailPage = () => {
                       </p>
                     </div>
                   </div>
-                  <button style={{
-                    backgroundColor: '#fbbf24',
-                    color: 'black',
-                    border: 'none',
-                    padding: '8px 16px',
-                    borderRadius: '6px',
-                    fontSize: '14px',
-                    fontWeight: '500',
-                    cursor: 'pointer'
-                  }}>
-                    View Details
-                  </button>
                 </div>
 
                 <div style={{ marginBottom: '32px' }}>
@@ -527,8 +526,8 @@ const PropertyBuyDetailPage = () => {
                     <div style={{ fontSize: '14px', color: '#10b981', fontWeight: '500', marginBottom: '4px' }}>
                       +${calculatePricePrediction(1).totalGain.toLocaleString()}
                     </div>
-                    <div style={{ fontSize: '12px', color: '#666' }}>
-                      (+{calculatePricePrediction(1).growthPercentage}% growth)
+                    <div style={{ fontSize: '12px', color: '#0ea5e9', fontWeight: '500', marginTop: '4px' }}>
+                      ROI: {((calculatePricePrediction(1).totalGain / property.buy_price) * 100).toFixed(1)}%
                     </div>
                   </div>
 
@@ -540,7 +539,7 @@ const PropertyBuyDetailPage = () => {
                     border: '2px solid #fbbf24'
                   }}>
                     <div style={{ fontSize: '14px', color: '#f59e0b', fontWeight: '500', marginBottom: '8px' }}>
-                      5 Year Forecast ⭐
+                      5 Year Forecast
                     </div>
                     <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'black', marginBottom: '4px' }}>
                       ${calculatePricePrediction(5).predicted.toLocaleString()}
@@ -548,8 +547,8 @@ const PropertyBuyDetailPage = () => {
                     <div style={{ fontSize: '14px', color: '#10b981', fontWeight: '500', marginBottom: '4px' }}>
                       +${calculatePricePrediction(5).totalGain.toLocaleString()}
                     </div>
-                    <div style={{ fontSize: '12px', color: '#666' }}>
-                      (+{calculatePricePrediction(5).growthPercentage}% growth)
+                    <div style={{ fontSize: '12px', color: '#0ea5e9', fontWeight: '500', marginTop: '4px' }}>
+                      ROI: {((calculatePricePrediction(5).totalGain / property.buy_price) * 100).toFixed(1)}%
                     </div>
                   </div>
 
@@ -567,19 +566,20 @@ const PropertyBuyDetailPage = () => {
                     <div style={{ fontSize: '14px', color: '#10b981', fontWeight: '500', marginBottom: '4px' }}>
                       +${calculatePricePrediction(10).totalGain.toLocaleString()}
                     </div>
-                    <div style={{ fontSize: '12px', color: '#666' }}>
-                      (+{calculatePricePrediction(10).growthPercentage}% growth)
+                    <div style={{ fontSize: '12px', color: '#0ea5e9', fontWeight: '500', marginTop: '4px' }}>
+                      ROI: {((calculatePricePrediction(10).totalGain / property.buy_price) * 100).toFixed(1)}%
                     </div>
                   </div>
                 </div>
               </div>
-              
+
+              {/* Location & Nearby */}
               <div style={{ marginBottom: '32px' }}>
                 <h2 style={{ fontSize: '20px', fontWeight: '600', color: 'black', marginBottom: '16px' }}>Location & Nearby</h2>
                 
                 <div style={{ backgroundColor: '#f9fafb', borderRadius: '12px', height: '400px', marginBottom: '16px', position: 'relative', overflow: 'hidden' }}>
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.0169!2d144.9630!3d-37.8136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577ca2f8c89a90!2s456%20Collins%20St%2C%20Melbourne%20VIC%203000!5e0!3m2!1sen!2sau!4v1234567890"
+                    src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.0169!2d${property.longitude}!3d${property.latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577ca2f8c89a90!2s${encodeURIComponent(property.address)}%2C%20${encodeURIComponent(property.suburb)}%20VIC%20${property.postcode}!5e0!3m2!1sen!2sau!4v1234567890`}
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
@@ -664,24 +664,23 @@ const PropertyBuyDetailPage = () => {
                 </div>
               </div>
 
-              {/* Similar Properties - Full Width */}
-
+              {/* Similar Properties */}
               <div style={{ marginTop: '48px' }}>
                 <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'black', marginBottom: '24px' }}>Similar Properties</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
                   {similarProperties.map(prop => (
-                    <PropertyCard key={prop.id} property={prop} />
+                    <PropertyCard key={prop.property_id} property={prop} />
                   ))}
                 </div>
               </div>
             </div>
 
+            {/* Sidebar */}
             <div>
               <div style={{ backgroundColor: 'white', border: '1px solid #e5e5e5', borderRadius: '12px', padding: '24px', position: 'sticky', top: '24px' }}>
                 
                 <div style={{ marginBottom: '24px', padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                    <span style={{ fontSize: '20px' }}>🧮</span>
                     <span style={{ fontWeight: '500', color: 'black' }}>Monthly Payment</span>
                   </div>
                   <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'black', marginBottom: '8px' }}>
@@ -692,25 +691,19 @@ const PropertyBuyDetailPage = () => {
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  <button 
-                    style={{ width: '100%', backgroundColor: '#fbbf24', color: 'black', padding: '16px', borderRadius: '8px', border: 'none', fontSize: '16px', fontWeight: '600', cursor: 'pointer' }}
-                  >
-                    Make an Offer
-                  </button>
-                  
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>               
                   <button 
                     onClick={() => setShowBookingModal(true)}
                     style={{ width: '100%', border: '1px solid #3b82f6', color: '#3b82f6', padding: '16px', borderRadius: '8px', fontSize: '16px', fontWeight: '600', backgroundColor: 'white', cursor: 'pointer' }}
                   >
-                    📅 Book Inspection
+                    Book Inspection
                   </button>
 
                   <button 
                     onClick={() => setShowMortgageModal(true)}
                     style={{ width: '100%', border: '1px solid #10b981', color: '#10b981', padding: '16px', borderRadius: '8px', fontSize: '16px', fontWeight: '600', backgroundColor: 'white', cursor: 'pointer' }}
                   >
-                    🧮 Mortgage Calculator
+                    Mortgage Calculator
                   </button>
 
                   <button 
@@ -726,6 +719,7 @@ const PropertyBuyDetailPage = () => {
         </div>
       </div>
 
+      {/* Contact Modal */}
       {showContactModal && (
         <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
           <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '24px', width: '100%', maxWidth: '448px', margin: '16px' }}>
@@ -746,7 +740,7 @@ const PropertyBuyDetailPage = () => {
               />
               <div>
                 <h4 style={{ fontSize: '18px', fontWeight: '600', color: 'black', margin: 0 }}>Michael Chen</h4>
-                <p style={{ color: '#666', margin: 0 }}>Sales Agent</p>
+                <p style={{ color: '#666', margin: 0 }}>{property.seller}</p>
                 <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>4.9 Rating (89 reviews)</p>
               </div>
             </div>
@@ -766,6 +760,7 @@ const PropertyBuyDetailPage = () => {
         </div>
       )}
 
+      {/* Booking Modal */}
       {showBookingModal && (
         <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
           <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '24px', width: '100%', maxWidth: '448px', margin: '16px' }}>
@@ -808,6 +803,7 @@ const PropertyBuyDetailPage = () => {
         </div>
       )}
 
+      {/* Mortgage Modal */}
       {showMortgageModal && (
         <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
           <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '24px', width: '100%', maxWidth: '448px', margin: '16px' }}>
@@ -822,7 +818,6 @@ const PropertyBuyDetailPage = () => {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              {/* Loan Amount */}
               <div>
                 <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '8px' }}>
                   Loan Amount: ${loanAmount.toLocaleString()}
@@ -842,7 +837,6 @@ const PropertyBuyDetailPage = () => {
                 </div>
               </div>
 
-              {/* Interest Rate */}
               <div>
                 <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '8px' }}>
                   Interest Rate: {interestRate}%
@@ -862,7 +856,6 @@ const PropertyBuyDetailPage = () => {
                 </div>
               </div>
 
-              {/* Loan Term */}
               <div>
                 <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '8px' }}>
                   Loan Term: {loanTerm} years
@@ -882,7 +875,6 @@ const PropertyBuyDetailPage = () => {
                 </div>
               </div>
 
-              {/* Results */}
               <div style={{ backgroundColor: '#fefce8', border: '1px solid #fef08a', borderRadius: '8px', padding: '16px' }}>
                 <h4 style={{ fontSize: '16px', fontWeight: '600', color: 'black', marginBottom: '12px' }}>Monthly Payment Breakdown</h4>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '14px' }}>
@@ -894,7 +886,7 @@ const PropertyBuyDetailPage = () => {
                     <span style={{ color: '#6b7280' }}>Property Tax (est.):</span>
                     <span style={{ fontWeight: '500' }}>
                       {property.councilRates 
-                        ? `$${Math.round(property.councilRates / 12).toLocaleString()}` 
+                        ? `${Math.round(property.councilRates / 12).toLocaleString()}` 
                         : 'N/A'}
                     </span>
                   </div>
@@ -902,7 +894,7 @@ const PropertyBuyDetailPage = () => {
                     <span style={{ color: '#6b7280' }}>Strata Fees:</span>
                     <span style={{ fontWeight: '500' }}>
                       {property.strata 
-                        ? `$${Math.round(property.strata / 12).toLocaleString()}` 
+                        ? `${Math.round(property.strata / 12).toLocaleString()}` 
                         : 'N/A'}
                     </span>
                   </div>
