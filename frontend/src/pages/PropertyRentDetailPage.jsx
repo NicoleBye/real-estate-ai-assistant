@@ -1,15 +1,272 @@
 import React, { useState } from 'react';
-import { Bed, Bath, Car, Ruler, Home } from 'lucide-react';
+import { Bed, Bath, Car, Ruler, Home, ArrowLeft } from 'lucide-react';
 import Logo from '../components/logo'; 
 import UserMenu from '../components/UserMenu';
+import PropertyCard from '../components/PropertyCard';
+
+// Icon components for Property Details 
+const PropertyIcon = () => <Home style={{ width: '16px', height: '16px', color: '#666' }} />;
+const LandIcon = () => <Ruler style={{ width: '16px', height: '16px', color: '#666' }} />;
+const CalendarIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2">
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+    <line x1="16" y1="2" x2="16" y2="6"/>
+    <line x1="8" y1="2" x2="8" y2="6"/>
+    <line x1="3" y1="10" x2="21" y2="10"/>
+  </svg>
+);
+const ClockIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2">
+    <circle cx="12" cy="12" r="10"/>
+    <polyline points="12,6 12,12 16,14"/>
+  </svg>
+);
+const LocationIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2">
+    <circle cx="12" cy="10" r="3"/>
+    <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z"/>
+  </svg>
+);
+
+// Additional Icon components for Features & Amenities
+const ParkingIcon = () => <Car style={{ width: '16px', height: '16px', color: '#b45309' }} />;
+const WifiIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b45309" strokeWidth="2">
+    <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+    <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+    <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+    <path d="M12 20h.01"/>
+  </svg>
+);
+const SwimmingIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b45309" strokeWidth="2">
+    <path d="M2 18h20"/>
+    <path d="M6.5 8.5c.5-1 1.5-1 2.5-1s2 0 2.5 1c.5 1 1.5 1 2.5 1s2 0 2.5-1"/>
+    <path d="M6.5 15.5c.5-1 1.5-1 2.5-1s2 0 2.5 1c.5 1 1.5 1 2.5 1s2 0 2.5-1"/>
+  </svg>
+);
+const GymIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b45309" strokeWidth="2">
+    <path d="M7.01 14.94L3 18.95"/>
+    <path d="M3 3l18 18"/>
+    <path d="M12.5 7.5L20 15"/>
+    <path d="M7.5 12.5L15 20"/>
+  </svg>
+);
+const ViewIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b45309" strokeWidth="2">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+    <circle cx="12" cy="12" r="3"/>
+  </svg>
+);
+const LightIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b45309" strokeWidth="2">
+    <circle cx="12" cy="12" r="5"/>
+    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+  </svg>
+);
+const AcIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b45309" strokeWidth="2">
+    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+    <line x1="8" y1="21" x2="16" y2="21"/>
+    <line x1="12" y1="17" x2="12" y2="21"/>
+  </svg>
+);
+const ServiceIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b45309" strokeWidth="2">
+    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+  </svg>
+);
+const BalconyIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b45309" strokeWidth="2">
+    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+    <polyline points="9,22 9,12 15,12 15,22"/>
+  </svg>
+);
+const KitchenIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b45309" strokeWidth="2">
+    <path d="M3 2v20h18V2H3z"/>
+    <path d="M9 22V12h6v10"/>
+    <path d="M9 7h6"/>
+  </svg>
+);
+
+// Header data structure
+const headerData = {
+  user: { name: 'John Doe', email: 'john@example.com' },
+  actions: [
+    {
+      type: 'save',
+      text: 'Save',
+      icon: '♡',
+      favorited: false
+    },
+    {
+      type: 'share', 
+      text: 'Share',
+      icon: '↗'
+    }
+  ]
+};
+
+// Tab content data structure
+const nearbyData = {
+  transportation: [
+    'Flinders Station - 5 min walk',
+    'Bus Stop - 2 min walk', 
+    'Tram Stop - 1 min walk'
+  ],
+  amenities: [
+    'Woolworths - 3 min walk',
+    'Multiple cafes nearby',
+    'Medical Center - 8 min walk'
+  ],
+  education: [
+    'Melbourne Primary - 1.2 km',
+    'RMIT University - 800m',
+    'State Library - 10 min walk'
+  ],
+  lifestyle: [
+    'Treasury Gardens - 5 min',
+    'Fitness First - 3 min walk',
+    'Restaurant district nearby'
+  ]
+};
+
+// Helper component for property detail row
+const PropertyDetailRow = ({ icon, label, value }) => (
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid #f3f4f6' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      {icon}
+      <span style={{ color: '#666', fontSize: '14px' }}>{label}</span>
+    </div>
+    <span style={{ color: 'black', fontWeight: '500' }}>{value}</span>
+  </div>
+);
+
+// Helper component for feature row
+const FeatureRow = ({ icon, text }) => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: '16px' }}>
+    {icon}
+    <span style={{ color: '#374151', fontSize: '14px' }}>{text}</span>
+  </div>
+);
+
+// Header button component 
+const HeaderButton = ({ text, icon, active, onClick, style = {} }) => (
+  <button 
+    onClick={onClick}
+    style={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      gap: '8px', 
+      padding: '8px 16px', 
+      borderRadius: '8px', 
+      border: '1px solid #d1d5db', 
+      backgroundColor: active ? '#fbbf24' : 'white', 
+      color: active ? 'black' : '#666', 
+      cursor: 'pointer',
+      ...style
+    }}
+  >
+    {icon} {text}
+  </button>
+);
+
+// Tab content component
+const TabContent = ({ items }) => (
+  <div style={{ padding: '24px' }}>
+    {items.map((item, index) => (
+      <div key={index} style={{ fontSize: '16px', marginBottom: '12px', color: '#374151' }}>
+        {item}
+      </div>
+    ))}
+  </div>
+);
+
+// Property header component
+const PropertyHeader = ({ property }) => (
+  <div>
+    <div style={{ fontSize: '48px', fontWeight: 'bold', color: 'black', marginBottom: '16px' }}>
+      ${property.rent_price}/week
+    </div>
+    
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+      <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: 'black', margin: 0 }}>
+        {property.property_type} in {property.suburb}
+      </h1>
+      <div style={{ width: '24px', height: '24px', backgroundColor: '#10b981', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '12px', fontWeight: 'bold' }}>✓</div>
+    </div>
+    
+    <p style={{ color: '#666', marginBottom: '24px', fontSize: '16px' }}>
+      {property.address}, {property.suburb} VIC {property.postcode}
+    </p>
+  </div>
+);
+
+// Property stats component
+const PropertyStats = ({ property }) => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: '32px', marginBottom: '24px' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <Bed style={{ width: '16px', height: '16px', color: '#666' }} />
+      <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.bedrooms}</span>
+    </div>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <Bath style={{ width: '16px', height: '16px', color: '#666' }} />
+      <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.bathrooms}</span>
+    </div>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <Car style={{ width: '16px', height: '16px', color: '#666' }} />
+      <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.carspaces}</span>
+    </div>
+    {property.landsize && (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <Ruler style={{ width: '16px', height: '16px', color: '#666' }} />
+        <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.landsize}m²</span>
+      </div>
+    )}
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <Home style={{ width: '16px', height: '16px', color: '#666' }} />
+      <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.property_type}</span>
+    </div>
+  </div>
+);
+
+// Property summary component
+const PropertySummary = ({ property }) => (
+  <div style={{ display: 'flex', gap: '24px', fontSize: '14px', color: '#666', marginBottom: '32px', flexWrap: 'wrap' }}>
+    <span><strong>Distance from CBD:</strong> {property.distance}km</span>
+    <span><strong>Rental Method:</strong> {property.method}</span>
+    <span><strong>Agent:</strong> {property.seller}</span>
+  </div>
+);
 
 const PropertyRentDetailPage = () => {
+  const [activeLocationTab, setActiveLocationTab] = useState('transportation');
   const [isFavorited, setIsFavorited] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [showInspectionModal, setShowInspectionModal] = useState(false);
-  const [showRentalCalculatorModal, setShowRentalCalculatorModal] = useState(false);
 
+  // Share functionality
+  const handleShare = async () => {
+    const shareData = {
+      title: `${property.property_type} in ${property.suburb}`,
+      text: `Check out this ${property.property_type} for $${property.rent_price}/week`,
+      url: window.location.href
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.log('Share cancelled');
+      }
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Link copied to clipboard!');
+    }
+  };
   // Property data using database schema fields
   const property = {
     property_id: "550e8400-e29b-41d4-a716-446655440007",
@@ -49,6 +306,7 @@ const PropertyRentDetailPage = () => {
       suburb: "Southbank",
       address: "100 Southbank Promenade",
       postcode: "3006",
+      listing_type: "rent",
       rent_price: 580,
       bedrooms: 2,
       bathrooms: 1,
@@ -60,6 +318,7 @@ const PropertyRentDetailPage = () => {
       suburb: "Collingwood",
       address: "789 Smith Street",
       postcode: "3066",
+      listing_type: "rent",
       rent_price: 520,
       bedrooms: 2,
       bathrooms: 1,
@@ -72,6 +331,7 @@ const PropertyRentDetailPage = () => {
       address: "123 Bridge Road",
       postcode: "3121",
       rent_price: 720,
+      listing_type: "rent",
       bedrooms: 2,
       bathrooms: 2,
       property_type: "Apartment",
@@ -83,23 +343,13 @@ const PropertyRentDetailPage = () => {
       address: "456 Lygon Street",
       postcode: "3053",
       rent_price: 450,
+      listing_type: "rent",
       bedrooms: 1,
       bathrooms: 1,
       property_type: "Apartment",
       image_url: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
     }
   ];
-
-  const currentRent = property.rent_price;
-
-  const calculateAffordability = () => {
-    return {
-      isAffordable: true,
-      recommendedMaxRent: 650,
-      difference: 0,
-      percentage: 30
-    };
-  };
 
   const formatAvailableDate = (saleDate) => {
     const date = new Date(saleDate);
@@ -116,36 +366,6 @@ const PropertyRentDetailPage = () => {
     }
   };
 
-  const PropertyCard = ({ property }) => (
-    <div style={{ backgroundColor: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', cursor: 'pointer' }}>
-      <div style={{ position: 'relative' }}>
-        <img 
-          src={property.image_url} 
-          alt={`${property.property_type} in ${property.suburb}`}
-          style={{ width: '100%', height: '192px', objectFit: 'cover' }}
-        />
-      </div>
-      
-      <div style={{ padding: '16px' }}>
-        <div style={{ fontSize: '20px', fontWeight: '600', color: 'black', marginBottom: '8px' }}>
-          ${property.rent_price}/week
-        </div>
-        
-        <h3 style={{ fontWeight: '500', color: 'black', marginBottom: '4px', fontSize: '16px', margin: '0 0 4px 0' }}>
-          {property.property_type}
-        </h3>
-        <p style={{ fontSize: '14px', color: '#666', marginBottom: '12px', margin: '0 0 12px 0' }}>
-          {property.address}, {property.suburb} {property.postcode}
-        </p>
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '14px', color: '#666' }}>
-          <span>{property.bedrooms} beds</span>
-          <span>•</span>
-          <span>{property.bathrooms} bath</span>
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <div style={{ width: '100vw', minHeight: '100vh', backgroundColor: 'white', margin: 0, padding: 0 }}>
@@ -155,27 +375,41 @@ const PropertyRentDetailPage = () => {
           {/* Header */}
           <div style={{ backgroundColor: 'white', borderBottom: '1px solid #e5e5e5', padding: '16px 0', marginBottom: '32px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <button style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: 'transparent', border: 'none', color: '#666', fontSize: '16px', cursor: 'pointer' }}>
-                ← Go back
+              <button style={{ 
+                padding: '6px',
+                border: 'none',
+                backgroundColor: '#f8f9fa', 
+                borderRadius: '6px',
+                display: 'flex', 
+                alignItems: 'center', 
+                cursor: 'pointer'
+              }}>
+                <ArrowLeft style={{ width: '18px', height: '18px', color: '#495057' }} />
               </button>
-              
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '36px', height: '36px', backgroundColor: '#3b82f6', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '18px', color: 'white' }}>
-                  P
-                </div>
-                <span style={{ fontSize: '24px', fontWeight: 'bold', color: 'black' }}>PROPZY</span>
-              </div>
+
+              <Logo />
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <button 
+                <UserMenu 
+                  user={headerData.user}
+                  onLogin={() => console.log('Login')}
+                  onSignup={() => console.log('Signup')}
+                  onLogout={() => console.log('Logout')}
+                />
+
+                <HeaderButton
+                  text="Save"
+                  icon={isFavorited ? '♥' : '♡'}
+                  active={isFavorited}
                   onClick={() => setIsFavorited(!isFavorited)}
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '8px', border: '1px solid #d1d5db', backgroundColor: isFavorited ? '#3b82f6' : 'white', color: isFavorited ? 'white' : '#666', cursor: 'pointer' }}
-                >
-                  {isFavorited ? '♥' : '♡'} Save
-                </button>
-                <button style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '8px', border: '1px solid #d1d5db', backgroundColor: 'white', color: '#666', cursor: 'pointer' }}>
-                  ↗ Share
-                </button>
+                />
+
+                <HeaderButton
+                  text="Share"
+                  icon="↗"
+                  active={false}
+                  onClick={handleShare}
+                />
               </div>
             </div>
           </div>
@@ -216,101 +450,48 @@ const PropertyRentDetailPage = () => {
             
             {/* Main Content */}
             <div>
-              <div style={{ fontSize: '48px', fontWeight: 'bold', color: 'black', marginBottom: '16px' }}>
-                ${property.rent_price}/week
-              </div>
-              
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: 'black', margin: 0 }}>
-                  {property.property_type} in {property.suburb}
-                </h1>
-                <div style={{ backgroundColor: '#10b981', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold' }}>
-                  {formatAvailableDate(property.sale_date)}
-                </div>
-              </div>
-              
-              <p style={{ color: '#666', marginBottom: '24px', fontSize: '16px' }}>
-                {property.address}, {property.suburb} VIC {property.postcode}
-              </p>
+              <PropertyHeader property={property} />
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '32px', marginBottom: '24px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <Bed style={{ width: '16px', height: '16px', color: '#666' }} />
-                  <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.bedrooms}</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <Bath style={{ width: '16px', height: '16px', color: '#666' }} />
-                  <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.bathrooms}</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <Car style={{ width: '16px', height: '16px', color: '#666' }} />
-                  <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.carspaces || 0}</span>
-                </div>
-                {property.landsize && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <Ruler style={{ width: '16px', height: '16px', color: '#666' }} />
-                    <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.landsize}m²</span>
-                  </div>
-                )}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <Home style={{ width: '16px', height: '16px', color: '#666' }} />
-                  <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.property_type}</span>
-                </div>
-              </div>
+              <PropertyStats property={property} />
 
-              <div style={{ display: 'flex', gap: '24px', fontSize: '14px', color: '#666', marginBottom: '32px', flexWrap: 'wrap' }}>
-                <span><strong>Distance from CBD:</strong> {property.distance}km</span>
-                <span><strong>Rental Method:</strong> {property.method}</span>
-                <span><strong>Agent:</strong> {property.seller}</span>
-                <span><strong>Built:</strong> {property.year_built}</span>
-              </div>
-
-              {/* About Property */}
-              <div style={{ marginBottom: '32px' }}>
-                <h2 style={{ fontSize: '20px', fontWeight: '600', color: 'black', marginBottom: '12px' }}>About this property</h2>
-                <p style={{ color: '#666', lineHeight: '1.6', marginBottom: '16px' }}>
-                  {property.description}
-                </p>
-                <button style={{ color: '#3b82f6', backgroundColor: 'transparent', border: 'none', fontWeight: '500', cursor: 'pointer' }}>
-                  Full description →
-                </button>
-              </div>
+              <PropertySummary property={property} />
 
               {/* Rental Details */}
               <div style={{ backgroundColor: 'white', border: '1px solid #e5e5e5', borderRadius: '12px', padding: '24px', marginBottom: '32px' }}>
                 <h3 style={{ fontSize: '18px', fontWeight: '600', color: 'black', marginBottom: '24px' }}>Rental Details</h3>
                 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 40px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid #f3f4f6' }}>
-                    <span style={{ color: '#666', fontSize: '14px' }}>Property Type</span>
-                    <span style={{ color: 'black', fontWeight: '500' }}>{property.property_type}</span>
-                  </div>
-                  
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid #f3f4f6' }}>
-                    <span style={{ color: '#666', fontSize: '14px' }}>Available Date</span>
-                    <span style={{ color: 'black', fontWeight: '500' }}>{formatAvailableDate(property.sale_date)}</span>
-                  </div>
-
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid #f3f4f6' }}>
-                    <span style={{ color: '#666', fontSize: '14px' }}>Rental Method</span>
-                    <span style={{ color: 'black', fontWeight: '500' }}>{property.method}</span>
-                  </div>
-
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid #f3f4f6' }}>
-                    <span style={{ color: '#666', fontSize: '14px' }}>Built Year</span>
-                    <span style={{ color: 'black', fontWeight: '500' }}>{property.year_built}</span>
-                  </div>
-
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid #f3f4f6' }}>
-                    <span style={{ color: '#666', fontSize: '14px' }}>Distance from CBD</span>
-                    <span style={{ color: 'black', fontWeight: '500' }}>{property.distance}km</span>
-                  </div>
-
+                  <PropertyDetailRow 
+                    icon={<PropertyIcon />} 
+                    label="Property Type" 
+                    value={property.property_type} 
+                  />
+                  <PropertyDetailRow 
+                    icon={<CalendarIcon />} 
+                    label="Available Date" 
+                    value={formatAvailableDate(property.sale_date)} 
+                  />
+                  <PropertyDetailRow 
+                    icon={<ClockIcon />} 
+                    label="Rental Method" 
+                    value={property.method} 
+                  />
+                  <PropertyDetailRow 
+                    icon={<CalendarIcon />} 
+                    label="Built Year" 
+                    value={property.year_built} 
+                  />
+                  <PropertyDetailRow 
+                    icon={<LocationIcon />} 
+                    label="Distance from CBD" 
+                    value={`${property.distance}km`} 
+                  />
                   {property.landsize && (
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid #f3f4f6' }}>
-                      <span style={{ color: '#666', fontSize: '14px' }}>Land Size</span>
-                      <span style={{ color: 'black', fontWeight: '500' }}>{property.landsize}m²</span>
-                    </div>
+                    <PropertyDetailRow 
+                      icon={<LandIcon />} 
+                      label="Land Size" 
+                      value={`${property.landsize}m²`} 
+                    />
                   )}
                 </div>
               </div>
@@ -320,55 +501,16 @@ const PropertyRentDetailPage = () => {
                 <h3 style={{ fontSize: '18px', fontWeight: '600', color: 'black', marginBottom: '24px' }}>Features & Amenities</h3>
                 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 40px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: '16px' }}>
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%' }}></div>
-                    <span style={{ color: '#374151', fontSize: '14px' }}>Secure parking</span>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: '16px' }}>
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%' }}></div>
-                    <span style={{ color: '#374151', fontSize: '14px' }}>NBN ready</span>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: '16px' }}>
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%' }}></div>
-                    <span style={{ color: '#374151', fontSize: '14px' }}>Swimming pool</span>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: '16px' }}>
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%' }}></div>
-                    <span style={{ color: '#374151', fontSize: '14px' }}>Gym access</span>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: '16px' }}>
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%' }}></div>
-                    <span style={{ color: '#374151', fontSize: '14px' }}>City views</span>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: '16px' }}>
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%' }}></div>
-                    <span style={{ color: '#374151', fontSize: '14px' }}>Natural light</span>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: '16px' }}>
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%' }}></div>
-                    <span style={{ color: '#374151', fontSize: '14px' }}>Air conditioning</span>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: '16px' }}>
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%' }}></div>
-                    <span style={{ color: '#374151', fontSize: '14px' }}>Dishwasher</span>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: '16px' }}>
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%' }}></div>
-                    <span style={{ color: '#374151', fontSize: '14px' }}>Balcony</span>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: '16px' }}>
-                    <div style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%' }}></div>
-                    <span style={{ color: '#374151', fontSize: '14px' }}>Modern kitchen</span>
-                  </div>
+                  <FeatureRow icon={<ParkingIcon />} text="Secure parking" />
+                  <FeatureRow icon={<WifiIcon />} text="NBN ready" />
+                  <FeatureRow icon={<SwimmingIcon />} text="Swimming pool" />
+                  <FeatureRow icon={<GymIcon />} text="Gym access" />
+                  <FeatureRow icon={<ViewIcon />} text="City views" />
+                  <FeatureRow icon={<LightIcon />} text="Natural light" />
+                  <FeatureRow icon={<AcIcon />} text="Air conditioning" />
+                  <FeatureRow icon={<ServiceIcon />} text="Dishwasher" />
+                  <FeatureRow icon={<BalconyIcon />} text="Balcony" />
+                  <FeatureRow icon={<KitchenIcon />} text="Modern kitchen" />
                 </div>
               </div>
               
@@ -388,87 +530,46 @@ const PropertyRentDetailPage = () => {
                   ></iframe>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
-                  <div style={{ backgroundColor: 'white', border: '1px solid #e5e5e5', borderRadius: '8px', padding: '16px' }}>
-                    <h4 style={{ fontSize: '16px', fontWeight: '600', color: 'black', marginBottom: '12px' }}>Transportation</h4>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '16px' }}>🚊</span>
-                        <span style={{ fontSize: '14px', color: '#666' }}>Flinders Station - 5 min walk</span>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '16px' }}>🚌</span>
-                        <span style={{ fontSize: '14px', color: '#666' }}>Bus Stop - 2 min walk</span>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '16px' }}>🚃</span>
-                        <span style={{ fontSize: '14px', color: '#666' }}>Tram Stop - 1 min walk</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div style={{ backgroundColor: 'white', border: '1px solid #e5e5e5', borderRadius: '8px', padding: '16px' }}>
-                    <h4 style={{ fontSize: '16px', fontWeight: '600', color: 'black', marginBottom: '12px' }}>Nearby Amenities</h4>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '16px' }}>🛒</span>
-                        <span style={{ fontSize: '14px', color: '#666' }}>Woolworths - 3 min walk</span>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '16px' }}>☕</span>
-                        <span style={{ fontSize: '14px', color: '#666' }}>Multiple cafes nearby</span>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '16px' }}>🏥</span>
-                        <span style={{ fontSize: '14px', color: '#666' }}>Medical Center - 8 min walk</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div style={{ backgroundColor: 'white', border: '1px solid #e5e5e5', borderRadius: '8px', padding: '16px' }}>
-                    <h4 style={{ fontSize: '16px', fontWeight: '600', color: 'black', marginBottom: '12px' }}>Education</h4>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '16px' }}>🏫</span>
-                        <span style={{ fontSize: '14px', color: '#666' }}>Melbourne Primary - 1.2 km</span>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '16px' }}>🎓</span>
-                        <span style={{ fontSize: '14px', color: '#666' }}>RMIT University - 800m</span>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '16px' }}>📚</span>
-                        <span style={{ fontSize: '14px', color: '#666' }}>State Library - 10 min walk</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div style={{ backgroundColor: 'white', border: '1px solid #e5e5e5', borderRadius: '8px', padding: '16px' }}>
-                    <h4 style={{ fontSize: '16px', fontWeight: '600', color: 'black', marginBottom: '12px' }}>Lifestyle</h4>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '16px' }}>🏞️</span>
-                        <span style={{ fontSize: '14px', color: '#666' }}>Treasury Gardens - 5 min</span>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '16px' }}>🏋️</span>
-                        <span style={{ fontSize: '14px', color: '#666' }}>Fitness First - 3 min walk</span>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '16px' }}>🍽️</span>
-                        <span style={{ fontSize: '14px', color: '#666' }}>Restaurant district nearby</span>
-                      </div>
-                    </div>
-                  </div>
+                {/* Tab Navigation */}
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', borderBottom: '1px solid #e5e7eb' }}>
+                  {['Transportation', 'Amenities', 'Education', 'Lifestyle'].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveLocationTab(tab.toLowerCase())}
+                      style={{
+                        padding: '12px 20px',
+                        backgroundColor: 'transparent',
+                        border: 'none',
+                        fontSize: '16px',
+                        fontWeight: '500',
+                        color: activeLocationTab === tab.toLowerCase() ? '#2563eb' : '#6b7280',
+                        borderBottom: activeLocationTab === tab.toLowerCase() ? '2px solid #2563eb' : '2px solid transparent',
+                        cursor: 'pointer',
+                        transition: 'color 0.2s'
+                      }}
+                    >
+                      {tab}
+                    </button>
+                  ))}
                 </div>
+
+                {/* Tab Content */}
+                <TabContent items={nearbyData[activeLocationTab]} />
+
               </div>
 
               {/* Similar Properties */}
               <div style={{ marginTop: '48px' }}>
                 <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'black', marginBottom: '24px' }}>Similar Properties</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
-                  {similarProperties.map(prop => (
-                    <PropertyCard key={prop.property_id} property={prop} />
+                  {similarProperties  
+                    .filter(prop => prop.listing_type === property.listing_type)
+                    .map(prop => (
+                      <PropertyCard 
+                        key={prop.property_id} 
+                        property={prop} 
+                        onView={(property) => window.location.href = `/${property.listing_type}/${property.property_id}`}
+                      />
                   ))}
                 </div>
               </div>
@@ -490,7 +591,7 @@ const PropertyRentDetailPage = () => {
                     onClick={() => setShowInspectionModal(true)}
                     style={{ width: '100%', border: '1px solid #10b981', color: '#10b981', padding: '16px', borderRadius: '8px', fontSize: '16px', fontWeight: '600', backgroundColor: 'white', cursor: 'pointer' }}
                   >
-                    📅 Book Inspection
+                    Book Inspection
                   </button>
 
                   <button 
@@ -640,80 +741,6 @@ const PropertyRentDetailPage = () => {
               >
                 Confirm Booking
               </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Rental Calculator Modal */}
-      {showRentalCalculatorModal && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
-          <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '24px', width: '100%', maxWidth: '448px', margin: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
-              <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'black', margin: 0 }}>Affordability Calculator</h3>
-              <button 
-                onClick={() => setShowRentalCalculatorModal(false)}
-                style={{ color: '#9ca3af', backgroundColor: 'transparent', border: 'none', fontSize: '24px', cursor: 'pointer' }}
-              >
-                ×
-              </button>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '8px' }}>
-                  Weekly Income: ${weeklyIncome.toLocaleString()}
-                </label>
-                <input
-                  type="range"
-                  min="500"
-                  max="5000"
-                  step="50"
-                  value={weeklyIncome}
-                  onChange={(e) => setWeeklyIncome(parseInt(e.target.value))}
-                  style={{ width: '100%', height: '8px', backgroundColor: '#e5e7eb', borderRadius: '4px', appearance: 'none', cursor: 'pointer' }}
-                />
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
-                  <span>$500</span>
-                  <span>$5000</span>
-                </div>
-              </div>
-
-              <div style={{ backgroundColor: calculateAffordability().isAffordable ? '#f0fdf4' : '#fef2f2', border: `1px solid ${calculateAffordability().isAffordable ? '#bbf7d0' : '#fecaca'}`, borderRadius: '8px', padding: '16px' }}>
-                <h4 style={{ fontSize: '16px', fontWeight: '600', color: 'black', marginBottom: '12px' }}>Affordability Analysis</h4>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '14px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#6b7280' }}>Weekly Income:</span>
-                    <span style={{ fontWeight: '500' }}>${weeklyIncome.toLocaleString()}</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#6b7280' }}>Recommended Max Rent (30%):</span>
-                    <span style={{ fontWeight: '500' }}>${calculateAffordability().recommendedMaxRent}</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#6b7280' }}>This Property:</span>
-                    <span style={{ fontWeight: '500' }}>${currentRent}/week</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ color: '#6b7280' }}>Percentage of Income:</span>
-                    <span style={{ fontWeight: '500', color: calculateAffordability().isAffordable ? '#059669' : '#dc2626' }}>
-                      {calculateAffordability().percentage}%
-                    </span>
-                  </div>
-                  <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '8px', marginTop: '8px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', fontWeight: '600' }}>
-                      <span>Assessment:</span>
-                      <span style={{ color: calculateAffordability().isAffordable ? '#059669' : '#dc2626' }}>
-                        {calculateAffordability().isAffordable ? 'Affordable' : 'Above Budget'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ fontSize: '12px', color: '#6b7280' }}>
-                * Based on the 30% rule. Consider other expenses like utilities, groceries, and savings when budgeting.
-              </div>
             </div>
           </div>
         </div>

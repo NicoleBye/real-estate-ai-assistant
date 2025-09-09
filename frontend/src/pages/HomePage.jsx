@@ -3,6 +3,7 @@ import Logo from '../components/logo';
 import UserMenu from '../components/UserMenu';
 import PropertyCard from '../components/PropertyCard';
 
+
 import { 
   Search, 
   Send, 
@@ -20,222 +21,6 @@ import {
   TrendingUp
 } from 'lucide-react';
 
-// AI Chat Component 
-const CompactAIChat = ({ isOpen, onClose }) => {
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      type: 'bot',
-      text: "Hi! I'm your AI property assistant. Ask me about properties in Wollongong!"
-    }
-  ]);
-  const [inputValue, setInputValue] = useState('');
-
-  const addMessage = (userText, botText) => {
-    const userMsg = {
-      id: Math.random(),
-      type: 'user', 
-      text: userText
-    };
-    
-    const botMsg = {
-      id: Math.random(),
-      type: 'bot',
-      text: botText
-    };
-
-    setMessages(current => [...current, userMsg, botMsg]);
-  };
-
-  const handleSend = () => {
-    if (!inputValue.trim()) return;
-    addMessage(inputValue, "Thanks for your message! I found some great properties for you.");
-    setInputValue('');
-  };
-
-  if (!isOpen) return null;
-
-  return (
-    <div style={{
-      position: 'fixed',
-      bottom: '24px',
-      right: '24px',
-      width: '340px',
-      height: '480px',
-      backgroundColor: 'white',
-      borderRadius: '12px',
-      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-      border: '1px solid #e5e7eb',
-      zIndex: 1000,
-      display: 'flex',
-      flexDirection: 'column',
-      fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif'
-    }}>
-      <div style={{
-        background: 'linear-gradient(to right, #2563eb, #9333ea)',
-        color: 'white',
-        padding: '16px',
-        borderTopLeftRadius: '12px',
-        borderTopRightRadius: '12px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <div>
-          <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 'bold' }}>AI Assistant</h3>
-          <p style={{ margin: 0, fontSize: '12px', opacity: 0.9 }}>Your Property Guide</p>
-        </div>
-        <button 
-          onClick={onClose}
-          style={{
-            background: 'rgba(255,255,255,0.2)',
-            border: 'none',
-            borderRadius: '50%',
-            width: '32px',
-            height: '32px',
-            color: 'white',
-            cursor: 'pointer',
-            fontSize: '18px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          ×
-        </button>
-      </div>
-
-      <div style={{
-        flex: 1,
-        padding: '16px',
-        overflowY: 'auto',
-        backgroundColor: '#f9fafb'
-      }}>
-        {messages.map((message) => (
-          <div key={message.id} style={{
-            marginBottom: '12px',
-            display: 'flex',
-            justifyContent: message.type === 'user' ? 'flex-end' : 'flex-start'
-          }}>
-            <div style={{
-              maxWidth: '280px',
-              padding: '8px 12px',
-              borderRadius: '18px',
-              fontSize: '14px',
-              backgroundColor: message.type === 'user' ? '#2563eb' : 'white',
-              color: message.type === 'user' ? 'white' : '#374151',
-              border: message.type === 'bot' ? '1px solid #e5e7eb' : 'none'
-            }}>
-              {message.text}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div style={{ padding: '0 16px' }}>
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          gap: '8px', 
-          marginBottom: '12px'
-        }}>
-          <button 
-            onClick={() => addMessage("Show me 2 bedroom apartments", "Great! I'll help you find 2 bedroom apartments.")}
-            style={{
-              fontSize: '12px',
-              padding: '8px 12px',
-              backgroundColor: '#dbeafe',
-              color: '#1d4ed8',
-              border: '1px solid #bfdbfe',
-              borderRadius: '20px',
-              cursor: 'pointer',
-              textAlign: 'left',
-              transition: 'background-color 0.2s'
-            }}
-          >
-            Show me 2 bedroom apartments
-          </button>
-          <button 
-            onClick={() => addMessage("Properties under $800k", "Great! I'll help you find properties under $800k.")}
-            style={{
-              fontSize: '12px',
-              padding: '8px 12px',
-              backgroundColor: '#dbeafe',
-              color: '#1d4ed8',
-              border: '1px solid #bfdbfe',
-              borderRadius: '20px',
-              cursor: 'pointer',
-              textAlign: 'left',
-              transition: 'background-color 0.2s'
-            }}
-          >
-            Properties under $800k
-          </button>
-          <button 
-            onClick={() => addMessage("Houses in Wollongong", "Great! I'll help you find houses in Wollongong.")}
-            style={{
-              fontSize: '12px',
-              padding: '8px 12px',
-              backgroundColor: '#dbeafe',
-              color: '#1d4ed8',
-              border: '1px solid #bfdbfe',
-              borderRadius: '20px',
-              cursor: 'pointer',
-              textAlign: 'left',
-              transition: 'background-color 0.2s'
-            }}
-          >
-            Houses in Wollongong
-          </button>
-        </div>
-      </div>
-
-      <div style={{ 
-        padding: '16px', 
-        borderTop: '1px solid #e5e7eb',
-        backgroundColor: 'white',
-        borderBottomLeftRadius: '12px',
-        borderBottomRightRadius: '12px'
-      }}>
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Ask about properties..."
-            style={{
-              flex: 1,
-              padding: '8px 12px',
-              border: '1px solid #d1d5db',
-              borderRadius: '20px',
-              outline: 'none',
-              fontSize: '14px'
-            }}
-          />
-          <button
-            onClick={handleSend}
-            style={{
-              backgroundColor: '#2563eb',
-              color: 'white',
-              border: 'none',
-              borderRadius: '50%',
-              width: '36px',
-              height: '36px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              outline: 'none'
-            }}
-          >
-            →
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 // Main Homepage Component
 const Homepage = () => {
@@ -243,7 +28,6 @@ const Homepage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('rent');
   const [currentNewsSlide, setCurrentNewsSlide] = useState(0);
-  const [isChatOpen, setIsChatOpen] = useState(false);
   
   // User behavior tracking
   const [hasUserActivity, setHasUserActivity] = useState(false);
@@ -824,7 +608,7 @@ const Homepage = () => {
               <PropertyCard 
                 key={property.property_id} 
                 property={property}
-                onView={(propertyId) => window.location.href = `/buy/${propertyId}`}
+                onView={(property) => window.location.href = `/${property.listing_type}/${property.property_id}`}
               />
             ))}
           </div>
@@ -1030,31 +814,6 @@ const Homepage = () => {
           </div>
         </div>
       </section>
-
-      <div style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 100 }}>
-        <button 
-          onClick={() => setIsChatOpen(!isChatOpen)}
-          style={{ 
-            width: '70px', 
-            height: '70px', 
-            borderRadius: '50%', 
-            backgroundColor: '#2563eb', 
-            border: 'none', 
-            cursor: 'pointer',
-            boxShadow: '0 12px 20px -3px rgba(37, 99, 235, 0.3), 0 4px 6px -2px rgba(37, 99, 235, 0.2)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative',
-            transition: 'all 0.3s ease'
-          }}
-        >
-          <Bot style={{ width: '32px', height: '32px', color: 'white' }} />
-          <Sparkles style={{ width: '18px', height: '18px', color: 'white', position: 'absolute', top: '8px', right: '8px' }} />
-        </button>
-      </div>
-
-      <CompactAIChat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </div>
   );
 };

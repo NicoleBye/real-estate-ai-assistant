@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Logo from '../components/logo'; 
-import UserMenu from '../components/UserMenu';
 import PropertyCard from '../components/PropertyCard';
 
 const BuyPropertiesPage = () => {
@@ -821,7 +820,7 @@ const BuyPropertiesPage = () => {
               <PropertyCard 
                 key={property.property_id} 
                 property={property}
-                onView={(propertyId) => window.location.href = `/buy/${propertyId}`}
+                onView={(property) => window.location.href = `/${property.listing_type}/${property.property_id}`}
               />
             ))}
           </div>

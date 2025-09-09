@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 
 // Property Card Component
-const PropertyCard = ({ property }) => (
+const PropertyCard = ({ property, onView }) => (
   <div style={{
     backgroundColor: '#ffffff',
     borderRadius: '12px',
@@ -35,7 +35,9 @@ const PropertyCard = ({ property }) => (
   onMouseLeave={(e) => {
     e.currentTarget.style.transform = 'translateY(0)';
     e.currentTarget.style.boxShadow = 'none';
-  }}>
+  }}
+  onClick={() => onView && onView(property)}>
+
     <div style={{
       height: '160px',
       backgroundColor: property.color || '#3b82f6',
@@ -144,8 +146,65 @@ const PropertyCard = ({ property }) => (
   </div>
 );
 
-// Enhanced AI Chat Component
-const EnhancedAIChat = ({ isOpen, onClose }) => {
+// Property Modal Component - Add this before CompactAIChat component
+const PropertyModal = ({ isOpen, onClose, property }) => {
+  if (!isOpen || !property) return null;
+
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      zIndex: 2000,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '20px'
+    }}
+    onClick={onClose}>
+      <div style={{
+        backgroundColor: 'white',
+        borderRadius: '12px',
+        maxWidth: '800px',
+        maxHeight: '90vh',
+        overflowY: 'auto',
+        position: 'relative'
+      }}
+      onClick={(e) => e.stopPropagation()}>
+        <button 
+          onClick={onClose}
+          style={{
+            position: 'absolute',
+            top: '16px',
+            right: '16px',
+            background: 'rgba(0,0,0,0.1)',
+            border: 'none',
+            borderRadius: '50%',
+            width: '32px',
+            height: '32px',
+            cursor: 'pointer',
+            zIndex: 10
+          }}>
+          <X style={{ width: '16px', height: '16px' }} />
+        </button>
+        
+        {/* Property details content will go here */}
+        <div style={{ padding: '40px 24px 24px 24px' }}>
+          <h2>{property.property_type} in {property.suburb}</h2>
+          <p>{property.address}</p>
+          <p>Price: ${property.buy_price ? property.buy_price.toLocaleString() : `${property.rent_price}/week`}</p>
+          <p>{property.bedrooms} bed, {property.bathrooms} bath</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Compact AI Chat
+const CompactAIChat = ({ isOpen, onClose, onPropertyView}) => {
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -507,7 +566,13 @@ const EnhancedAIChat = ({ isOpen, onClose }) => {
               {message.properties && message.properties.length > 0 && (
                 <div style={{ width: '100%', marginTop: '8px' }}>
                   {message.properties.map((property) => (
-                    <PropertyCard key={property.property_id} property={property} />
+                    <PropertyCard 
+                      key={property.property_id} 
+                      property={property} 
+                      onView={(property) => {
+                        onPropertyView && onPropertyView(property);
+                      }}
+                    />
                   ))}
                 </div>
               )}
@@ -663,7 +728,7 @@ const Homepage = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   // ... (rest of the homepage code remains the same)
-  // Just replacing the old chat component with EnhancedAIChat
+  // Just replacing the old chat component with CompactAIChat
 
   return (
     <div>
@@ -705,7 +770,7 @@ const Homepage = () => {
         </div>
 
         {/* Enhanced AI Chat Component */}
-        <EnhancedAIChat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+        <CompactAIChat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
       </div>
     </div>
   );

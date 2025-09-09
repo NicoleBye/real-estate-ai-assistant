@@ -115,32 +115,59 @@ const RegisterPage = () => {
 
     // Prepare user data based on role
     const userData = {
-      name: formData.name.trim(),
+      username: formData.name.trim(),
       email: formData.email.toLowerCase(),
-      password_hash: formData.password, // This should be hashed in backend
+      password: formData.password, // This should be hashed in backend
       role: formData.role,
       ...(formData.role === 'agent' && {
         company: formData.company.trim(),
         license_number: formData.licenseNumber.trim(),
         phone: formData.phone.trim(),
-        status: 'pending' // Agent accounts start as pending approval
       })
     };
 
     console.log('User data to be sent to backend:', userData);
 
-    await new Promise((res) => setTimeout(res, 2000));
-    setShowSuccess(true);
-    setTimeout(() => {
-      if (formData.role === 'agent') {
-        alert('Agent application submitted! Please wait for approval before you can access your account.');
-        window.location.href = '/login';
+    // fetch API request
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Registration successful
+        setShowSuccess(true);
+        setTimeout(() => {
+          alert('Account created successfully! Redirecting to dashboard...');
+          if (formData.role === 'agent') {
+            window.location.href = '/agent';  
+          } else {
+            window.location.href = '/user';
+          }
+        }, 1500);
+        
       } else {
-        alert('Account created successfully! Redirecting to dashboard...');
-        window.location.href = '/user';
+        // Registration failed
+        if (data.errors) {
+          setErrors(data.errors);
+        } else {
+          setErrors({ general: data.message || 'Registration failed. Please try again.' });
+        }
       }
-    }, 1500);
-  };
+    } catch (error) {
+      // Network error
+      console.error('Registration error:', error);
+      setErrors({ general: 'Network error. Please check your connection and try again.' });
+    } finally {
+      setIsLoading(false);
+    }
+    };
 
   const getPasswordStrengthColor = () => {
     if (passwordStrength <= 2) return 'bg-red-500';
@@ -164,13 +191,10 @@ const RegisterPage = () => {
             <Check className="w-10 h-10 text-green-600" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            {formData.role === 'agent' ? 'Application Submitted!' : 'Account Created!'}
+            Account Created!
           </h2>
           <p className="text-gray-600">
-            {formData.role === 'agent' 
-              ? 'Your agent application is under review. We\'ll notify you once approved!'
-              : 'Welcome to Propzy! Redirecting to your dashboard...'
-            }
+              Welcome to Propzy! Redirecting to your dashboard...
           </p>
         </div>
       </div>
@@ -213,12 +237,12 @@ const RegisterPage = () => {
                       : 'text-gray-600 hover:text-gray-800'
                   }`}
                 >
-                  Agent Application
+                  Agent Account
                 </button>
               </div>
               
               <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-                {formData.role === 'agent' ? 'Apply as Agent' : 'Create your account'}
+                {formData.role === 'agent' ? 'Create Agent Account' : 'Create your account'}
               </h2>
               <p className="text-sm text-gray-600">
                 Already have an account?{' '}
@@ -235,14 +259,6 @@ const RegisterPage = () => {
                   Sign in here
                 </button>
               </p>
-              
-              {formData.role === 'agent' && (
-                <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <p className="text-xs text-green-800">
-                    Agent applications require manual approval. You'll be notified once your account is activated.
-                  </p>
-                </div>
-              )}
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -397,6 +413,13 @@ const RegisterPage = () => {
                 </label>
               </div>
               {errors.terms && <p className="text-red-500 text-xs">{errors.terms}</p>}
+              
+              {/* General error display */}
+              {errors.general && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                  <p className="text-red-600 text-sm">{errors.general}</p>
+                </div>
+              )}
 
               <button
                 type="submit"
@@ -410,11 +433,11 @@ const RegisterPage = () => {
                 {isLoading ? (
                   <div className="flex items-center justify-center gap-2">
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    {formData.role === 'agent' ? 'Submitting Application...' : 'Creating Account...'}
+                    {formData.role === 'agent' ? 'Submitting Account...' : 'Creating Account...'}
                   </div>
                 ) : (
                   <>
-                    {formData.role === 'agent' ? 'Submit Application' : 'Create Account'}
+                    Create Account
                     <ArrowRight className="w-5 h-5" />
                   </>
                 )}

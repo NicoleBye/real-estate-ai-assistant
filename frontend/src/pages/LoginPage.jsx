@@ -46,39 +46,64 @@ const LoginPage = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validate()) return;
-    setIsLoading(true);
+  e.preventDefault();
+  if (!validate()) return;
+  setIsLoading(true);
 
-    // Prepare login data for backend
-    const loginData = {
-      email: formData.email.toLowerCase().trim(),
-      password: formData.password,
-      rememberMe: rememberMe
-    };
+  // Prepare login data for backend
+  const loginData = {
+    email: formData.email.toLowerCase().trim(),
+    password: formData.password,
+    rememberMe: rememberMe
+  };
 
-    console.log('Login data to be sent to backend:', loginData);
+  console.log('Login data to be sent to backend:', loginData);
 
-    // Simulate API call
-    await new Promise((res) => setTimeout(res, 1500));
+  // fetch API request
+try {
+  const requestData = {
+    ...loginData,
+    role: userType
+  };
+
+  const response = await fetch('/api/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(requestData)
+  });
+
+  const data = await response.json();
+
+  if (response.ok) {
+    // Login successful
+    if (data.token) {
+      localStorage.setItem('authToken', data.token);
+    }
     
     setShowSuccess(true);
     setTimeout(() => {
-      // Backend will return user role, then redirect accordingly
-      // For demo purposes, using userType state
-      switch(userType) {
-        case 'user':
-          window.location.href = '/user';
-          break;
-        case 'agent':
-          window.location.href = '/agent';
-          break;
-        default:
-          window.location.href = '/';
-      }
+      const redirectUrl = data.redirectUrl || (data.userType === 'agent' ? '/agent' : '/user');
+      window.location.href = redirectUrl;
     }, 1500);
-  };
-
+    
+  } else {
+    // Login failed
+    if (data.errors) {
+      setErrors(data.errors);
+    } else {
+      setErrors({ general: data.message || 'Login failed. Please try again.' });
+    }
+  }
+} catch (error) {
+  // Network error
+  console.error('Login error:', error);
+  setErrors({ general: 'Network error. Please check your connection and try again.' });
+} finally {
+  setIsLoading(false);
+}
+};
   const handleForgotPassword = () => {
     alert('Forgot password functionality would be implemented here');
   };
@@ -126,8 +151,8 @@ const LoginPage = () => {
                   onClick={() => setUserType('user')}
                   className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
                     userType === 'user' 
-                      ? 'bg-white text-blue-600 shadow-sm' 
-                      : 'text-gray-600 hover:text-gray-800'
+                      ? 'bg-yellow-400 text-black shadow-sm border-2 border-yellow-400' 
+                      : 'bg-white text-gray-600 hover:text-gray-800 border-2 border-transparent'
                   }`}
                 >
                   User Login
@@ -136,8 +161,8 @@ const LoginPage = () => {
                   onClick={() => setUserType('agent')}
                   className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
                     userType === 'agent' 
-                      ? 'bg-white text-green-600 shadow-sm' 
-                      : 'text-gray-600 hover:text-gray-800'
+                      ? 'bg-yellow-400 text-black shadow-sm border-2 border-yellow-400' 
+                      : 'bg-white text-gray-600 hover:text-gray-800 border-2 border-transparent'
                   }`}
                 >
                   Agent Login
@@ -225,6 +250,13 @@ const LoginPage = () => {
                   Forgot password?
                 </button>
               </div>
+
+              {/* General error display */}
+              {errors.general && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                  <p className="text-red-600 text-sm">{errors.general}</p>
+                </div>
+              )}     
 
               <button
                 type="submit"

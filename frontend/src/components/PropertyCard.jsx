@@ -11,7 +11,7 @@ const PropertyCard = ({
 }) => {
   const [isSaved, setIsSaved] = useState(false);
 
-  // 格式化价格显示
+  // format price
   const formatPrice = () => {
     if (property.listing_type === 'buy' && property.buy_price) {
       if (property.buy_price >= 1000000) {
@@ -54,7 +54,7 @@ const PropertyCard = ({
   // handle card click
   const handleCardClick = () => {
     if (onView) {
-      onView(property.property_id);
+      onView(property);
     }
   };
 
@@ -131,14 +131,13 @@ const PropertyCard = ({
               boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
             }}
           >
-            <Heart 
-              style={{ 
-                width: '18px', 
-                height: '18px',
-                color: isSaved ? 'white' : '#6b7280',
-                fill: isSaved ? 'white' : 'none'
-              }} 
-            />
+            <span style={{ 
+              fontSize: '16px', 
+              color: isSaved ? 'white' : '#6b7280',
+              lineHeight: 1
+            }}>
+              {isSaved ? '♥' : '♡'}
+            </span>
           </button>
         )}
 
