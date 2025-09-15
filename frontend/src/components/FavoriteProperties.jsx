@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Heart, 
   Bell,
@@ -13,9 +13,108 @@ import {
   Home
 } from 'lucide-react';
 
-const FavoriteProperties = ({ favoriteProperties, onRemoveProperty }) => {
+// TODO: Delete after API integration - START
+const fallbackFavoriteProperties = [
+  {
+    property_id: "550e8400-e29b-41d4-a716-446655440001",
+    suburb: "Bondi Beach",
+    address: "123 Ocean Drive",
+    postcode: "2026",
+    listing_type: "buy",
+    property_type: "House",
+    seller: "Elite Realty",
+    distance: 12.5,
+    buy_price: 2850000,
+    rent_price: null,
+    bedrooms: 4,
+    bathrooms: 3,
+    carspaces: 2,
+    price_alert: true,
+    saved_date: "2025-01-15T10:00:00Z"
+  },
+  {
+    property_id: "550e8400-e29b-41d4-a716-446655440002",
+    suburb: "Sydney CBD",
+    address: "456 George Street",
+    postcode: "2000",
+    listing_type: "rent",
+    property_type: "Apartment",
+    seller: "City Properties",
+    distance: 0.5,
+    buy_price: null,
+    rent_price: 800,
+    bedrooms: 2,
+    bathrooms: 2,
+    carspaces: 1,
+    price_alert: false,
+    saved_date: "2025-01-20T10:00:00Z"
+  }
+];
+// TODO: Delete after API integration - END
+
+const FavoriteProperties = () => {
+  // TODO: Change to useState([]) after API integration
+  const [favoriteProperties, setFavoriteProperties] = useState(fallbackFavoriteProperties);
+  // const [favoriteProperties, setFavoriteProperties] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
+
+    // TODO: Uncomment when API is ready
+  /*
+  useEffect(() => {
+    fetchFavoriteProperties();
+  }, []);
+
+  const fetchFavoriteProperties = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/user/favorites');
+      if (!response.ok) {
+        throw new Error('Failed to fetch favorites');
+      }
+      const data = await response.json();
+      setFavoriteProperties(data);
+    } catch (error) {
+      console.error('Failed to fetch favorites:', error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  */
+
+  const handleRemoveProperty = (propertyId) => {
+    // TODO: Delete below direct state update and uncomment API call when backend is ready
+    setFavoriteProperties(prev => 
+      prev.filter(property => property.property_id !== propertyId)
+    );
+    
+    /*
+    const removePropertyAPI = async () => {
+      try {
+        const response = await fetch(`/api/user/favorites/${propertyId}`, {
+          method: 'DELETE'
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to remove favorite');
+        }
+        
+        setFavoriteProperties(prev => 
+          prev.filter(property => property.property_id !== propertyId)
+        );
+      } catch (error) {
+        console.error('Failed to remove favorite:', error);
+        setError('Failed to remove property');
+      }
+    };
+    
+    removePropertyAPI();
+    */
+  };
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-AU', { 
@@ -258,7 +357,7 @@ const FavoriteProperties = ({ favoriteProperties, onRemoveProperty }) => {
             <PropertyCard 
               key={property.property_id} 
               property={property} 
-              onRemove={onRemoveProperty}
+              onRemove={handleRemoveProperty}
             />
           ))}
         </div>

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PropertyCard from './PropertyCard'; 
+
 import { 
   Search, 
   Send, 
@@ -17,207 +19,8 @@ import {
   X
 } from 'lucide-react';
 
-// Property Card Component
-const PropertyCard = ({ property, onView }) => (
-  <div style={{
-    backgroundColor: '#ffffff',
-    borderRadius: '12px',
-    overflow: 'hidden',
-    border: '1px solid #e5e7eb',
-    marginBottom: '12px',
-    transition: 'transform 0.2s, box-shadow 0.2s',
-    cursor: 'pointer'
-  }}
-  onMouseEnter={(e) => {
-    e.currentTarget.style.transform = 'translateY(-2px)';
-    e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
-  }}
-  onMouseLeave={(e) => {
-    e.currentTarget.style.transform = 'translateY(0)';
-    e.currentTarget.style.boxShadow = 'none';
-  }}
-  onClick={() => onView && onView(property)}>
-
-    <div style={{
-      height: '160px',
-      backgroundColor: property.color || '#3b82f6',
-      position: 'relative',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    }}>
-      <Home style={{ width: '48px', height: '48px', color: 'white', opacity: 0.3 }} />
-      <div style={{
-        position: 'absolute',
-        top: '12px',
-        left: '12px',
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        color: 'white',
-        padding: '6px 10px',
-        borderRadius: '6px',
-        fontSize: '12px',
-        fontWeight: '600'
-      }}>
-        ${property.buy_price ? property.buy_price.toLocaleString() : `$${property.rent_price}/week`}
-      </div>
-      <div style={{
-        position: 'absolute',
-        top: '12px',
-        right: '12px',
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        color: '#374151',
-        padding: '4px 8px',
-        borderRadius: '12px',
-        fontSize: '10px',
-        fontWeight: '500',
-        textTransform: 'uppercase'
-      }}>
-        {property.listing_type}
-      </div>
-    </div>
-    
-    <div style={{ padding: '16px' }}>
-      <h4 style={{
-        margin: '0 0 8px 0',
-        fontSize: '16px',
-        fontWeight: '600',
-        color: '#111827',
-        lineHeight: '1.3'
-      }}>
-        {property.property_type} in {property.suburb}
-      </h4>
-      
-      <p style={{
-        margin: '0 0 12px 0',
-        fontSize: '13px',
-        color: '#6b7280',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '4px'
-      }}>
-        <MapPin style={{ width: '12px', height: '12px' }} />
-        {property.address}, {property.suburb} {property.postcode}
-      </p>
-      
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <div style={{
-          display: 'flex',
-          gap: '12px',
-          fontSize: '12px',
-          color: '#374151'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Bed style={{ width: '14px', height: '14px' }} />
-            <span>{property.bedrooms}</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Bath style={{ width: '14px', height: '14px' }} />
-            <span>{property.bathrooms}</span>
-          </div>
-          {property.carspaces > 0 && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Car style={{ width: '14px', height: '14px' }} />
-              <span>{property.carspaces}</span>
-            </div>
-          )}
-        </div>
-        
-        <button style={{
-          backgroundColor: '#2563eb',
-          color: 'white',
-          border: 'none',
-          borderRadius: '6px',
-          padding: '6px 12px',
-          fontSize: '11px',
-          fontWeight: '500',
-          cursor: 'pointer',
-          transition: 'background-color 0.2s'
-        }}
-        onMouseEnter={(e) => e.target.style.backgroundColor = '#1d4ed8'}
-        onMouseLeave={(e) => e.target.style.backgroundColor = '#2563eb'}>
-          View Details
-        </button>
-      </div>
-    </div>
-  </div>
-);
-
-// Property Modal Component - Add this before CompactAIChat component
-const PropertyModal = ({ isOpen, onClose, property }) => {
-  if (!isOpen || !property) return null;
-
-  return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      zIndex: 2000,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '20px'
-    }}
-    onClick={onClose}>
-      <div style={{
-        backgroundColor: 'white',
-        borderRadius: '12px',
-        maxWidth: '800px',
-        maxHeight: '90vh',
-        overflowY: 'auto',
-        position: 'relative'
-      }}
-      onClick={(e) => e.stopPropagation()}>
-        <button 
-          onClick={onClose}
-          style={{
-            position: 'absolute',
-            top: '16px',
-            right: '16px',
-            background: 'rgba(0,0,0,0.1)',
-            border: 'none',
-            borderRadius: '50%',
-            width: '32px',
-            height: '32px',
-            cursor: 'pointer',
-            zIndex: 10
-          }}>
-          <X style={{ width: '16px', height: '16px' }} />
-        </button>
-        
-        {/* Property details content will go here */}
-        <div style={{ padding: '40px 24px 24px 24px' }}>
-          <h2>{property.property_type} in {property.suburb}</h2>
-          <p>{property.address}</p>
-          <p>Price: ${property.buy_price ? property.buy_price.toLocaleString() : `${property.rent_price}/week`}</p>
-          <p>{property.bedrooms} bed, {property.bathrooms} bath</p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Compact AI Chat
-const CompactAIChat = ({ isOpen, onClose, onPropertyView}) => {
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      type: 'bot',
-      text: "Hi there! I'm here to help you find your perfect property. Just tell me what you're looking for - like \"2 bedroom apartment in Sydney under 800k\" or \"houses for rent in Wollongong\" - and I'll show you what's available.",
-      timestamp: new Date()
-    }
-  ]);
-  const [inputValue, setInputValue] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-
-  // Sample properties data
-  const sampleProperties = [
+// TODO: Delete after API integration - START
+  const fallbackChatProperties = [
     {
       property_id: "1",
       suburb: "Bondi Beach",
@@ -258,7 +61,103 @@ const CompactAIChat = ({ isOpen, onClose, onPropertyView}) => {
       color: '#f59e0b'
     }
   ];
+  // TODO: Delete after API integration - END
+  
+// Property Modal Component - Add this before CompactAIChat component
+const PropertyModal = ({ isOpen, onClose, property }) => {
+  if (!isOpen || !property) return null;
 
+  // Build property detail URL
+  const pageUrl = property.listing_type === 'buy' 
+    ? `/buy/${property.property_id}?modal=true`
+    : `/rent/${property.property_id}?modal=true`;
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 0, left: 0, right: 0, bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      zIndex: 2000,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '20px'
+    }}
+    onClick={onClose}>
+      <div style={{
+        backgroundColor: 'white',
+        borderRadius: '16px',
+        width: '95%',
+        height: '95%',
+        position: 'relative',
+        overflow: 'hidden',
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+      }}
+      onClick={(e) => e.stopPropagation()}>
+        
+        {/* Close button */}
+        <button 
+          onClick={onClose}
+          style={{
+            position: 'absolute',
+            top: '16px',
+            right: '16px',
+            background: 'rgba(0,0,0,0.7)',
+            border: 'none',
+            borderRadius: '50%',
+            width: '40px',
+            height: '40px',
+            cursor: 'pointer',
+            zIndex: 10,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'background-color 0.2s'
+          }}
+          onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(0,0,0,0.9)'}
+          onMouseLeave={(e) => e.target.style.backgroundColor = 'rgba(0,0,0,0.7)'}
+        >
+          <X style={{ width: '20px', height: '20px', color: 'white' }} />
+        </button>
+        {/* Embed complete property detail page */}
+        <iframe 
+          src={pageUrl}
+          style={{
+            width: '100%',
+            height: '100%',
+            border: 'none',
+            borderRadius: '16px'
+          }}
+          title="Property Details"
+        />
+      </div>
+    </div>
+  );
+};
+
+
+
+// Compact AI Chat
+const CompactAIChat = ({ isOpen, onClose, onPropertyView, properties = [], user = null }) => {
+  // TODO: Change to use only props.properties after API integration ：const availableProperties = properties;
+  const availableProperties = properties.length > 0 ? properties : fallbackChatProperties;
+    // Handle property card click
+  const handlePropertyView = (property) => {
+    console.log('Property clicked:', property); 
+    console.log('onPropertyView function:', onPropertyView);
+    onPropertyView && onPropertyView(property);
+  };
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      type: 'bot',
+      text: "Hi there! I'm here to help you find your perfect property. Just tell me what you're looking for - like \"2 bedroom apartment in Sydney under 800k\" or \"houses for rent in Wollongong\" - and I'll show you what's available.",
+      timestamp: new Date()
+    }
+  ]);
+  const [inputValue, setInputValue] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+
+  
   const addMessage = (userText, botText, properties = null) => {
     const userMsg = {
       id: Date.now(),
@@ -395,45 +294,102 @@ const CompactAIChat = ({ isOpen, onClose, onPropertyView}) => {
     });
   };
 
-  const handleSend = () => {
-    if (!inputValue.trim()) return;
-    
-    const criteria = parseQuery(inputValue);
-    const filteredProperties = filterProperties(sampleProperties, criteria);
-    
-    let response = "I found these properties that match your criteria:";
-    
-    // Generate contextual response based on search criteria
-    if (criteria.bedrooms) {
-      response = `Here are ${criteria.bedrooms}-bedroom properties I found:`;
-    }
-    if (criteria.location) {
-      response = `Properties in ${criteria.location.charAt(0).toUpperCase() + criteria.location.slice(1)}:`;
-    }
-    if (criteria.priceMax) {
-      response = `Properties under ${criteria.priceMax.toLocaleString()}:`;
-    }
-    if (criteria.propertyType) {
-      response = `${criteria.propertyType}s available:`;
-    }
-    
-    if (filteredProperties.length === 0) {
-      response = "I couldn't find properties matching your exact criteria, but here are some similar options you might like:";
-      // Relax criteria and try again
-      const relaxedProperties = sampleProperties.slice(0, 2);
-      addMessage(inputValue, response, relaxedProperties);
-    } else {
-      addMessage(inputValue, response, filteredProperties);
-    }
-    
-    setInputValue('');
+  const handleSend = async () => {
+  if (!inputValue.trim()) return;
+  
+  const userMsg = {
+    id: Date.now(),
+    type: 'user',
+    text: inputValue,
+    timestamp: new Date()
   };
+  setMessages(current => [...current, userMsg]);
+  
+  const currentInput = inputValue;
+  setInputValue('');
+  setIsTyping(true);
 
+  // Use local search logic temporarily, no API call
+  setTimeout(() => {
+    const criteria = parseQuery(currentInput);
+    const filteredProperties = filterProperties(availableProperties, criteria);
+    
+    const botMsg = {
+      id: Date.now() + 1,
+      type: 'bot',
+      text: `Found ${filteredProperties.length} properties matching your criteria`,
+      timestamp: new Date(),
+      properties: filteredProperties.length > 0 ? filteredProperties.slice(0, 3) : availableProperties.slice(0, 2)
+    };
+    
+    setMessages(current => [...current, botMsg]);
+    setIsTyping(false);
+  }, 1000);
+
+  // TODO: Delete setTimeout section above and uncomment code below when backend is ready
+  /*
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify({
+        message: currentInput,
+        properties: availableProperties,
+        conversationHistory: messages,
+        userId: user?.id
+      })
+    });
+
+    const responseText = await response.text();
+    console.log('Response status:', response.status);
+    console.log('Raw response:', responseText);
+    
+    let aiResponse;
+    try {
+      aiResponse = JSON.parse(responseText);
+    } catch (parseError) {
+      throw new Error(`Invalid JSON: ${responseText}`);
+    }
+    
+    if (response.ok) {
+      const botMsg = {
+        id: Date.now() + 1,
+        type: 'bot',
+        text: aiResponse.message,
+        timestamp: new Date(),
+        properties: aiResponse.recommendedProperties || null
+      };
+      setMessages(current => [...current, botMsg]);
+    } else {
+      const errorMsg = {
+        id: Date.now() + 1,
+        type: 'bot',
+        text: `API Error: ${aiResponse.error || 'Unknown error'}`,
+        timestamp: new Date()
+      };
+      setMessages(current => [...current, errorMsg]);
+    }
+  } catch (error) {
+    const errorMsg = {
+      id: Date.now() + 1,
+      type: 'bot', 
+      text: `Network Error: ${error.message}`,
+      timestamp: new Date()
+    };
+    setMessages(current => [...current, errorMsg]);
+  } finally {
+    setIsTyping(false);
+  }
+  */
+};
   const quickActions = [
-    { text: "Show me 2 bedroom apartments", action: () => addMessage("Show me 2 bedroom apartments", "Here are some great 2-bedroom apartments:", sampleProperties.filter(p => p.bedrooms === 2)) },
-    { text: "Properties under $800k", action: () => addMessage("Properties under $800k", "I found these properties under $800k:", sampleProperties.filter(p => p.buy_price && p.buy_price < 800000)) },
-    { text: "Houses in Wollongong", action: () => addMessage("Houses in Wollongong", "Here are houses available in Wollongong:", sampleProperties.filter(p => p.suburb.toLowerCase().includes('wollongong'))) },
-    { text: "Rental properties", action: () => addMessage("Show me rental properties", "Here are available rental properties:", sampleProperties.filter(p => p.listing_type === 'rent')) }
+    { text: "Show me 2 bedroom apartments", action: () => addMessage("Show me 2 bedroom apartments", "Here are some great 2-bedroom apartments:", availableProperties.filter(p => p.bedrooms === 2)) },
+    { text: "Properties under $800k", action: () => addMessage("Properties under $800k", "I found these properties under $800k:", availableProperties.filter(p => p.buy_price && p.buy_price < 800000)) },
+    { text: "Houses in Wollongong", action: () => addMessage("Houses in Wollongong", "Here are houses available in Wollongong:", availableProperties.filter(p => p.suburb.toLowerCase().includes('wollongong'))) },
+    { text: "Rental properties", action: () => addMessage("Show me rental properties", "Here are available rental properties:", availableProperties.filter(p => p.listing_type === 'rent')) }
   ];
 
   if (!isOpen) return null;
@@ -565,15 +521,14 @@ const CompactAIChat = ({ isOpen, onClose, onPropertyView}) => {
               {/* Property Cards */}
               {message.properties && message.properties.length > 0 && (
                 <div style={{ width: '100%', marginTop: '8px' }}>
-                  {message.properties.map((property) => (
-                    <PropertyCard 
-                      key={property.property_id} 
-                      property={property} 
-                      onView={(property) => {
-                        onPropertyView && onPropertyView(property);
-                      }}
-                    />
-                  ))}
+                {message.properties.map((property) => (
+                  <PropertyCard 
+                    key={property.property_id} 
+                    property={property} 
+                    onView={handlePropertyView}
+                    showSaveButton={false}
+                  />
+                ))}
                 </div>
               )}
               
@@ -721,6 +676,7 @@ const CompactAIChat = ({ isOpen, onClose, onPropertyView}) => {
 
 // Main Homepage Component (keeping the same structure but with enhanced chat)
 const Homepage = () => {
+  const [modalProperty, setModalProperty] = useState(null); 
   const [user, setUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('rent');
@@ -729,6 +685,29 @@ const Homepage = () => {
 
   // ... (rest of the homepage code remains the same)
   // Just replacing the old chat component with CompactAIChat
+  // TODO: Delete test file after integration
+  const featuredProperties = [
+    {
+      property_id: "test-1",
+      suburb: "Bondi Beach",
+      property_type: "House",
+      buy_price: 2850000,
+      bedrooms: 4,
+      bathrooms: 3,
+      carspaces: 2,
+      color: '#3b82f6'
+    },
+    {
+      property_id: "test-2",
+      suburb: "Sydney CBD",
+      property_type: "Apartment",
+      rent_price: 800,
+      bedrooms: 2,
+      bathrooms: 2,
+      carspaces: 1,
+      color: '#10b981'
+    }
+  ];
 
   return (
     <div>
@@ -769,8 +748,20 @@ const Homepage = () => {
           </button>
         </div>
 
-        {/* Enhanced AI Chat Component */}
-        <CompactAIChat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+        {/* AI Chat Component */}
+        <CompactAIChat 
+          isOpen={isChatOpen} 
+          onClose={() => setIsChatOpen(false)}
+          onPropertyView={setModalProperty} 
+          properties={featuredProperties} 
+          user={user}
+        />
+
+        <PropertyModal 
+        isOpen={!!modalProperty}
+        onClose={() => setModalProperty(null)}
+        property={modalProperty}
+        />
       </div>
     </div>
   );

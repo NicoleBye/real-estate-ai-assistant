@@ -1,152 +1,207 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Logo from '../components/logo'; 
 import PropertyCard from '../components/PropertyCard';
 
-const BuyPropertiesPage = () => {
-  // Melbourne property data for buying - exactly matching your database schema
-  const [properties] = useState([
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440001",
-      suburb: "Melbourne",
-      address: "123 Collins Street",
-      listing_type: "buy",
-      property_type: "Apartment",
-      method: "Private Sale",
-      seller: "Ray White Melbourne",
-      distance: 0.5,
-      postcode: "3000",
-      sale_date: "2025-01-15",
-      buy_price: 650000,
-      rent_price: null,
-      bedrooms: 3,
-      bathrooms: 2,
-      carspaces: 1,
-      landsize: null,
-      year_built: 2020,
-      latitude: -37.8136,
-      longitude: 144.9631,
-      image_url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      created_at: "2025-01-01T10:00:00Z"
-    },
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440002",
-      suburb: "South Yarra",
-      address: "456 Chapel Street",
-      listing_type: "buy", 
-      property_type: "House",
-      method: "Auction",
-      seller: "Jellis Craig",
-      distance: 3.2,
-      postcode: "3141",
-      sale_date: "2025-02-01",
-      buy_price: 780000,
-      rent_price: null,
-      bedrooms: 4,
-      bathrooms: 3,
-      carspaces: 2,
-      landsize: 400,
-      year_built: 2018,
-      latitude: -37.8467,
-      longitude: 144.9896,
-      image_url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      created_at: "2025-01-02T11:30:00Z"
-    },
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440003",
-      suburb: "Collingwood",
-      address: "789 Smith Street",
-      listing_type: "buy",
-      property_type: "Townhouse", 
-      method: "Private Sale",
-      seller: "Hocking Stuart",
-      distance: 2.8,
-      postcode: "3066",
-      sale_date: "2025-01-20",
-      buy_price: 920000,
-      rent_price: null,
-      bedrooms: 3,
-      bathrooms: 2,
-      carspaces: 2,
-      landsize: 150,
-      year_built: 2019,
-      latitude: -37.8043,
-      longitude: 144.9848,
-      image_url: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      created_at: "2025-01-03T14:15:00Z"
-    },
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440004",
-      suburb: "Richmond",
-      address: "321 Swan Street",
-      listing_type: "buy",
-      property_type: "Unit",
-      method: "Private Sale", 
-      seller: "Nelson Alexander",
-      distance: 2.1,
-      postcode: "3121",
-      sale_date: "2025-01-25",
-      buy_price: 450000,
-      rent_price: null,
-      bedrooms: 2,
-      bathrooms: 1,
-      carspaces: 1,
-      landsize: null,
-      year_built: 2015,
-      latitude: -37.8197,
-      longitude: 144.9864,
-      image_url: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      created_at: "2025-01-04T09:45:00Z"
-    },
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440005",
-      suburb: "Southbank",
-      address: "100 Southbank Promenade",
-      listing_type: "buy",
-      property_type: "Apartment",
-      method: "Auction",
-      seller: "Barry Plant",
-      distance: 1.5,
-      postcode: "3006", 
-      sale_date: "2025-02-10",
-      buy_price: 1150000,
-      rent_price: null,
-      bedrooms: 3,
-      bathrooms: 2,
-      carspaces: 2,
-      landsize: null,
-      year_built: 2021,
-      latitude: -37.8220,
-      longitude: 144.9633,
-      image_url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      created_at: "2025-01-05T16:20:00Z"
-    },
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440006",
-      suburb: "Fitzroy",
-      address: "555 Brunswick Street", 
-      listing_type: "buy",
-      property_type: "House",
-      method: "Private Sale",
-      seller: "RT Edgar",
-      distance: 3.5,
-      postcode: "3065",
-      sale_date: "2025-02-15",
-      buy_price: 2200000,
-      rent_price: null,
-      bedrooms: 5,
-      bathrooms: 3,
-      carspaces: 2,
-      landsize: 600,
-      year_built: 1920,
-      latitude: -37.7979,
-      longitude: 144.9810,
-      image_url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      created_at: "2025-01-06T12:00:00Z"
-    }
-  ]);
+// TODO: Delete after API integration - START  
+const fallbackBuyProperties = [
+  {
+    id: 1,
+    suburb: "Melbourne",
+    address: "123 Collins Street",
+    property_type: "buy",
+    category: "Apartment",
+    company: "Ray White Melbourne",
+    postcode: "3000",
+    buy_price: 650000,
+    rent_price: null,
+    bedrooms_num: 3,
+    bathrooms_num: 2,
+    carspaces: 1,
+    landsize: null,
+    year_built: 2020,
+    lat: -37.8136,
+    lng: 144.9631,
+    images: [
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      }
+    ],
+    created_at: "2025-01-01T10:00:00Z",
+    updated_at: "2025-01-01T10:00:00Z"
+  },
+  {
+    id: 2,
+    suburb: "South Yarra",
+    address: "456 Chapel Street",
+    property_type: "buy", 
+    category: "House",
+    company: "Jellis Craig",
+    postcode: "3141",
+    buy_price: 780000,
+    rent_price: null,
+    bedrooms_num: 4,
+    bathrooms_num: 3,
+    carspaces: 2,
+    landsize: 400,
+    year_built: 2018,
+    lat: -37.8467,
+    lng: 144.9896,
+    images: [
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      }
+    ],
+    created_at: "2025-01-02T11:30:00Z",
+    updated_at: "2025-01-02T11:30:00Z"
+  },
+  {
+    id: 3,
+    suburb: "Collingwood",
+    address: "789 Smith Street",
+    property_type: "buy",
+    category: "Townhouse", 
+    company: "Hocking Stuart",
+    postcode: "3066",
+    buy_price: 920000,
+    rent_price: null,
+    bedrooms_num: 3,
+    bathrooms_num: 2,
+    carspaces: 2,
+    landsize: 150,
+    year_built: 2019,
+    lat: -37.8043,
+    lng: 144.9848,
+    images: [
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      }
+    ],
+    created_at: "2025-01-03T14:15:00Z",
+    updated_at: "2025-01-03T14:15:00Z"
+  },
+  {
+    id: 4,
+    suburb: "Richmond",
+    address: "321 Swan Street",
+    property_type: "buy",
+    category: "Unit",
+    company: "Nelson Alexander",
+    postcode: "3121",
+    buy_price: 450000,
+    rent_price: null,
+    bedrooms_num: 2,
+    bathrooms_num: 1,
+    carspaces: 1,
+    landsize: null,
+    year_built: 2015,
+    lat: -37.8197,
+    lng: 144.9864,
+    images: [
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      }
+    ],
+    created_at: "2025-01-04T09:45:00Z",
+    updated_at: "2025-01-04T09:45:00Z"
+  },
+  {
+    id: 5,
+    suburb: "Southbank",
+    address: "100 Southbank Promenade",
+    property_type: "buy",
+    category: "Apartment",
+    company: "Barry Plant",
+    postcode: "3006", 
+    buy_price: 1150000,
+    rent_price: null,
+    bedrooms_num: 3,
+    bathrooms_num: 2,
+    carspaces: 2,
+    landsize: null,
+    year_built: 2021,
+    lat: -37.8220,
+    lng: 144.9633,
+    images: [
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      }
+    ],
+    created_at: "2025-01-05T16:20:00Z",
+    updated_at: "2025-01-05T16:20:00Z"
+  },
+  {
+    id: 6,
+    suburb: "Fitzroy",
+    address: "555 Brunswick Street", 
+    property_type: "buy",
+    category: "House",
+    company: "RT Edgar",
+    postcode: "3065",
+    buy_price: 2200000,
+    rent_price: null,
+    bedrooms_num: 5,
+    bathrooms_num: 3,
+    carspaces: 2,
+    landsize: 600,
+    year_built: 1920,
+    lat: -37.7979,
+    lng: 144.9810,
+    images: [
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      }
+    ],
+    created_at: "2025-01-06T12:00:00Z",
+    updated_at: "2025-01-06T12:00:00Z"
+  }
+];
+  // TODO: Delete after API integration - END
 
+const BuyPropertiesPage = () => {
+  // TODO: Change to useState([]) after API integration  
+  const [properties, setProperties] = useState(fallbackBuyProperties)
   const [showMap, setShowMap] = useState(true);
   const [priceRange, setPriceRange] = useState({ min: 400000, max: 1500000 });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('buy');
+
+  // Load properties when component mounts
+  useEffect(() => {
+    // Use fallback data temporarily, no API call
+    setProperties(fallbackBuyProperties);
+    setLoading(false);
+    
+    // TODO: Delete above two lines and uncomment code below when backend is ready
+    /*
+    const loadProperties = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/properties/buy');
+      const data = await response.json();
+      
+      if (response.ok) {
+        setProperties(data.properties || []);
+      } else {
+        console.error('Failed to load properties');
+        setProperties([]);
+      }
+    } catch (error) {
+      console.error('Failed to load properties:', error);
+      setProperties([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+  loadProperties();
+  */
+}, []);
 
   // Format price for display
   const formatPrice = (price) => {
@@ -156,22 +211,6 @@ const BuyPropertiesPage = () => {
       return `$${(price / 1000)}K`;
     }
     return `$${price}`;
-  };
-
-  // Format settlement date 
-  const formatSettlementDate = (saleDate) => {
-    const date = new Date(saleDate);
-    const now = new Date();
-    const diffTime = date - now;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays <= 0) {
-      return "Available now";
-    } else if (diffDays <= 30) {
-      return `Settlement ${diffDays} days`;
-    } else {
-      return "Settlement flexible";
-    }
   };
 
   const MapSection = () => (
@@ -299,10 +338,41 @@ const BuyPropertiesPage = () => {
           
           {/* Buy/Rent Toggle */}
           <div style={{ display: 'flex', gap: '4px', marginBottom: '16px', backgroundColor: '#f3f4f6', borderRadius: '8px', padding: '4px' }}>
-            <button style={{ flex: 1, padding: '12px 16px', fontSize: '14px', fontWeight: '500', backgroundColor: '#FBCA03', color: '#111827', borderRadius: '6px', border: 'none', cursor: 'pointer', transition: 'background-color 0.2s' }}>
+            <button 
+              onClick={() => setActiveTab('buy')}
+              style={{ 
+                flex: 1, 
+                padding: '12px 16px', 
+                fontSize: '14px', 
+                fontWeight: '500', 
+                backgroundColor: activeTab === 'buy' ? '#FBCA03' : '#f3f4f6', 
+                color: activeTab === 'buy' ? '#111827' : '#6b7280', 
+                borderRadius: '6px', 
+                border: 'none', 
+                cursor: 'pointer', 
+                transition: 'background-color 0.2s' 
+              }}
+            >
               Buy
             </button>
-            <button style={{ flex: 1, padding: '12px 16px', fontSize: '14px', fontWeight: '500', backgroundColor: '#f3f4f6', color: '#6b7280', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>
+            <button 
+              onClick={() => {
+                setActiveTab('rent');
+                window.location.href = '/rent';
+              }}
+              style={{ 
+                flex: 1, 
+                padding: '12px 16px', 
+                fontSize: '14px', 
+                fontWeight: '500', 
+                backgroundColor: activeTab === 'rent' ? '#FBCA03' : '#f3f4f6', 
+                color: activeTab === 'rent' ? '#111827' : '#6b7280', 
+                borderRadius: '6px', 
+                border: 'none', 
+                cursor: 'pointer', 
+                transition: 'background-color 0.2s' 
+              }}
+            >
               Rent
             </button>
           </div>
@@ -360,29 +430,6 @@ const BuyPropertiesPage = () => {
                   transition: 'border-color 0.2s'
                 }}
               />
-            </div>
-
-            {/* Settlement Date */}
-            <div>
-              <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#111827', marginBottom: '12px', margin: '0 0 12px 0' }}>Settlement</h3>
-              <select style={{ 
-                width: '100%', 
-                padding: '12px', 
-                border: '1px solid #d1d5db', 
-                borderRadius: '6px', 
-                backgroundColor: '#ffffff', 
-                fontSize: '14px', 
-                boxSizing: 'border-box', 
-                outline: 'none',
-                color: '#374151',
-                cursor: 'pointer'
-              }}>
-                <option value="any">Any time</option>
-                <option value="30">Within 30 days</option>
-                <option value="60">Within 60 days</option>
-                <option value="90">Within 90 days</option>
-                <option value="flexible">Flexible</option>
-              </select>
             </div>
 
             {/* Price Range */}
@@ -584,15 +631,11 @@ const BuyPropertiesPage = () => {
                 </label>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                   <input type="checkbox" name="propertyType" value="Apartment" defaultChecked style={{ marginRight: '12px' }} />
-                  <span style={{ fontSize: '14px', color: '#374151' }}>Apartment</span>
+                  <span style={{ fontSize: '14px', color: '#374151' }}>Apartment & Unit</span>
                 </label>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                   <input type="checkbox" name="propertyType" value="Townhouse" style={{ marginRight: '12px' }} />
                   <span style={{ fontSize: '14px', color: '#374151' }}>Townhouse</span>
-                </label>
-                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="checkbox" name="propertyType" value="Unit" style={{ marginRight: '12px' }} />
-                  <span style={{ fontSize: '14px', color: '#374151' }}>Unit</span>
                 </label>
               </div>
             </div>
@@ -658,25 +701,6 @@ const BuyPropertiesPage = () => {
               </div>
             </div>
 
-            {/* Sale Method */}
-            <div>
-              <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#111827', marginBottom: '12px', margin: '0 0 12px 0' }}>Sale Method</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="checkbox" name="method" value="Private Sale" defaultChecked style={{ marginRight: '12px' }} />
-                  <span style={{ fontSize: '14px', color: '#374151' }}>Private Sale</span>
-                </label>
-                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="checkbox" name="method" value="Auction" defaultChecked style={{ marginRight: '12px' }} />
-                  <span style={{ fontSize: '14px', color: '#374151' }}>Auction</span>
-                </label>
-                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="checkbox" name="method" value="Expression of Interest" style={{ marginRight: '12px' }} />
-                  <span style={{ fontSize: '14px', color: '#374151' }}>Expression of Interest</span>
-                </label>
-              </div>
-            </div>
-
             {/* Year Built */}
             <div>
               <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#111827', marginBottom: '12px', margin: '0 0 12px 0' }}>Year Built</h3>
@@ -686,15 +710,15 @@ const BuyPropertiesPage = () => {
                   <span style={{ fontSize: '14px', color: '#374151' }}>Any year</span>
                 </label>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="yearBuilt" value="new" style={{ marginRight: '12px' }} />
-                  <span style={{ fontSize: '14px', color: '#374151' }}>2020+</span>
+                  <input type="radio" name="yearBuilt" value="2010+" style={{ marginRight: '12px' }} />
+                  <span style={{ fontSize: '14px', color: '#374151' }}>2010+</span>
                 </label>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="yearBuilt" value="modern" style={{ marginRight: '12px' }} />
-                  <span style={{ fontSize: '14px', color: '#374151' }}>2000-2019</span>
+                  <input type="radio" name="yearBuilt" value="2000-2010" style={{ marginRight: '12px' }} />
+                  <span style={{ fontSize: '14px', color: '#374151' }}>2000-2010</span>
                 </label>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="yearBuilt" value="established" style={{ marginRight: '12px' }} />
+                  <input type="radio" name="yearBuilt" value="before2000" style={{ marginRight: '12px' }} />
                   <span style={{ fontSize: '14px', color: '#374151' }}>Before 2000</span>
                 </label>
               </div>
@@ -716,41 +740,17 @@ const BuyPropertiesPage = () => {
                 cursor: 'pointer'
               }}>
                 <option value="any">Any size</option>
-                <option value="200">200+ sqm</option>
-                <option value="300">300+ sqm</option>
-                <option value="400">400+ sqm</option>
-                <option value="500">500+ sqm</option>
-                <option value="600">600+ sqm</option>
-                <option value="800">800+ sqm</option>
-              </select>
-            </div>
-
-            {/* Distance from CBD */}
-            <div>
-              <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#111827', marginBottom: '12px', margin: '0 0 12px 0' }}>Distance from CBD</h3>
-              <select style={{ 
-                width: '100%', 
-                padding: '12px', 
-                border: '1px solid #d1d5db', 
-                borderRadius: '6px', 
-                backgroundColor: '#ffffff', 
-                fontSize: '14px', 
-                boxSizing: 'border-box', 
-                outline: 'none',
-                color: '#374151',
-                cursor: 'pointer'
-              }}>
-                <option value="any">Any distance</option>
-                <option value="2">Within 2km</option>
-                <option value="5">Within 5km</option>
-                <option value="10">Within 10km</option>
-                <option value="15">Within 15km</option>
-                <option value="20">Within 20km</option>
+                <option value="0-200">0-200 sqm</option>
+                <option value="200-400">200-400 sqm</option>
+                <option value="400-600">400-600 sqm</option>
+                <option value="600-800">600-800 sqm</option>
+                <option value="800-1000">800-1000 sqm</option>
+                <option value="1000+">1000+ sqm</option>
               </select>
             </div>
           </div>
         </div>
-
+            
         {/* Search Button */}
         <div style={{ padding: '16px', borderTop: '1px solid #e5e7eb' }}>
           <button 
@@ -810,7 +810,6 @@ const BuyPropertiesPage = () => {
                 <option value="price-high">Price: High to Low</option>
                 <option value="date">Date Listed</option>
                 <option value="bedrooms">Bedrooms</option>
-                <option value="distance">Distance from CBD</option>
               </select>
             </div>
           </div>
@@ -818,9 +817,9 @@ const BuyPropertiesPage = () => {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '24px' }}>
             {properties.map(property => (
               <PropertyCard 
-                key={property.property_id} 
+                key={property.id} 
                 property={property}
-                onView={(property) => window.location.href = `/${property.listing_type}/${property.property_id}`}
+                onView={(property) => window.location.href = `/${property.property_type}/${property.id}`}
               />
             ))}
           </div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import Logo from '../components/logo'; 
 import UserMenu from '../components/UserMenu';
 import PropertyCard from '../components/PropertyCard';
@@ -21,6 +22,179 @@ import {
   TrendingUp
 } from 'lucide-react';
 
+  // TODO: Delete after API integration - START
+const fallbackProperties = [
+  { 
+    id: "550e8400-e29b-41d4-a716-446655440001",
+    suburb: "Bondi Beach", 
+    address: "123 Ocean Drive",
+    postcode: "2026",
+    property_type: "buy",
+    category: "House",
+    company: "Elite Realty",
+    created_at: "2025-01-01T10:00:00Z",
+    updated_at: "2025-01-01T10:00:00Z",
+    buy_price: 2850000,
+    rent_price: null,
+    bedrooms_num: 4, 
+    bathrooms_num: 3, 
+    carspaces: 2,
+    landsize: 450, 
+    year_built: 2020,
+    lat: -33.8915,
+    lng: 151.2767,
+    images: [
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      }
+    ],
+    color: '#3b82f6',
+    match_score: 95
+  },
+  { 
+    id: "550e8400-e29b-41d4-a716-446655440002",
+    suburb: "Sydney CBD", 
+    address: "456 George Street",
+    postcode: "2000",
+    property_type: "buy",
+    category: "Apartment",
+    company: "City Properties",
+    created_at: "2025-01-01T10:00:00Z",
+    updated_at: "2025-01-01T10:00:00Z",
+    buy_price: 1250000,
+    rent_price: null,
+    bedrooms_num: 2, 
+    bathrooms_num: 2, 
+    carspaces: 1,
+    landsize: null, 
+    year_built: 2018,
+    lat: -33.8688,
+    lng: 151.2093,
+    images: [
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      }
+    ],
+    color: '#10b981',
+    match_score: 89
+  },
+  { 
+    id: "550e8400-e29b-41d4-a716-446655440003",
+    suburb: "Paddington", 
+    address: "789 Oxford Street",
+    postcode: "2021",
+    property_type: "buy",
+    category: "Townhouse",
+    company: "Heritage Homes",
+    created_at: "2025-01-01T10:00:00Z",
+    updated_at: "2025-01-01T10:00:00Z",
+    buy_price: 3200000,
+    rent_price: null,
+    bedrooms_num: 5, 
+    bathrooms_num: 4, 
+    carspaces: 2,
+    landsize: 680, 
+    year_built: 1920,
+    lat: -33.8848,
+    lng: 151.2291,
+    images: [
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      }
+    ],
+    color: '#f59e0b',
+    match_score: 84
+  },
+  { 
+    id: "550e8400-e29b-41d4-a716-446655440004",
+    suburb: "Surry Hills", 
+    address: "321 Crown Street",
+    postcode: "2010",
+    property_type: "buy",
+    category: "Townhouse",
+    company: "Urban Living",
+    created_at: "2025-01-01T10:00:00Z",
+    updated_at: "2025-01-01T10:00:00Z",
+    buy_price: 950000,
+    rent_price: null,
+    bedrooms_num: 3, 
+    bathrooms_num: 2, 
+    carspaces: 1,
+    landsize: 180, 
+    year_built: 2019,
+    lat: -33.8886,
+    lng: 151.2094,
+    images: [
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      }
+    ],
+    color: '#ef4444',
+    match_score: 78
+  },
+  { 
+    id: "550e8400-e29b-41d4-a716-446655440005",
+    suburb: "Darling Harbour", 
+    address: "100 Harbour Street",
+    postcode: "2000",
+    property_type: "buy",
+    category: "Apartment",
+    company: "Waterfront Realty",
+    created_at: "2025-01-01T10:00:00Z",
+    updated_at: "2025-01-01T10:00:00Z",
+    buy_price: 1680000,
+    rent_price: null,
+    bedrooms_num: 3, 
+    bathrooms_num: 3, 
+    carspaces: 2,
+    landsize: null, 
+    year_built: 2021,
+    lat: -33.8708,
+    lng: 151.1982,
+    images: [
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      }
+    ],
+    color: '#8b5cf6',
+    match_score: 72
+  },
+  { 
+    id: "550e8400-e29b-41d4-a716-446655440006",
+    suburb: "Leichhardt", 
+    address: "45 Norton Street",
+    postcode: "2040",
+    property_type: "buy",
+    category: "House",
+    company: "Family First Realty",
+    created_at: "2025-01-01T10:00:00Z",
+    updated_at: "2025-01-01T10:00:00Z",
+    buy_price: 750000,
+    rent_price: null,
+    bedrooms_num: 3, 
+    bathrooms_num: 1, 
+    carspaces: 1,
+    landsize: 250, 
+    year_built: 1960,
+    lat: -33.8846,
+    lng: 151.1547,
+    images: [
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      }
+    ],
+    color: '#06b6d4',
+    match_score: 68
+  }
+];
+  // TODO: Delete after API integration - END
+
 
 // Main Homepage Component
 const Homepage = () => {
@@ -33,39 +207,140 @@ const Homepage = () => {
   const [hasUserActivity, setHasUserActivity] = useState(false);
   const [savedProperties, setSavedProperties] = useState([]);
 
-  const mainFeatures = ['Properties', 'New Homes', 'Commercial', 'Agents'];
 
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      setHasUserActivity(true);
-      
-      // Navigate to the appropriate search page based on active tab
-      if (activeTab === 'rent') {
-        window.location.href = `/rent?location=${encodeURIComponent(searchQuery)}`;
-      } else if (activeTab === 'buy') {
-        window.location.href = `/buy?location=${encodeURIComponent(searchQuery)}`;
-      }
-    }
-  };
+
+  // TODO: Change to useState([]) after API integration
+  const [featuredProperties, setFeaturedProperties] = useState(fallbackProperties);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleLogin = () => {
     window.location.href = '/login';
   };
 
   const handleSignup = () => {
-    window.location.href = '/register';
+  window.location.href = '/register';
   };
 
-  const handleLogout = () => {
-    setUser(null);
+  // handleSearch function
+  const handleSearch = async () => {
+    if (searchQuery.trim()) {
+      setHasUserActivity(true);
+      
+      // Navigate directly without API call
+      if (activeTab === 'rent') {
+        window.location.href = `/rent?location=${encodeURIComponent(searchQuery)}`;
+      } else if (activeTab === 'buy') {
+        window.location.href = `/buy?location=${encodeURIComponent(searchQuery)}`;
+      }
+      
+      // TODO: Delete above navigation code and uncomment API call below when backend is ready
+      /*
+      setLoading(true);
+      try {
+        const response = await fetch('/api/properties/search', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 
+            query: searchQuery, 
+            type: activeTab 
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          if (activeTab === 'rent') {
+            window.location.href = `/rent?location=${encodeURIComponent(searchQuery)}`;
+          } else if (activeTab === 'buy') {
+            window.location.href = `/buy?location=${encodeURIComponent(searchQuery)}`;
+          }
+        } else {
+          setError('Search failed. Please try again.');
+        }
+      } catch (error) {
+        console.error('Search failed:', error);
+        setError('Search failed. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+      */
+    }
   };
 
-  const handleSaveProperty = (propertyId) => {
+  // handleSaveProperty function  
+  const handleSaveProperty = async (propertyId) => {
+    if (!user) {
+      alert('Please log in to save properties!');
+      return;
+    }
+
     setHasUserActivity(true);
+    
+    // Mock save functionality - just update local state
     if (!savedProperties.includes(propertyId)) {
       setSavedProperties([...savedProperties, propertyId]);
     }
-    alert(`Property ${propertyId} saved to your favorites!`);
+    alert('Property saved to your favorites! (Mock functionality)');
+    
+    // TODO: Delete above mock code and uncomment API call below when backend is ready
+    /*
+    try {
+      const response = await fetch('/api/properties/save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({ propertyId })
+      });
+      
+      if (response.ok) {
+        if (!savedProperties.includes(propertyId)) {
+          setSavedProperties([...savedProperties, propertyId]);
+        }
+        alert('Property saved to your favorites!');
+      } else {
+        alert('Failed to save property. Please try again.');
+      }
+    } catch (error) {
+      console.error('Failed to save property:', error);
+      alert('Failed to save property. Please try again.');
+    }
+    */
+  };
+
+  // handleLogout function
+  const handleLogout = async () => {
+    // Clear local state directly without API call
+    setUser(null);
+    setSavedProperties([]);
+    localStorage.removeItem('token');
+    
+    // TODO: Add API call when backend is ready
+    /*
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      setUser(null);
+      setSavedProperties([]);
+      localStorage.removeItem('token');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Still clear local state
+      setUser(null);
+      setSavedProperties([]);
+      localStorage.removeItem('token');
+    }
+    */
   };
 
   const newsArticles = [
@@ -124,158 +399,6 @@ const Homepage = () => {
     setCurrentNewsSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
   };
 
-  const featuredProperties = [
-    { 
-      property_id: "550e8400-e29b-41d4-a716-446655440001",
-      suburb: "Bondi Beach", 
-      address: "123 Ocean Drive",
-      postcode: "2026",
-      listing_type: "buy",
-      property_type: "House",
-      method: "Private Sale",
-      seller: "Elite Realty",
-      distance: 12.5,
-      sale_date: "2025-04-15",
-      buy_price: 2850000,
-      rent_price: null,
-      bedrooms: 4, 
-      bathrooms: 3, 
-      carspaces: 2,
-      landsize: 450, 
-      year_built: 2020,
-      latitude: -33.8915,
-      longitude: 151.2767,
-      image_url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      created_at: "2025-01-01T10:00:00Z",
-      color: '#3b82f6',
-      match_score: 95
-    },
-    { 
-      property_id: "550e8400-e29b-41d4-a716-446655440002",
-      suburb: "Sydney CBD", 
-      address: "456 George Street",
-      postcode: "2000",
-      listing_type: "buy",
-      property_type: "Apartment",
-      method: "Auction",
-      seller: "City Properties",
-      distance: 0.5,
-      sale_date: "2025-04-20",
-      buy_price: 1250000,
-      rent_price: null,
-      bedrooms: 2, 
-      bathrooms: 2, 
-      carspaces: 1,
-      landsize: null, 
-      year_built: 2018,
-      latitude: -33.8688,
-      longitude: 151.2093,
-      image_url: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      created_at: "2025-01-02T10:00:00Z",
-      color: '#10b981',
-      match_score: 89
-    },
-    { 
-      property_id: "550e8400-e29b-41d4-a716-446655440003",
-      suburb: "Paddington", 
-      address: "789 Oxford Street",
-      postcode: "2021",
-      listing_type: "buy",
-      property_type: "Townhouse",
-      method: "Private Treaty",
-      seller: "Heritage Homes",
-      distance: 3.2,
-      sale_date: "2025-05-01",
-      buy_price: 3200000,
-      rent_price: null,
-      bedrooms: 5, 
-      bathrooms: 4, 
-      carspaces: 2,
-      landsize: 680, 
-      year_built: 1920,
-      latitude: -33.8848,
-      longitude: 151.2291,
-      image_url: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      created_at: "2025-01-03T10:00:00Z",
-      color: '#f59e0b',
-      match_score: 84
-    },
-    { 
-      property_id: "550e8400-e29b-41d4-a716-446655440004",
-      suburb: "Surry Hills", 
-      address: "321 Crown Street",
-      postcode: "2010",
-      listing_type: "buy",
-      property_type: "Townhouse",
-      method: "Private Sale",
-      seller: "Urban Living",
-      distance: 2.1,
-      sale_date: "2025-04-25",
-      buy_price: 950000,
-      rent_price: null,
-      bedrooms: 3, 
-      bathrooms: 2, 
-      carspaces: 1,
-      landsize: 180, 
-      year_built: 2019,
-      latitude: -33.8886,
-      longitude: 151.2094,
-      image_url: "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      created_at: "2025-01-04T10:00:00Z",
-      color: '#ef4444',
-      match_score: 78
-    },
-    { 
-      property_id: "550e8400-e29b-41d4-a716-446655440005",
-      suburb: "Darling Harbour", 
-      address: "100 Harbour Street",
-      postcode: "2000",
-      listing_type: "buy",
-      property_type: "Apartment",
-      method: "Private Treaty",
-      seller: "Waterfront Realty",
-      distance: 1.0,
-      sale_date: "2025-05-10",
-      buy_price: 1680000,
-      rent_price: null,
-      bedrooms: 3, 
-      bathrooms: 3, 
-      carspaces: 2,
-      landsize: null, 
-      year_built: 2021,
-      latitude: -33.8708,
-      longitude: 151.1982,
-      image_url: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      created_at: "2025-01-05T10:00:00Z",
-      color: '#8b5cf6',
-      match_score: 72
-    },
-    { 
-      property_id: "550e8400-e29b-41d4-a716-446655440006",
-      suburb: "Leichhardt", 
-      address: "45 Norton Street",
-      postcode: "2040",
-      listing_type: "buy",
-      property_type: "House",
-      method: "Auction",
-      seller: "Family First Realty",
-      distance: 5.8,
-      sale_date: "2025-04-30",
-      buy_price: 750000,
-      rent_price: null,
-      bedrooms: 3, 
-      bathrooms: 1, 
-      carspaces: 1,
-      landsize: 250, 
-      year_built: 1960,
-      latitude: -33.8846,
-      longitude: 151.1547,
-      image_url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      created_at: "2025-01-06T10:00:00Z",
-      color: '#06b6d4',
-      match_score: 68
-    }
-  ];
 
   const getMatchScoreColor = (score) => {
     if (score >= 90) return '#10b981';
@@ -283,6 +406,37 @@ const Homepage = () => {
     if (score >= 70) return '#ef4444';
     return '#6b7280';
   };
+
+  // Load featured properties when component mounts
+  useEffect(() => {
+    // Use fallback data temporarily, no API call
+    setFeaturedProperties(fallbackProperties);
+    setLoading(false);
+    
+    // TODO: Delete above two lines and uncomment code below when backend is ready
+    /*
+    const loadFeaturedProperties = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('/api/properties/featured');
+        const data = await response.json();
+        
+        if (response.ok) {
+          setFeaturedProperties(data);
+        } else {
+          console.error('Failed to load featured properties');
+          setFeaturedProperties(fallbackProperties);
+        }
+      } catch (error) {
+        console.error('Failed to load featured properties:', error);
+        setFeaturedProperties(fallbackProperties);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadFeaturedProperties();
+    */
+  }, []);
 
   return (
     <div style={{ minHeight: '100vh', width: '100vw', backgroundColor: '#ffffff', margin: 0, padding: 0, position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, overflowY: 'auto', overflowX: 'hidden' }}>
@@ -410,7 +564,7 @@ const Homepage = () => {
                 .sort((a, b) => b.match_score - a.match_score)
                 .slice(0, 6)
                 .map((property, index) => (
-                <div key={property.property_id} style={{ 
+                <div key={property.id} style={{ 
                   backgroundColor: '#ffffff', 
                   borderRadius: '16px', 
                   overflow: 'hidden', 
@@ -478,13 +632,13 @@ const Homepage = () => {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleSaveProperty(property.property_id);
+                        handleSaveProperty(property.id);
                       }}
                       style={{
                         position: 'absolute',
                         bottom: '16px',
                         right: '16px',
-                        backgroundColor: savedProperties.includes(property.property_id) ? '#ef4444' : 'rgba(255, 255, 255, 0.9)',
+                        backgroundColor: savedProperties.includes(property.id) ? '#ef4444' : 'rgba(255, 255, 255, 0.9)',
                         border: 'none',
                         borderRadius: '50%',
                         width: '40px',
@@ -501,8 +655,8 @@ const Homepage = () => {
                         style={{ 
                           width: '18px', 
                           height: '18px', 
-                          color: savedProperties.includes(property.property_id) ? 'white' : '#374151',
-                          fill: savedProperties.includes(property.property_id) ? 'white' : 'none'
+                          color: savedProperties.includes(property.id) ? 'white' : '#374151',
+                          fill: savedProperties.includes(property.id) ? 'white' : 'none'
                         }} 
                       />
                     </button>
@@ -511,7 +665,7 @@ const Homepage = () => {
                   <div style={{ padding: '24px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
                       <h3 style={{ fontSize: '20px', fontWeight: '600', color: '#111827', margin: '0', flex: 1 }}>
-                        {property.property_type} in {property.suburb}
+                        {property.category} in {property.suburb}
                       </h3>
                       {property.match_score >= 85 && (
                         <div style={{
@@ -533,8 +687,8 @@ const Homepage = () => {
                     </p>
                     
                     <div style={{ display: 'flex', gap: '24px', fontSize: '14px', color: '#374151', marginBottom: '16px' }}>
-                      <span>{property.bedrooms} beds</span>
-                      <span>{property.bathrooms} baths</span>
+                      <span>{property.bedrooms_num} beds</span>
+                      <span>{property.bathrooms_num} baths</span>
                       {property.landsize && <span>{property.landsize} sqm</span>}
                       {property.carspaces && <span>{property.carspaces} car</span>}
                     </div>
@@ -593,7 +747,6 @@ const Homepage = () => {
           <div style={{ textAlign: 'center', marginBottom: '64px' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(59, 130, 246, 0.1)', padding: '6px 14px', borderRadius: '16px', marginBottom: '20px', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
               <Camera style={{ width: '14px', height: '14px', color: '#3b82f6' }} />
-              <span style={{ fontSize: '12px', fontWeight: '500', color: '#3b82f6', textTransform: 'uppercase', letterSpacing: '1px' }}>3D TOURS</span>
             </div>
             <h2 style={{ fontSize: '36px', fontWeight: 'bold', color: '#111827', marginBottom: '16px', margin: '0 0 16px 0' }}>
               Trending Properties
@@ -606,9 +759,9 @@ const Homepage = () => {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
             {featuredProperties.slice(0, 6).map((property) => (
               <PropertyCard 
-                key={property.property_id} 
+                key={property.id} 
                 property={property}
-                onView={(property) => window.location.href = `/${property.listing_type}/${property.property_id}`}
+                onView={(property) => window.location.href = `/${property.property_type}/${property.id}`}
               />
             ))}
           </div>

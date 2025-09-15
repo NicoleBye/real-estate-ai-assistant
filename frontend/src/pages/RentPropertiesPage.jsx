@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Logo from '../components/logo'; 
 import PropertyCard from '../components/PropertyCard';
 
-const RentPropertiesPage = () => {
-  // Melbourne property data for renting - exactly matching your database schema
-  const [properties] = useState([
+// TODO: Delete after API integration - START 
+const fallbackRentProperties =[
     {
       property_id: "550e8400-e29b-41d4-a716-446655440007",
       suburb: "Melbourne",
@@ -143,10 +142,50 @@ const RentPropertiesPage = () => {
       image_url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
       created_at: "2025-01-06T12:00:00Z"
     }
-  ]);
+  ];
+  // TODO: Delete after API integration - END
 
+const RentPropertiesPage = () => {
+  // TODO: Change to useState([]) after API integration  
+  const [properties, setProperties] = useState(fallbackRentProperties);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('rent');
   const [showMap, setShowMap] = useState(true);
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
+  
+  // Load properties when component mounts
+  useEffect(() => {
+    // Use fallback data temporarily, no API call
+    setProperties(fallbackRentProperties);
+    setLoading(false);
+    
+    // TODO: Delete above two lines and uncomment code below when backend is ready
+    /*
+    const loadProperties = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('/api/properties/rent');
+        const data = await response.json();
+        
+        if (response.ok) {
+          setProperties(data.properties || []);
+        } else {
+          console.error('Failed to load properties');
+          setProperties([]);
+        }
+      } catch (error) {
+        console.error('Failed to load properties:', error);
+        setProperties([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProperties();
+    */
+  }, []);
+
+
 
   // Format price for display
   const formatPrice = (price) => {
@@ -294,10 +333,37 @@ const RentPropertiesPage = () => {
           
           {/* Buy/Rent Toggle */}
           <div style={{ display: 'flex', gap: '4px', marginBottom: '16px', backgroundColor: '#f3f4f6', borderRadius: '8px', padding: '4px' }}>
-            <button style={{ flex: 1, padding: '12px 16px', fontSize: '14px', fontWeight: '500', backgroundColor: '#f3f4f6', color: '#6b7280', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>
+            <button 
+              onClick={() => {
+                setActiveTab('buy');
+                window.location.href = '/buy';
+              }}
+              style={{ flex: 1, 
+                padding: '12px 16px', 
+                fontSize: '14px', 
+                fontWeight: '500', 
+                backgroundColor: '#f3f4f6', 
+                color: '#6b7280', 
+                borderRadius: '6px', 
+                border: 'none', 
+                cursor: 'pointer' 
+              }}>
               Buy
             </button>
-            <button style={{ flex: 1, padding: '12px 16px', fontSize: '14px', fontWeight: '500', backgroundColor: '#FBCA03', color: '#111827', borderRadius: '6px', border: 'none', cursor: 'pointer', transition: 'background-color 0.2s' }}>
+            <button 
+              onClick={() => setActiveTab('rent')}
+              style={{ 
+                flex: 1, 
+                padding: '12px 16px', 
+                fontSize: '14px', 
+                fontWeight: '500', 
+                backgroundColor: '#FBCA03', 
+                color: '#111827', 
+                borderRadius: '6px', 
+                border: 'none', 
+                cursor: 'pointer', 
+                transition: 'background-color 0.2s' 
+              }}>
               Rent
             </button>
           </div>
@@ -718,6 +784,41 @@ const RentPropertiesPage = () => {
         {/* Search Button */}
         <div style={{ padding: '16px', borderTop: '1px solid #e5e7eb' }}>
           <button 
+            onClick={() => {
+            // Mock search functionality
+            alert('Search functionality active (Mock mode)');
+            
+            // TODO: Delete above line and uncomment API call below when backend is ready
+            /*
+            const handleSearchRentals = async () => {
+              setLoading(true);
+              try {
+                const response = await fetch('/api/properties/search', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    type: 'rent',
+                    location: 'Melbourne',
+                    filters: {}
+                  })
+                });
+                
+                const data = await response.json();
+                if (response.ok) {
+                  setProperties(data.properties || []);
+                } else {
+                  setError('Search failed. Please try again.');
+                }
+              } catch (error) {
+                console.error('Search failed:', error);
+                setError('Search failed. Please try again.');
+              } finally {
+                setLoading(false);
+              }
+            };
+            handleSearchRentals();
+            */
+          }}
             style={{ 
               width: '100%', 
               padding: '14px 16px', 

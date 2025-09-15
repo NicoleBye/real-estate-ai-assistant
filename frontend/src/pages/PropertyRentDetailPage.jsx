@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Bed, Bath, Car, Ruler, Home, ArrowLeft } from 'lucide-react';
 import Logo from '../components/logo'; 
 import UserMenu from '../components/UserMenu';
@@ -133,6 +133,91 @@ const nearbyData = {
   ]
 };
 
+// TODO: Delete after API integration - START
+  const fallbackRentPropertyData = {
+    property_id: "550e8400-e29b-41d4-a716-446655440007",
+    suburb: "Melbourne",
+    address: "456 Collins Street",
+    postcode: "3000",
+    listing_type: "rent",
+    property_type: "Apartment",
+    method: "Property Management",
+    seller: "City Rentals",
+    distance: 0.1,
+    sale_date: "2025-09-01", // Available date
+    buy_price: null,
+    rent_price: 650,
+    bedrooms: 2,
+    bathrooms: 2,
+    carspaces: 1,
+    landsize: null,
+    year_built: 2020,
+    latitude: -37.8136,
+    longitude: 144.9631,
+    image_url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    created_at: "2025-01-01T10:00:00Z",
+    images: [
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "Discover comfortable living in this modern 2-bedroom apartment located in the heart of Melbourne's CBD. Featuring contemporary finishes, plenty of natural light, and convenient city access."
+  };
+
+  // Similar properties using database schema
+  const fallbackRentSimilarProperties = [
+    {
+      property_id: "550e8400-e29b-41d4-a716-446655440008",
+      suburb: "Southbank",
+      address: "100 Southbank Promenade",
+      postcode: "3006",
+      listing_type: "rent",
+      rent_price: 580,
+      bedrooms: 2,
+      bathrooms: 1,
+      property_type: "Unit",
+      image_url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      property_id: "550e8400-e29b-41d4-a716-446655440009",
+      suburb: "Collingwood",
+      address: "789 Smith Street",
+      postcode: "3066",
+      listing_type: "rent",
+      rent_price: 520,
+      bedrooms: 2,
+      bathrooms: 1,
+      property_type: "Townhouse",
+      image_url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      property_id: "550e8400-e29b-41d4-a716-446655440010",
+      suburb: "Richmond",
+      address: "123 Bridge Road",
+      postcode: "3121",
+      rent_price: 720,
+      listing_type: "rent",
+      bedrooms: 2,
+      bathrooms: 2,
+      property_type: "Apartment",
+      image_url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      property_id: "550e8400-e29b-41d4-a716-446655440011",
+      suburb: "Carlton",
+      address: "456 Lygon Street",
+      postcode: "3053",
+      rent_price: 450,
+      listing_type: "rent",
+      bedrooms: 1,
+      bathrooms: 1,
+      property_type: "Apartment",
+      image_url: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    }
+  ];
+  // TODO: Delete after API integration - END
+
 // Helper component for property detail row
 const PropertyDetailRow = ({ icon, label, value }) => (
   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid #f3f4f6' }}>
@@ -242,11 +327,54 @@ const PropertySummary = ({ property }) => (
 );
 
 const PropertyRentDetailPage = () => {
+  // TODO: Change to useState({}) and useState([]) after API integration
+  const [property, setProperty] = useState(fallbackRentPropertyData);
+  const [similarProperties, setSimilarProperties] = useState(fallbackRentSimilarProperties);
+
   const [activeLocationTab, setActiveLocationTab] = useState('transportation');
   const [isFavorited, setIsFavorited] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [showInspectionModal, setShowInspectionModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+  // Use fallback data temporarily, no API call
+  setProperty(fallbackRentPropertyData);
+  setSimilarProperties(fallbackRentSimilarProperties);
+  setLoading(false);
+  
+  // TODO: Delete above lines and uncomment code below when backend is ready
+  /*
+  const loadPropertyDetails = async () => {
+    setLoading(true);
+    try {
+      const propertyId = window.location.pathname.split('/').pop();
+      
+      const response = await fetch(`/api/properties/rent/${propertyId}`);
+      const data = await response.json();
+      
+      if (response.ok) {
+        setProperty(data.property);
+        setSimilarProperties(data.similarProperties || []);
+      } else {
+        console.error('Failed to load property details');
+        setProperty(fallbackRentPropertyData);
+        setSimilarProperties(fallbackRentSimilarProperties);
+      }
+    } catch (error) {
+      console.error('Failed to load property details:', error);
+      setProperty(fallbackRentPropertyData);
+      setSimilarProperties(fallbackRentSimilarProperties);
+    } finally {
+      setLoading(false);
+    }
+  };
+  loadPropertyDetails();
+  */
+}, []);
+
 
   // Share functionality
   const handleShare = async () => {
@@ -267,89 +395,7 @@ const PropertyRentDetailPage = () => {
       alert('Link copied to clipboard!');
     }
   };
-  // Property data using database schema fields
-  const property = {
-    property_id: "550e8400-e29b-41d4-a716-446655440007",
-    suburb: "Melbourne",
-    address: "456 Collins Street",
-    postcode: "3000",
-    listing_type: "rent",
-    property_type: "Apartment",
-    method: "Property Management",
-    seller: "City Rentals",
-    distance: 0.1,
-    sale_date: "2025-09-01", // Available date
-    buy_price: null,
-    rent_price: 650,
-    bedrooms: 2,
-    bathrooms: 2,
-    carspaces: 1,
-    landsize: null,
-    year_built: 2020,
-    latitude: -37.8136,
-    longitude: 144.9631,
-    image_url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    created_at: "2025-01-01T10:00:00Z",
-    images: [
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    ],
-    description: "Discover comfortable living in this modern 2-bedroom apartment located in the heart of Melbourne's CBD. Featuring contemporary finishes, plenty of natural light, and convenient city access."
-  };
-
-  // Similar properties using database schema
-  const similarProperties = [
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440008",
-      suburb: "Southbank",
-      address: "100 Southbank Promenade",
-      postcode: "3006",
-      listing_type: "rent",
-      rent_price: 580,
-      bedrooms: 2,
-      bathrooms: 1,
-      property_type: "Unit",
-      image_url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440009",
-      suburb: "Collingwood",
-      address: "789 Smith Street",
-      postcode: "3066",
-      listing_type: "rent",
-      rent_price: 520,
-      bedrooms: 2,
-      bathrooms: 1,
-      property_type: "Townhouse",
-      image_url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440010",
-      suburb: "Richmond",
-      address: "123 Bridge Road",
-      postcode: "3121",
-      rent_price: 720,
-      listing_type: "rent",
-      bedrooms: 2,
-      bathrooms: 2,
-      property_type: "Apartment",
-      image_url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440011",
-      suburb: "Carlton",
-      address: "456 Lygon Street",
-      postcode: "3053",
-      rent_price: 450,
-      listing_type: "rent",
-      bedrooms: 1,
-      bathrooms: 1,
-      property_type: "Apartment",
-      image_url: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-    }
-  ];
+  
 
   const formatAvailableDate = (saleDate) => {
     const date = new Date(saleDate);

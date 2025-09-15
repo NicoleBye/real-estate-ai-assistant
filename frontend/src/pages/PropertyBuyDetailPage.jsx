@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Area, AreaChart } from 'recharts';
 import { Bed, Bath, Car, Ruler, Home, ArrowLeft } from 'lucide-react';
 import Logo from '../components/logo'; 
@@ -155,6 +155,94 @@ const nearbyData = {
   ]
 };
 
+// TODO: Delete after API integration - START
+  const fallbackPropertyData = {
+    property_id: "550e8400-e29b-41d4-a716-446655440001",
+    suburb: "Melbourne",
+    address: "456 Collins Street",
+    postcode: "3000",
+    listing_type: "buy",
+    property_type: "Apartment",
+    method: "Private Sale",
+    seller: "Premium Real Estate",
+    distance: 0.1,
+    sale_date: "2025-02-15",
+    buy_price: 850000,
+    rent_price: null,
+    bedrooms: 3,
+    bathrooms: 2,
+    carspaces: 2,
+    landsize: null,
+    year_built: 2020,
+    latitude: -37.8136,
+    longitude: 144.9631,
+    image_url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    created_at: "2025-01-01T10:00:00Z",
+    images: [
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+    ],
+    description: "Experience luxury living in this stunning 3-bedroom penthouse located in the prestigious heart of Melbourne's CBD. This exceptional residence features premium finishes, floor-to-ceiling windows, and breathtaking city views."
+  };
+
+  const fallbackSimilarProperties = [
+    {
+      property_id: "550e8400-e29b-41d4-a716-446655440002",
+      suburb: "Southbank",
+      address: "100 Southbank Promenade",
+      postcode: "3006",
+      listing_type: "buy",
+      buy_price: 720000,
+      rent_price: null, 
+      bedrooms: 2,
+      bathrooms: 2,
+      property_type: "Apartment",
+      image_url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      property_id: "550e8400-e29b-41d4-a716-446655440003",
+      suburb: "Collingwood",
+      address: "789 Smith Street",
+      postcode: "3066",
+      listing_type: "buy",
+      buy_price: 680000,
+      rent_price: null, 
+      bedrooms: 3,
+      bathrooms: 2,
+      property_type: "Townhouse",
+      image_url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      property_id: "550e8400-e29b-41d4-a716-446655440004",
+      suburb: "Richmond",
+      address: "123 Bridge Road",
+      postcode: "3121",
+      listing_type: "buy",
+      buy_price: 950000,
+      rent_price: null, 
+      bedrooms: 3,
+      bathrooms: 2,
+      property_type: "Apartment",
+      image_url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      property_id: "550e8400-e29b-41d4-a716-446655440005",
+      suburb: "Carlton",
+      address: "456 Lygon Street",
+      postcode: "3053",
+      listing_type: "buy",
+      buy_price: 780000,
+      rent_price: null, 
+      bedrooms: 2,
+      bathrooms: 1,
+      property_type: "Apartment",
+      image_url: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    }
+  ];
+  // TODO: Delete after API integration - END
+
 // Helper component for property detail row
 const PropertyDetailRow = ({ icon, label, value }) => (
   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid #f3f4f6' }}>
@@ -300,6 +388,10 @@ const ForecastCard = ({ period, years, highlighted, calculatePrediction, basePri
 };
 
 const PropertyBuyDetailPage = () => {
+  // TODO: Change to useState({}) and useState([]) after API integration
+  const [property, setProperty] = useState(fallbackPropertyData);
+  const [similarProperties, setSimilarProperties] = useState(fallbackSimilarProperties);
+
   const [activeLocationTab, setActiveLocationTab] = useState('transportation');
   const [isFavorited, setIsFavorited] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
@@ -308,6 +400,45 @@ const PropertyBuyDetailPage = () => {
   const [loanAmount, setLoanAmount] = useState(720000);
   const [interestRate, setInterestRate] = useState(6.5);
   const [loanTerm, setLoanTerm] = useState(30);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+  // Use fallback data temporarily, no API call
+  setProperty(fallbackPropertyData);
+  setSimilarProperties(fallbackSimilarProperties);
+  setLoading(false);
+  
+  // TODO: Delete above lines and uncomment code below when backend is ready
+  /*
+  const loadPropertyDetails = async () => {
+    setLoading(true);
+    try {
+      const propertyId = window.location.pathname.split('/').pop();
+      
+      const response = await fetch(`/api/properties/buy/${propertyId}`);
+      const data = await response.json();
+      
+      if (response.ok) {
+        setProperty(data.property);
+        setSimilarProperties(data.similarProperties || []);
+      } else {
+        console.error('Failed to load property details');
+        setProperty(fallbackPropertyData);
+        setSimilarProperties(fallbackSimilarProperties);
+      }
+    } catch (error) {
+      console.error('Failed to load property details:', error);
+      setProperty(fallbackPropertyData);
+      setSimilarProperties(fallbackSimilarProperties);
+    } finally {
+      setLoading(false);
+    }
+  };
+  loadPropertyDetails();
+  */
+}, []);
+
 
     // Share functionality
   const handleShare = async () => {
@@ -329,92 +460,7 @@ const PropertyBuyDetailPage = () => {
     }
   };
 
-  // Property data using database schema fields
-  const property = {
-    property_id: "550e8400-e29b-41d4-a716-446655440001",
-    suburb: "Melbourne",
-    address: "456 Collins Street",
-    postcode: "3000",
-    listing_type: "buy",
-    property_type: "Apartment",
-    method: "Private Sale",
-    seller: "Premium Real Estate",
-    distance: 0.1,
-    sale_date: "2025-02-15",
-    buy_price: 850000,
-    rent_price: null,
-    bedrooms: 3,
-    bathrooms: 2,
-    carspaces: 2,
-    landsize: null,
-    year_built: 2020,
-    latitude: -37.8136,
-    longitude: 144.9631,
-    image_url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    created_at: "2025-01-01T10:00:00Z",
-    images: [
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    ],
-    description: "Experience luxury living in this stunning 3-bedroom penthouse located in the prestigious heart of Melbourne's CBD. This exceptional residence features premium finishes, floor-to-ceiling windows, and breathtaking city views."
-  };
-
-  const similarProperties = [
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440002",
-      suburb: "Southbank",
-      address: "100 Southbank Promenade",
-      postcode: "3006",
-      listing_type: "buy",
-      buy_price: 720000,
-      rent_price: null, 
-      bedrooms: 2,
-      bathrooms: 2,
-      property_type: "Apartment",
-      image_url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440003",
-      suburb: "Collingwood",
-      address: "789 Smith Street",
-      postcode: "3066",
-      listing_type: "buy",
-      buy_price: 680000,
-      rent_price: null, 
-      bedrooms: 3,
-      bathrooms: 2,
-      property_type: "Townhouse",
-      image_url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440004",
-      suburb: "Richmond",
-      address: "123 Bridge Road",
-      postcode: "3121",
-      listing_type: "buy",
-      buy_price: 950000,
-      rent_price: null, 
-      bedrooms: 3,
-      bathrooms: 2,
-      property_type: "Apartment",
-      image_url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440005",
-      suburb: "Carlton",
-      address: "456 Lygon Street",
-      postcode: "3053",
-      listing_type: "buy",
-      buy_price: 780000,
-      rent_price: null, 
-      bedrooms: 2,
-      bathrooms: 1,
-      property_type: "Apartment",
-      image_url: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-    }
-  ];
+  
 
   const currentPrice = property.buy_price;
   const annualGrowthRate = 0.08;

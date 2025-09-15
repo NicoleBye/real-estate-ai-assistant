@@ -46,6 +46,7 @@ function App() {
       />
       )}
 
+    
       {/* Portal Modal */}
       {modalProperty && ReactDOM.createPortal(
         <div style={{
@@ -88,10 +89,25 @@ function App() {
               ×
             </button>
             
-            <div style={{ padding: '40px' }}>
-              <h2>{modalProperty.property_type} in {modalProperty.suburb}</h2>
-              <p>Price: ${modalProperty.buy_price ? modalProperty.buy_price.toLocaleString() : `${modalProperty.rent_price}/week`}</p>
-            </div>
+            {/* Build property detail page URL */}
+            {(() => {
+              const pageUrl = modalProperty.listing_type === 'buy' 
+                ? `/buy/${modalProperty.property_id}?modal=true`
+                : `/rent/${modalProperty.property_id}?modal=true`;
+                              
+              return (
+                <iframe 
+                  src={pageUrl}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    border: 'none',
+                    borderRadius: '12px'
+                  }}
+                  title="Property Details"
+                />
+              );
+            })()}
           </div>
         </div>,
         document.body

@@ -38,21 +38,59 @@ const AdminLoginPage = () => {
     if (!validate()) return;
     setIsLoading(true);
 
-    const loginData = {
-      email: formData.email.toLowerCase().trim(),
-      password: formData.password,
-      userType: 'admin'
+    // Prepare login data for backend
+  const loginData = {
+    email: formData.email.toLowerCase().trim(),
+    password: formData.password
+  };
+
+  console.log('Admin login data to be sent to backend:', loginData);
+
+  // fetch API request
+  try {
+    const requestData = {
+      ...loginData,
+      role: 'admin'
     };
 
-    console.log('Admin login data to be sent to backend:', loginData);
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestData)
+    });
 
-    await new Promise((res) => setTimeout(res, 2000));
-    
-    setShowSuccess(true);
-    setTimeout(() => {
-      window.location.href = '/admin';
-    }, 1500);
-  };
+    const data = await response.json();
+
+    if (response.ok) {
+      // Login successful
+      if (data.token) {
+        localStorage.setItem('authToken', data.token);
+      }
+      
+      setShowSuccess(true);
+      setTimeout(() => {
+        const redirectUrl = data.redirectUrl || '/admin';
+        window.location.href = redirectUrl;
+      }, 1500);
+      
+    } else {
+      // Login failed
+      if (data.errors) {
+        setErrors(data.errors);
+      } else {
+        setErrors({ general: data.message || 'Login failed. Please try again.' });
+      }
+    }
+  } catch (error) {
+    // Network error
+    console.error('Admin login error:', error);
+    setErrors({ general: 'Network error. Please check your connection and try again.' });
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   if (showSuccess) {
     return (
@@ -89,6 +127,13 @@ const AdminLoginPage = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* General error display */}
+              {errors.general && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                  <p className="text-red-600 text-sm">{errors.general}</p>
+                </div>
+              )}
+              
               <div className="relative">
                 <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                 <input

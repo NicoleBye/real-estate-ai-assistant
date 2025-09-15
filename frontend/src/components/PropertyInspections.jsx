@@ -1,7 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, Bed, Bath, MapPin, Phone, Clock } from 'lucide-react';
 
-const PropertyInspections = ({ inspections }) => {
+// TODO: Delete after API integration - START
+const fallbackInspections = [
+  {
+    id: "insp_001",
+    address: "123 Collins Street, Melbourne",
+    bedrooms: 2,
+    bathrooms: 1,
+    property_type: "Apartment",
+    price: 550000,
+    listing_type: "buy",
+    inspection_date: "2025-01-25T14:00:00Z",
+    inspection_type: "Private",
+    agent_name: "Sarah Wilson",
+    agent_phone: "0412 345 678",
+    status: "confirmed"
+  },
+  {
+    id: "insp_002", 
+    address: "456 Chapel Street, South Yarra",
+    bedrooms: 3,
+    bathrooms: 2,
+    property_type: "Townhouse",
+    price: 850,
+    listing_type: "rent",
+    inspection_date: "2025-01-26T11:00:00Z",
+    inspection_type: "Open House",
+    agent_name: "Michael Chen",
+    agent_phone: "0423 456 789",
+    status: "pending"
+  },
+  {
+    id: "insp_003",
+    address: "789 Burke Road, Camberwell", 
+    bedrooms: 4,
+    bathrooms: 3,
+    property_type: "House",
+    price: 1200000,
+    listing_type: "buy",
+    inspection_date: "2025-01-24T10:00:00Z",
+    inspection_type: "Private",
+    agent_name: "Emma Thompson",
+    agent_phone: "0434 567 890", 
+    status: "cancelled"
+  }
+];
+// TODO: Delete after API integration - END
+
+const PropertyInspections = () => {
+  // TODO: Change to useState([]) after API integration
+  const [inspections, setInspections] = useState(fallbackInspections);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+    // TODO: Uncomment when API is ready
+  /*
+  useEffect(() => {
+    fetchInspections();
+  }, []);
+
+  const fetchInspections = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/user/inspections');
+      if (!response.ok) {
+        throw new Error('Failed to fetch inspections');
+      }
+      const data = await response.json();
+      setInspections(data);
+    } catch (error) {
+      console.error('Failed to fetch inspections:', error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  */
+
   const formatDateTime = (dateString) => {
     return new Date(dateString).toLocaleString('en-AU', { 
       weekday: 'short',
