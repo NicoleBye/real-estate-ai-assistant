@@ -1,14 +1,26 @@
-import { useState } from 'react';
-import { Mail, Lock, User, Phone, Eye, EyeOff, Check, X, Sparkles } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import Logo from '../components/logo';
+import { Mail, Lock, User, Eye, EyeOff, Check, X, Building2, ArrowRight } from 'lucide-react';
 
 const RegisterPage = () => {
+  // Check URL to determine initial role
+  const getInitialRole = () => {
+    if (typeof window !== 'undefined') {
+      return window.location.pathname.includes('/agent') ? 'agent' : 'user';
+    }
+    return 'user';
+  };
+
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    name: '',
     email: '',
-    phone: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    role: getInitialRole(), // Set initial role based on URL
+    // Agent specific fields
+    company: '',
+    licenseNumber: '',
+    phone: ''
   });
 
   const [errors, setErrors] = useState({});
@@ -19,11 +31,39 @@ const RegisterPage = () => {
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
 
+  // Update role based on URL changes
+  useEffect(() => {
+    const currentRole = getInitialRole();
+    if (currentRole !== formData.role) {
+      setFormData(prev => ({ 
+        ...prev, 
+        role: currentRole,
+        // Clear agent-specific fields when switching to user
+        ...(currentRole === 'user' && { company: '', licenseNumber: '', phone: '' })
+      }));
+    }
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: '' }));
     if (name === 'password') updatePasswordStrength(value);
+  };
+
+  const handleRoleChange = (newRole) => {
+    setFormData((prev) => ({ 
+      ...prev, 
+      role: newRole,
+      // Clear agent-specific fields when switching to user
+      ...(newRole === 'user' && { company: '', licenseNumber: '', phone: '' })
+    }));
+    setErrors({});
+    
+    // Update URL to match the role using query parameter
+    const newSearch = newRole === 'agent' ? '?type=agent' : '';
+    const newUrl = `/register${newSearch}`;
+    window.history.pushState({}, '', newUrl);
   };
 
   const updatePasswordStrength = (password) => {
@@ -38,18 +78,30 @@ const RegisterPage = () => {
 
   const validate = () => {
     const newErrors = {};
-    const { firstName, lastName, email, phone, password, confirmPassword } = formData;
+    const { name, email, password, confirmPassword, role, company, licenseNumber, phone } = formData;
 
-    if (!firstName) newErrors.firstName = 'First name is required';
-    if (!lastName) newErrors.lastName = 'Last name is required';
+    if (!name.trim()) newErrors.name = 'Full name is required';
+    else if (name.trim().length < 2) newErrors.name = 'Name must be at least 2 characters';
+    
     if (!email) newErrors.email = 'Email is required';
     else if (!/^\S+@\S+\.\S+$/.test(email)) newErrors.email = 'Invalid email format';
-    if (!phone) newErrors.phone = 'Phone number is required';
-    else if (!/^\+?[\d\s-()]{10,}$/.test(phone)) newErrors.phone = 'Invalid phone number';
+    else if (email.length > 100) newErrors.email = 'Email must be less than 100 characters';
+    
     if (!password) newErrors.password = 'Password is required';
-    else if (password.length < 8) newErrors.password = 'At least 8 characters';
+    else if (password.length < 8) newErrors.password = 'Password must be at least 8 characters';
+    
     if (!confirmPassword) newErrors.confirmPassword = 'Confirm your password';
     else if (password !== confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
+    
+    // Agent-specific validations
+    if (role === 'agent') {
+      if (!company.trim()) newErrors.company = 'Company name is required';
+      if (!licenseNumber.trim()) newErrors.licenseNumber = 'License number is required';
+      else if (licenseNumber.trim().length < 5) newErrors.licenseNumber = 'License number must be at least 5 characters';
+      if (!phone.trim()) newErrors.phone = 'Phone number is required';
+      else if (!/^\+?[\d\s\-\(\)]{10,}$/.test(phone)) newErrors.phone = 'Invalid phone number format';
+    }
+    
     if (!acceptTerms) newErrors.terms = 'You must accept the terms';
 
     setErrors(newErrors);
@@ -61,12 +113,61 @@ const RegisterPage = () => {
     if (!validate()) return;
     setIsLoading(true);
 
-    await new Promise((res) => setTimeout(res, 1500));
-    setShowSuccess(true);
-    setTimeout(() => {
-      alert('Account created successfully! Redirecting to dashboard...');
-    }, 1500);
-  };
+    // Prepare user data based on role
+    const userData = {
+      username: formData.name.trim(),
+      email: formData.email.toLowerCase(),
+      password: formData.password, // This should be hashed in backend
+      role: formData.role,
+      ...(formData.role === 'agent' && {
+        company: formData.company.trim(),
+        license_number: formData.licenseNumber.trim(),
+        phone: formData.phone.trim(),
+      })
+    };
+
+    console.log('User data to be sent to backend:', userData);
+
+    // fetch API request
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Registration successful
+        setShowSuccess(true);
+        setTimeout(() => {
+          alert('Account created successfully! Redirecting to dashboard...');
+          if (formData.role === 'agent') {
+            window.location.href = '/agent';  
+          } else {
+            window.location.href = '/user';
+          }
+        }, 1500);
+        
+      } else {
+        // Registration failed
+        if (data.errors) {
+          setErrors(data.errors);
+        } else {
+          setErrors({ general: data.message || 'Registration failed. Please try again.' });
+        }
+      }
+    } catch (error) {
+      // Network error
+      console.error('Registration error:', error);
+      setErrors({ general: 'Network error. Please check your connection and try again.' });
+    } finally {
+      setIsLoading(false);
+    }
+    };
 
   const getPasswordStrengthColor = () => {
     if (passwordStrength <= 2) return 'bg-red-500';
@@ -89,8 +190,12 @@ const RegisterPage = () => {
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <Check className="w-10 h-10 text-green-600" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Account Created!</h2>
-          <p className="text-gray-600">Welcome to Propzy! Redirecting to your dashboard...</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Account Created!
+          </h2>
+          <p className="text-gray-600">
+              Welcome to Propzy! Redirecting to your dashboard...
+          </p>
         </div>
       </div>
     );
@@ -106,19 +211,49 @@ const RegisterPage = () => {
         <div className="max-w-md w-full relative z-10">
           <div className="bg-white rounded-3xl shadow-2xl p-8 backdrop-blur-sm bg-opacity-95">
             <div className="text-center mb-8">
-              <div className="flex items-center justify-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-white" />
-                </div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Propzy
-                </h1>
+              <div className="mb-4">
+                <Logo size="large" clickable={false} />
               </div>
-              <h2 className="text-2xl font-semibold text-gray-800 mb-2">Create your account</h2>
+              
+              {/* Account Type Selection */}
+              <div className="flex bg-gray-100 rounded-xl p-1 mb-6">
+                <button
+                  type="button"
+                  onClick={() => handleRoleChange('user')}
+                  className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
+                    formData.role === 'user' 
+                      ? 'bg-white text-blue-600 shadow-sm' 
+                      : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                >
+                  User Account
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleRoleChange('agent')}
+                  className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
+                    formData.role === 'agent' 
+                      ? 'bg-white text-green-600 shadow-sm' 
+                      : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                >
+                  Agent Account
+                </button>
+              </div>
+              
+              <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+                {formData.role === 'agent' ? 'Create Agent Account' : 'Create your account'}
+              </h2>
               <p className="text-sm text-gray-600">
                 Already have an account?{' '}
                 <button 
-                  onClick={() => alert('Redirecting to login page...')} 
+                  onClick={() => {
+                    if (formData.role === 'agent') {
+                      window.location.href = '/login?type=agent';
+                    } else {
+                      window.location.href = '/login';
+                    }
+                  }}
                   className="text-blue-600 hover:text-blue-700 font-medium hover:underline bg-transparent transition-colors"
                 >
                   Sign in here
@@ -126,32 +261,19 @@ const RegisterPage = () => {
               </p>
             </div>
 
-            <div className="space-y-5">
-              <div className="flex gap-3">
-                <div className="w-1/2 relative">
-                  <User className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                  <input
-                    type="text"
-                    name="firstName"
-                    placeholder="First Name"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    className={`w-full pl-10 pr-4 py-3 border-2 ${errors.firstName ? 'border-red-300' : 'border-gray-200'} bg-white text-gray-900 placeholder-gray-500 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300`}
-                  />
-                  {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
-                </div>
-                <div className="w-1/2 relative">
-                  <User className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                  <input
-                    type="text"
-                    name="lastName"
-                    placeholder="Last Name"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    className={`w-full pl-10 pr-4 py-3 border-2 ${errors.lastName ? 'border-red-300' : 'border-gray-200'} bg-white text-gray-900 placeholder-gray-500 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300`}
-                  />
-                  {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
-                </div>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="relative">
+                <User className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Full Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  maxLength={100}
+                  className={`w-full pl-10 pr-4 py-3 border-2 ${errors.name ? 'border-red-300' : 'border-gray-200'} bg-white text-gray-900 placeholder-gray-500 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300`}
+                />
+                {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
               </div>
 
               <div className="relative">
@@ -162,23 +284,53 @@ const RegisterPage = () => {
                   placeholder="Email address"
                   value={formData.email}
                   onChange={handleChange}
+                  maxLength={100}
                   className={`w-full pl-10 pr-4 py-3 border-2 ${errors.email ? 'border-red-300' : 'border-gray-200'} bg-white text-gray-900 placeholder-gray-500 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300`}
                 />
                 {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
               </div>
 
-              <div className="relative">
-                <Phone className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                <input
-                  type="tel"
-                  name="phone"
-                  placeholder="Phone number"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className={`w-full pl-10 pr-4 py-3 border-2 ${errors.phone ? 'border-red-300' : 'border-gray-200'} bg-white text-gray-900 placeholder-gray-500 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300`}
-                />
-                {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
-              </div>
+              {/* Agent-specific fields */}
+              {formData.role === 'agent' && (
+                <>
+                  <div className="relative">
+                    <Building2 className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                    <input
+                      type="text"
+                      name="company"
+                      placeholder="Company Name"
+                      value={formData.company}
+                      onChange={handleChange}
+                      className={`w-full pl-10 pr-4 py-3 border-2 ${errors.company ? 'border-red-300' : 'border-gray-200'} bg-white text-gray-900 placeholder-gray-500 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300`}
+                    />
+                    {errors.company && <p className="text-red-500 text-xs mt-1">{errors.company}</p>}
+                  </div>
+
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="licenseNumber"
+                      placeholder="Real Estate License Number"
+                      value={formData.licenseNumber}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-3 border-2 ${errors.licenseNumber ? 'border-red-300' : 'border-gray-200'} bg-white text-gray-900 placeholder-gray-500 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300`}
+                    />
+                    {errors.licenseNumber && <p className="text-red-500 text-xs mt-1">{errors.licenseNumber}</p>}
+                  </div>
+
+                  <div className="relative">
+                    <input
+                      type="tel"
+                      name="phone"
+                      placeholder="Phone Number"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-3 border-2 ${errors.phone ? 'border-red-300' : 'border-gray-200'} bg-white text-gray-900 placeholder-gray-500 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300`}
+                    />
+                    {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+                  </div>
+                </>
+              )}
 
               <div className="relative">
                 <Lock className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
@@ -261,23 +413,36 @@ const RegisterPage = () => {
                 </label>
               </div>
               {errors.terms && <p className="text-red-500 text-xs">{errors.terms}</p>}
+              
+              {/* General error display */}
+              {errors.general && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                  <p className="text-red-600 text-sm">{errors.general}</p>
+                </div>
+              )}
 
               <button
                 type="submit"
-                onClick={handleSubmit}
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className={`w-full font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 ${
+                  formData.role === 'agent' 
+                    ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white' 
+                    : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white'
+                }`}
               >
                 {isLoading ? (
                   <div className="flex items-center justify-center gap-2">
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Creating Account...
+                    {formData.role === 'agent' ? 'Submitting Account...' : 'Creating Account...'}
                   </div>
                 ) : (
-                  'Create Account'
+                  <>
+                    Create Account
+                    <ArrowRight className="w-5 h-5" />
+                  </>
                 )}
               </button>
-            </div>
+            </form>
           </div>
         </div>
       </div>

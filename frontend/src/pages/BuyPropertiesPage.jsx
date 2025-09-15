@@ -1,138 +1,178 @@
 import React, { useState } from 'react';
+import Logo from '../components/logo'; 
+import PropertyCard from '../components/PropertyCard';
 
 const BuyPropertiesPage = () => {
-  // Melbourne property data for buying
+  // Melbourne property data for buying - exactly matching your database schema
   const [properties] = useState([
     {
-      id: 1,
-      title: "Modern CBD Apartment",
-      price: "$650,000",
-      location: "Collins Street, Melbourne CBD",
+      property_id: "550e8400-e29b-41d4-a716-446655440001",
+      suburb: "Melbourne",
+      address: "123 Collins Street",
+      listing_type: "buy",
+      property_type: "Apartment",
+      method: "Private Sale",
+      seller: "Ray White Melbourne",
+      distance: 0.5,
+      postcode: "3000",
+      sale_date: "2025-01-15",
+      buy_price: 650000,
+      rent_price: null,
       bedrooms: 3,
       bathrooms: 2,
-      parking: 1,
-      availableDate: "Available now",
-      type: "Apartment",
-      image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      carspaces: 1,
+      landsize: null,
+      year_built: 2020,
+      latitude: -37.8136,
+      longitude: 144.9631,
+      image_url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      created_at: "2025-01-01T10:00:00Z"
     },
     {
-      id: 2,
-      title: "Spacious Family House", 
-      price: "$780,000",
-      location: "Chapel Street, South Yarra",
+      property_id: "550e8400-e29b-41d4-a716-446655440002",
+      suburb: "South Yarra",
+      address: "456 Chapel Street",
+      listing_type: "buy", 
+      property_type: "House",
+      method: "Auction",
+      seller: "Jellis Craig",
+      distance: 3.2,
+      postcode: "3141",
+      sale_date: "2025-02-01",
+      buy_price: 780000,
+      rent_price: null,
       bedrooms: 4,
       bathrooms: 3,
-      parking: 2,
-      availableDate: "Settlement flexible",
-      type: "House",
-      image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      carspaces: 2,
+      landsize: 400,
+      year_built: 2018,
+      latitude: -37.8467,
+      longitude: 144.9896,
+      image_url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      created_at: "2025-01-02T11:30:00Z"
     },
     {
-      id: 3,
-      title: "Modern Townhouse",
-      price: "$920,000",
-      location: "Smith Street, Collingwood",
+      property_id: "550e8400-e29b-41d4-a716-446655440003",
+      suburb: "Collingwood",
+      address: "789 Smith Street",
+      listing_type: "buy",
+      property_type: "Townhouse", 
+      method: "Private Sale",
+      seller: "Hocking Stuart",
+      distance: 2.8,
+      postcode: "3066",
+      sale_date: "2025-01-20",
+      buy_price: 920000,
+      rent_price: null,
       bedrooms: 3,
       bathrooms: 2,
-      parking: 2,
-      availableDate: "Available now",
-      type: "Townhouse",
-      image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      carspaces: 2,
+      landsize: 150,
+      year_built: 2019,
+      latitude: -37.8043,
+      longitude: 144.9848,
+      image_url: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      created_at: "2025-01-03T14:15:00Z"
     },
     {
-      id: 4,
-      title: "Cozy Richmond Unit",
-      price: "$450,000",
-      location: "Swan Street, Richmond", 
+      property_id: "550e8400-e29b-41d4-a716-446655440004",
+      suburb: "Richmond",
+      address: "321 Swan Street",
+      listing_type: "buy",
+      property_type: "Unit",
+      method: "Private Sale", 
+      seller: "Nelson Alexander",
+      distance: 2.1,
+      postcode: "3121",
+      sale_date: "2025-01-25",
+      buy_price: 450000,
+      rent_price: null,
       bedrooms: 2,
       bathrooms: 1,
-      parking: 1,
-      availableDate: "Available now",
-      type: "Unit",
-      image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      carspaces: 1,
+      landsize: null,
+      year_built: 2015,
+      latitude: -37.8197,
+      longitude: 144.9864,
+      image_url: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      created_at: "2025-01-04T09:45:00Z"
     },
     {
-      id: 5,
-      title: "Luxury Southbank Apartment",
-      price: "$1,150,000",
-      location: "Southbank Promenade, Southbank",
+      property_id: "550e8400-e29b-41d4-a716-446655440005",
+      suburb: "Southbank",
+      address: "100 Southbank Promenade",
+      listing_type: "buy",
+      property_type: "Apartment",
+      method: "Auction",
+      seller: "Barry Plant",
+      distance: 1.5,
+      postcode: "3006", 
+      sale_date: "2025-02-10",
+      buy_price: 1150000,
+      rent_price: null,
       bedrooms: 3,
       bathrooms: 2,
-      parking: 2,
-      availableDate: "Settlement 30 days",
-      type: "Apartment",
-      image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      carspaces: 2,
+      landsize: null,
+      year_built: 2021,
+      latitude: -37.8220,
+      longitude: 144.9633,
+      image_url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      created_at: "2025-01-05T16:20:00Z"
     },
     {
-      id: 6,
-      title: "Heritage House",
-      price: "$2,200,000",
-      location: "Brunswick Street, Fitzroy",
+      property_id: "550e8400-e29b-41d4-a716-446655440006",
+      suburb: "Fitzroy",
+      address: "555 Brunswick Street", 
+      listing_type: "buy",
+      property_type: "House",
+      method: "Private Sale",
+      seller: "RT Edgar",
+      distance: 3.5,
+      postcode: "3065",
+      sale_date: "2025-02-15",
+      buy_price: 2200000,
+      rent_price: null,
       bedrooms: 5,
       bathrooms: 3,
-      parking: 2,
-      availableDate: "Available now",
-      type: "House",
-      image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      carspaces: 2,
+      landsize: 600,
+      year_built: 1920,
+      latitude: -37.7979,
+      longitude: 144.9810,
+      image_url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      created_at: "2025-01-06T12:00:00Z"
     }
   ]);
 
   const [showMap, setShowMap] = useState(true);
   const [priceRange, setPriceRange] = useState({ min: 400000, max: 1500000 });
 
-  const PropertyCard = ({ property }) => (
-    <div style={{ 
-      backgroundColor: '#ffffff', 
-      borderRadius: '12px', 
-      overflow: 'hidden', 
-      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', 
-      transition: 'transform 0.2s, box-shadow 0.2s',
-      cursor: 'pointer'
-    }}>
-      <div style={{ position: 'relative' }}>
-        <img 
-          src={property.image} 
-          alt={property.title}
-          style={{ width: '100%', height: '200px', objectFit: 'cover' }}
-        />
-        <button style={{ 
-          position: 'absolute', 
-          top: '12px', 
-          right: '12px', 
-          width: '32px', 
-          height: '32px', 
-          backgroundColor: 'rgba(255, 255, 255, 0.9)', 
-          borderRadius: '50%', 
-          border: 'none',
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          cursor: 'pointer',
-          fontSize: '16px',
-          color: '#FBCA03',
-          transition: 'all 0.2s'
-        }}>
-          ♡
-        </button>
-      </div>
-      
-      <div style={{ padding: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '8px' }}>
-          <span style={{ fontSize: '20px', fontWeight: '600', color: '#111827' }}>{property.price}</span>
-        </div>
-        
-        <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '12px', margin: '0 0 12px 0' }}>{property.location}</p>
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '14px', color: '#6b7280', marginBottom: '8px' }}>
-          <span>{property.bedrooms} bed</span>
-          <span>•</span>
-          <span>{property.bathrooms} bath</span>
-          <span>•</span>
-          <span>{property.parking} car</span>
-        </div>
-      </div>
-    </div>
-  );
+  // Format price for display
+  const formatPrice = (price) => {
+    if (price >= 1000000) {
+      return `$${(price / 1000000).toFixed(1)}M`;
+    } else if (price >= 1000) {
+      return `$${(price / 1000)}K`;
+    }
+    return `$${price}`;
+  };
+
+  // Format settlement date 
+  const formatSettlementDate = (saleDate) => {
+    const date = new Date(saleDate);
+    const now = new Date();
+    const diffTime = date - now;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays <= 0) {
+      return "Available now";
+    } else if (diffDays <= 30) {
+      return `Settlement ${diffDays} days`;
+    } else {
+      return "Settlement flexible";
+    }
+  };
 
   const MapSection = () => (
     <div style={{ 
@@ -164,12 +204,25 @@ const BuyPropertiesPage = () => {
         </g>
       </svg>
       
-      <div style={{ position: 'absolute', top: '60px', left: '120px', backgroundColor: '#111827', color: '#ffffff', padding: '6px 12px', borderRadius: '6px', fontSize: '14px', fontWeight: '500' }}>$650K</div>
-      <div style={{ position: 'absolute', top: '80px', right: '150px', backgroundColor: '#111827', color: '#ffffff', padding: '6px 12px', borderRadius: '6px', fontSize: '14px', fontWeight: '500' }}>$1.1M</div>
-      <div style={{ position: 'absolute', bottom: '120px', left: '100px', backgroundColor: '#111827', color: '#ffffff', padding: '6px 12px', borderRadius: '6px', fontSize: '14px', fontWeight: '500' }}>$780K</div>
-      <div style={{ position: 'absolute', bottom: '100px', right: '180px', backgroundColor: '#111827', color: '#ffffff', padding: '6px 12px', borderRadius: '6px', fontSize: '14px', fontWeight: '500' }}>$920K</div>
-      <div style={{ position: 'absolute', top: '180px', left: '350px', backgroundColor: '#111827', color: '#ffffff', padding: '6px 12px', borderRadius: '6px', fontSize: '14px', fontWeight: '500' }}>$2.2M</div>
-      <div style={{ position: 'absolute', bottom: '200px', right: '80px', backgroundColor: '#111827', color: '#ffffff', padding: '6px 12px', borderRadius: '6px', fontSize: '14px', fontWeight: '500' }}>$450K</div>
+      {/* Property markers on map based on actual data */}
+      <div style={{ position: 'absolute', top: '60px', left: '120px', backgroundColor: '#111827', color: '#ffffff', padding: '6px 12px', borderRadius: '6px', fontSize: '14px', fontWeight: '500' }}>
+        {formatPrice(properties[0].buy_price)}
+      </div>
+      <div style={{ position: 'absolute', top: '80px', right: '150px', backgroundColor: '#111827', color: '#ffffff', padding: '6px 12px', borderRadius: '6px', fontSize: '14px', fontWeight: '500' }}>
+        {formatPrice(properties[4].buy_price)}
+      </div>
+      <div style={{ position: 'absolute', bottom: '120px', left: '100px', backgroundColor: '#111827', color: '#ffffff', padding: '6px 12px', borderRadius: '6px', fontSize: '14px', fontWeight: '500' }}>
+        {formatPrice(properties[1].buy_price)}
+      </div>
+      <div style={{ position: 'absolute', bottom: '100px', right: '180px', backgroundColor: '#111827', color: '#ffffff', padding: '6px 12px', borderRadius: '6px', fontSize: '14px', fontWeight: '500' }}>
+        {formatPrice(properties[2].buy_price)}
+      </div>
+      <div style={{ position: 'absolute', top: '180px', left: '350px', backgroundColor: '#111827', color: '#ffffff', padding: '6px 12px', borderRadius: '6px', fontSize: '14px', fontWeight: '500' }}>
+        {formatPrice(properties[5].buy_price)}
+      </div>
+      <div style={{ position: 'absolute', bottom: '200px', right: '80px', backgroundColor: '#111827', color: '#ffffff', padding: '6px 12px', borderRadius: '6px', fontSize: '14px', fontWeight: '500' }}>
+        {formatPrice(properties[3].buy_price)}
+      </div>
       
       <div style={{ 
         position: 'absolute', 
@@ -237,44 +290,11 @@ const BuyPropertiesPage = () => {
       scrollbarColor: '#c1c1c1 #f1f1f1'
     }}>
       {/* Left Sidebar - Filters */}
-      <div style={{ width: '320px', backgroundColor: '#ffffff', borderRight: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column', height: '100vh', position: 'sticky', top: 0 }}>
+      <div style={{ width: '380px', backgroundColor: '#ffffff', borderRight: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column', height: '100vh', position: 'sticky', top: 0 }}>
         {/* Header */}
         <div style={{ padding: '16px', borderBottom: '1px solid #e5e7eb' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
-            <img 
-              src="/logo.png" 
-              alt="Propzy Logo"
-              style={{ 
-                width: '36px', 
-                height: '36px', 
-                borderRadius: '8px'
-              }}
-              onError={(e) => {
-                console.log('Logo loading failed, trying alternative path');
-                if (e.target.src !== './src/assets/logo.png') {
-                  e.target.src = './src/assets/logo.png';
-                } else {
-                  e.target.style.display = 'none';
-                  e.target.nextSibling.style.display = 'flex';
-                }
-              }}
-            />
-            <div style={{ 
-              width: '36px', 
-              height: '36px', 
-              backgroundColor: '#FBCA03', 
-              borderRadius: '8px', 
-              display: 'none', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              fontWeight: 'bold',
-              fontSize: '18px',
-              color: '#111827',
-              boxShadow: '0 2px 4px rgba(251, 202, 3, 0.3)'
-            }}>
-              P
-            </div>
-            <span style={{ fontSize: '24px', fontWeight: 'bold', color: '#111827' }}>PROPZY</span>
+          <div style={{ marginBottom: '24px' }}>
+            <Logo size="medium" />
           </div>
           
           {/* Buy/Rent Toggle */}
@@ -559,19 +579,19 @@ const BuyPropertiesPage = () => {
               <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#111827', marginBottom: '12px', margin: '0 0 12px 0' }}>Property Type</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="propertyType" value="house" style={{ marginRight: '12px' }} />
+                  <input type="checkbox" name="propertyType" value="House" style={{ marginRight: '12px' }} />
                   <span style={{ fontSize: '14px', color: '#374151' }}>House</span>
                 </label>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="propertyType" value="apartment" defaultChecked style={{ marginRight: '12px' }} />
+                  <input type="checkbox" name="propertyType" value="Apartment" defaultChecked style={{ marginRight: '12px' }} />
                   <span style={{ fontSize: '14px', color: '#374151' }}>Apartment</span>
                 </label>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="propertyType" value="townhouse" style={{ marginRight: '12px' }} />
+                  <input type="checkbox" name="propertyType" value="Townhouse" style={{ marginRight: '12px' }} />
                   <span style={{ fontSize: '14px', color: '#374151' }}>Townhouse</span>
                 </label>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="propertyType" value="unit" style={{ marginRight: '12px' }} />
+                  <input type="checkbox" name="propertyType" value="Unit" style={{ marginRight: '12px' }} />
                   <span style={{ fontSize: '14px', color: '#374151' }}>Unit</span>
                 </label>
               </div>
@@ -619,47 +639,70 @@ const BuyPropertiesPage = () => {
               </div>
             </div>
 
-            {/* Parking */}
+            {/* Car Spaces */}
             <div>
-              <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#111827', marginBottom: '12px', margin: '0 0 12px 0' }}>Parking</h3>
+              <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#111827', marginBottom: '12px', margin: '0 0 12px 0' }}>Car Spaces</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="parking" value="any" defaultChecked style={{ marginRight: '12px' }} />
+                  <input type="radio" name="carspaces" value="any" defaultChecked style={{ marginRight: '12px' }} />
                   <span style={{ fontSize: '14px', color: '#374151' }}>Any</span>
                 </label>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="parking" value="1+" style={{ marginRight: '12px' }} />
+                  <input type="radio" name="carspaces" value="1+" style={{ marginRight: '12px' }} />
                   <span style={{ fontSize: '14px', color: '#374151' }}>1+ spaces</span>
                 </label>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="parking" value="2+" style={{ marginRight: '12px' }} />
+                  <input type="radio" name="carspaces" value="2+" style={{ marginRight: '12px' }} />
                   <span style={{ fontSize: '14px', color: '#374151' }}>2+ spaces</span>
                 </label>
               </div>
             </div>
 
-            {/* Additional Buy-specific filters */}
+            {/* Sale Method */}
             <div>
-              <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#111827', marginBottom: '12px', margin: '0 0 12px 0' }}>Property Age</h3>
+              <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#111827', marginBottom: '12px', margin: '0 0 12px 0' }}>Sale Method</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="propertyAge" value="any" defaultChecked style={{ marginRight: '12px' }} />
-                  <span style={{ fontSize: '14px', color: '#374151' }}>Any age</span>
+                  <input type="checkbox" name="method" value="Private Sale" defaultChecked style={{ marginRight: '12px' }} />
+                  <span style={{ fontSize: '14px', color: '#374151' }}>Private Sale</span>
                 </label>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="propertyAge" value="new" style={{ marginRight: '12px' }} />
-                  <span style={{ fontSize: '14px', color: '#374151' }}>New (0-5 years)</span>
+                  <input type="checkbox" name="method" value="Auction" defaultChecked style={{ marginRight: '12px' }} />
+                  <span style={{ fontSize: '14px', color: '#374151' }}>Auction</span>
                 </label>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="propertyAge" value="established" style={{ marginRight: '12px' }} />
-                  <span style={{ fontSize: '14px', color: '#374151' }}>Established (5+ years)</span>
+                  <input type="checkbox" name="method" value="Expression of Interest" style={{ marginRight: '12px' }} />
+                  <span style={{ fontSize: '14px', color: '#374151' }}>Expression of Interest</span>
                 </label>
               </div>
             </div>
 
-            {/* Land Size */}
+            {/* Year Built */}
             <div>
-              <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#111827', marginBottom: '12px', margin: '0 0 12px 0' }}>Land Size</h3>
+              <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#111827', marginBottom: '12px', margin: '0 0 12px 0' }}>Year Built</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                  <input type="radio" name="yearBuilt" value="any" defaultChecked style={{ marginRight: '12px' }} />
+                  <span style={{ fontSize: '14px', color: '#374151' }}>Any year</span>
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                  <input type="radio" name="yearBuilt" value="new" style={{ marginRight: '12px' }} />
+                  <span style={{ fontSize: '14px', color: '#374151' }}>2020+</span>
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                  <input type="radio" name="yearBuilt" value="modern" style={{ marginRight: '12px' }} />
+                  <span style={{ fontSize: '14px', color: '#374151' }}>2000-2019</span>
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                  <input type="radio" name="yearBuilt" value="established" style={{ marginRight: '12px' }} />
+                  <span style={{ fontSize: '14px', color: '#374151' }}>Before 2000</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Land Size (only for houses/townhouses) */}
+            <div>
+              <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#111827', marginBottom: '12px', margin: '0 0 12px 0' }}>Land Size (sqm)</h3>
               <select style={{ 
                 width: '100%', 
                 padding: '12px', 
@@ -673,11 +716,36 @@ const BuyPropertiesPage = () => {
                 cursor: 'pointer'
               }}>
                 <option value="any">Any size</option>
+                <option value="200">200+ sqm</option>
                 <option value="300">300+ sqm</option>
                 <option value="400">400+ sqm</option>
                 <option value="500">500+ sqm</option>
                 <option value="600">600+ sqm</option>
                 <option value="800">800+ sqm</option>
+              </select>
+            </div>
+
+            {/* Distance from CBD */}
+            <div>
+              <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#111827', marginBottom: '12px', margin: '0 0 12px 0' }}>Distance from CBD</h3>
+              <select style={{ 
+                width: '100%', 
+                padding: '12px', 
+                border: '1px solid #d1d5db', 
+                borderRadius: '6px', 
+                backgroundColor: '#ffffff', 
+                fontSize: '14px', 
+                boxSizing: 'border-box', 
+                outline: 'none',
+                color: '#374151',
+                cursor: 'pointer'
+              }}>
+                <option value="any">Any distance</option>
+                <option value="2">Within 2km</option>
+                <option value="5">Within 5km</option>
+                <option value="10">Within 10km</option>
+                <option value="15">Within 15km</option>
+                <option value="20">Within 20km</option>
               </select>
             </div>
           </div>
@@ -700,7 +768,7 @@ const BuyPropertiesPage = () => {
               boxShadow: '0 2px 4px rgba(251, 202, 3, 0.3)'
             }}
           >
-            Search
+            Search Properties
           </button>
         </div>
       </div>
@@ -709,14 +777,22 @@ const BuyPropertiesPage = () => {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100vh', position: 'relative' }}>
         {/* Map Section */}
         {showMap && (
-          <div style={{ height: '35%', borderBottom: '1px solid #e5e7eb' }}>
+          <div style={{ height: '55%', borderBottom: '1px solid #e5e7eb' }}>
             <MapSection />
           </div>
         )}
 
         {/* Properties Grid */}
-        <div style={{ height: showMap ? '65%' : '100%', backgroundColor: '#f8fafc', padding: '24px', overflowY: 'auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginBottom: '24px' }}>
+        <div style={{ height: showMap ? '45%' : '100%', backgroundColor: '#f8fafc', padding: '24px', overflowY: 'auto' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+            <div>
+              <h2 style={{ fontSize: '24px', fontWeight: '700', color: '#111827', margin: '0 0 8px 0' }}>
+                Properties for Sale
+              </h2>
+              <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>
+                {properties.length} properties found in Melbourne
+              </p>
+            </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '14px', color: '#6b7280', fontWeight: '500' }}>Sort by</span>
               <select style={{ 
@@ -733,15 +809,19 @@ const BuyPropertiesPage = () => {
                 <option value="price-low">Price: Low to High</option>
                 <option value="price-high">Price: High to Low</option>
                 <option value="date">Date Listed</option>
-                <option value="size">Size</option>
                 <option value="bedrooms">Bedrooms</option>
+                <option value="distance">Distance from CBD</option>
               </select>
             </div>
           </div>
           
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '24px' }}>
             {properties.map(property => (
-              <PropertyCard key={property.id} property={property} />
+              <PropertyCard 
+                key={property.property_id} 
+                property={property}
+                onView={(property) => window.location.href = `/${property.listing_type}/${property.property_id}`}
+              />
             ))}
           </div>
         </div>
