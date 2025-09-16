@@ -3,144 +3,162 @@ import Logo from '../components/logo';
 import PropertyCard from '../components/PropertyCard';
 
 // TODO: Delete after API integration - START 
-const fallbackRentProperties =[
+const fallbackRentProperties = [
     {
-      property_id: "550e8400-e29b-41d4-a716-446655440007",
+      id: 1,
       suburb: "Melbourne",
       address: "123 Collins Street",
-      listing_type: "rent",
-      property_type: "Apartment",
-      method: "Private Rental",
-      seller: "Ray White Melbourne",
-      distance: 0.5,
+      property_type: "rent",
+      category: "Apartment",
+      company: "Ray White Melbourne",
       postcode: "3000",
-      sale_date: "2025-09-01",
       buy_price: null,
       rent_price: 480,
-      bedrooms: 2,
-      bathrooms: 1,
+      bedrooms_num: 2,
+      bathrooms_num: 1,
       carspaces: 1,
       landsize: null,
       year_built: 2020,
-      latitude: -37.8136,
-      longitude: 144.9631,
-      image_url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      created_at: "2025-01-01T10:00:00Z"
+      lat: -37.8136,
+      lng: 144.9631,
+      images: [
+        {
+          id: 1,
+          url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+        }
+      ],
+      created_at: "2025-01-01T10:00:00Z",
+      updated_at: "2025-01-01T10:00:00Z"
     },
     {
-      property_id: "550e8400-e29b-41d4-a716-446655440008",
+      id: 2,
       suburb: "South Yarra",
       address: "456 Chapel Street",
-      listing_type: "rent",
-      property_type: "House",
-      method: "Property Management",
-      seller: "Jellis Craig",
-      distance: 3.2,
+      property_type: "rent",
+      category: "House",
+      company: "Jellis Craig",
       postcode: "3141",
-      sale_date: "2025-09-15",
       buy_price: null,
       rent_price: 510,
-      bedrooms: 2,
-      bathrooms: 1,
+      bedrooms_num: 2,
+      bathrooms_num: 1,
       carspaces: 2,
       landsize: 400,
       year_built: 2018,
-      latitude: -37.8467,
-      longitude: 144.9896,
-      image_url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      created_at: "2025-01-02T11:30:00Z"
+      lat: -37.8467,
+      lng: 144.9896,
+      images: [
+        {
+          id: 2,
+          url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+        }
+      ],
+      created_at: "2025-01-02T11:30:00Z",
+      updated_at: "2025-01-02T11:30:00Z"
     },
     {
-      property_id: "550e8400-e29b-41d4-a716-446655440009",
+      id: 3,
       suburb: "Collingwood",
       address: "789 Smith Street",
-      listing_type: "rent",
-      property_type: "Townhouse",
-      method: "Property Management",
-      seller: "Hocking Stuart",
-      distance: 2.8,
+      property_type: "rent",
+      category: "Townhouse",
+      company: "Hocking Stuart",
       postcode: "3066",
-      sale_date: "2025-10-01",
       buy_price: null,
       rent_price: 700,
-      bedrooms: 2,
-      bathrooms: 1,
+      bedrooms_num: 2,
+      bathrooms_num: 1,
       carspaces: 1,
       landsize: 150,
       year_built: 2019,
-      latitude: -37.8043,
-      longitude: 144.9848,
-      image_url: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      created_at: "2025-01-03T14:15:00Z"
+      lat: -37.8043,
+      lng: 144.9848,
+      images: [
+        {
+          id: 3,
+          url: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+        }
+      ],
+      created_at: "2025-01-03T14:15:00Z",
+      updated_at: "2025-01-03T14:15:00Z"
     },
     {
-      property_id: "550e8400-e29b-41d4-a716-446655440010",
+      id: 4,
       suburb: "Richmond",
       address: "321 Swan Street",
-      listing_type: "rent",
-      property_type: "Unit",
-      method: "Private Rental",
-      seller: "Nelson Alexander",
-      distance: 2.1,
+      property_type: "rent",
+      category: "Unit",
+      company: "Nelson Alexander",
       postcode: "3121",
-      sale_date: "2025-08-15",
       buy_price: null,
       rent_price: 380,
-      bedrooms: 1,
-      bathrooms: 1,
+      bedrooms_num: 1,
+      bathrooms_num: 1,
       carspaces: 0,
       landsize: null,
       year_built: 2015,
-      latitude: -37.8197,
-      longitude: 144.9864,
-      image_url: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      created_at: "2025-01-04T09:45:00Z"
+      lat: -37.8197,
+      lng: 144.9864,
+      images: [
+        {
+          id: 4,
+          url: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+        }
+      ],
+      created_at: "2025-01-04T09:45:00Z",
+      updated_at: "2025-01-04T09:45:00Z"
     },
     {
-      property_id: "550e8400-e29b-41d4-a716-446655440011",
+      id: 5,
       suburb: "Southbank",
       address: "100 Southbank Promenade",
-      listing_type: "rent",
-      property_type: "Apartment",
-      method: "Property Management",
-      seller: "Barry Plant",
-      distance: 1.5,
+      property_type: "rent",
+      category: "Apartment",
+      company: "Barry Plant",
       postcode: "3006",
-      sale_date: "2025-09-30",
       buy_price: null,
       rent_price: 750,
-      bedrooms: 2,
-      bathrooms: 2,
+      bedrooms_num: 2,
+      bathrooms_num: 2,
       carspaces: 1,
       landsize: null,
       year_built: 2021,
-      latitude: -37.8220,
-      longitude: 144.9633,
-      image_url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      created_at: "2025-01-05T16:20:00Z"
+      lat: -37.8220,
+      lng: 144.9633,
+      images: [
+        {
+          id: 5,
+          url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+        }
+      ],
+      created_at: "2025-01-05T16:20:00Z",
+      updated_at: "2025-01-05T16:20:00Z"
     },
     {
-      property_id: "550e8400-e29b-41d4-a716-446655440012",
+      id: 6,
       suburb: "Fitzroy",
       address: "555 Brunswick Street",
-      listing_type: "rent",
-      property_type: "House",
-      method: "Private Rental",
-      seller: "RT Edgar",
-      distance: 3.5,
+      property_type: "rent",
+      category: "House",
+      company: "RT Edgar",
       postcode: "3065",
-      sale_date: "2025-10-15",
       buy_price: null,
       rent_price: 680,
-      bedrooms: 2,
-      bathrooms: 1,
+      bedrooms_num: 2,
+      bathrooms_num: 1,
       carspaces: 1,
       landsize: 600,
       year_built: 1920,
-      latitude: -37.7979,
-      longitude: 144.9810,
-      image_url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      created_at: "2025-01-06T12:00:00Z"
+      lat: -37.7979,
+      lng: 144.9810,
+      images: [
+        {
+          id: 6,
+          url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+        }
+      ],
+      created_at: "2025-01-06T12:00:00Z",
+      updated_at: "2025-01-06T12:00:00Z"
     }
   ];
   // TODO: Delete after API integration - END
@@ -423,26 +441,6 @@ const RentPropertiesPage = () => {
               />
             </div>
 
-            {/* Available from */}
-            <div>
-              <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#111827', marginBottom: '12px', margin: '0 0 12px 0' }}>Available from</h3>
-              <input 
-                type="date" 
-                defaultValue="2025-09-01"
-                style={{ 
-                  width: '100%', 
-                  padding: '12px', 
-                  border: '1px solid #d1d5db', 
-                  borderRadius: '6px', 
-                  backgroundColor: '#ffffff', 
-                  fontSize: '14px', 
-                  boxSizing: 'border-box', 
-                  outline: 'none',
-                  color: '#374151',
-                  cursor: 'pointer'
-                }}
-              />
-            </div>
 
             {/* Price Range */}
             <div>
@@ -643,15 +641,11 @@ const RentPropertiesPage = () => {
                 </label>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                   <input type="checkbox" name="propertyType" value="Apartment" defaultChecked style={{ marginRight: '12px' }} />
-                  <span style={{ fontSize: '14px', color: '#374151' }}>Apartment</span>
+                  <span style={{ fontSize: '14px', color: '#374151' }}>Apartment & Unit</span>
                 </label>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                   <input type="checkbox" name="propertyType" value="Townhouse" style={{ marginRight: '12px' }} />
                   <span style={{ fontSize: '14px', color: '#374151' }}>Townhouse</span>
-                </label>
-                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="checkbox" name="propertyType" value="Unit" style={{ marginRight: '12px' }} />
-                  <span style={{ fontSize: '14px', color: '#374151' }}>Unit</span>
                 </label>
               </div>
             </div>
@@ -717,21 +711,6 @@ const RentPropertiesPage = () => {
               </div>
             </div>
 
-            {/* Rental Method */}
-            <div>
-              <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#111827', marginBottom: '12px', margin: '0 0 12px 0' }}>Rental Method</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="checkbox" name="method" value="Private Rental" defaultChecked style={{ marginRight: '12px' }} />
-                  <span style={{ fontSize: '14px', color: '#374151' }}>Private Rental</span>
-                </label>
-                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="checkbox" name="method" value="Property Management" defaultChecked style={{ marginRight: '12px' }} />
-                  <span style={{ fontSize: '14px', color: '#374151' }}>Property Management</span>
-                </label>
-              </div>
-            </div>
-
             {/* Year Built */}
             <div>
               <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#111827', marginBottom: '12px', margin: '0 0 12px 0' }}>Year Built</h3>
@@ -741,42 +720,18 @@ const RentPropertiesPage = () => {
                   <span style={{ fontSize: '14px', color: '#374151' }}>Any year</span>
                 </label>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="yearBuilt" value="new" style={{ marginRight: '12px' }} />
-                  <span style={{ fontSize: '14px', color: '#374151' }}>2020+</span>
+                  <input type="radio" name="yearBuilt" value="2010+" style={{ marginRight: '12px' }} />
+                  <span style={{ fontSize: '14px', color: '#374151' }}>2010+</span>
                 </label>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="yearBuilt" value="modern" style={{ marginRight: '12px' }} />
-                  <span style={{ fontSize: '14px', color: '#374151' }}>2000-2019</span>
+                  <input type="radio" name="yearBuilt" value="2000-2010" style={{ marginRight: '12px' }} />
+                  <span style={{ fontSize: '14px', color: '#374151' }}>2000-2010</span>
                 </label>
                 <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <input type="radio" name="yearBuilt" value="established" style={{ marginRight: '12px' }} />
+                  <input type="radio" name="yearBuilt" value="before2000" style={{ marginRight: '12px' }} />
                   <span style={{ fontSize: '14px', color: '#374151' }}>Before 2000</span>
                 </label>
               </div>
-            </div>
-
-            {/* Distance from CBD */}
-            <div>
-              <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#111827', marginBottom: '12px', margin: '0 0 12px 0' }}>Distance from CBD</h3>
-              <select style={{ 
-                width: '100%', 
-                padding: '12px', 
-                border: '1px solid #d1d5db', 
-                borderRadius: '6px', 
-                backgroundColor: '#ffffff', 
-                fontSize: '14px', 
-                boxSizing: 'border-box', 
-                outline: 'none',
-                color: '#374151',
-                cursor: 'pointer'
-              }}>
-                <option value="any">Any distance</option>
-                <option value="2">Within 2km</option>
-                <option value="5">Within 5km</option>
-                <option value="10">Within 10km</option>
-                <option value="15">Within 15km</option>
-                <option value="20">Within 20km</option>
-              </select>
             </div>
           </div>
         </div>
@@ -884,9 +839,9 @@ const RentPropertiesPage = () => {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '24px' }}>
             {properties.map(property => (
               <PropertyCard 
-                key={property.property_id} 
+                key={property.id} 
                 property={property}
-                onView={(property) => window.location.href = `/${property.listing_type}/${property.property_id}`}
+                onView={(property) => window.location.href = `/${property.property_type}/${property.id}`}
               />
             ))}
           </div>

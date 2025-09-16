@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropertyCard from './PropertyCard'; 
 
 import { 
@@ -19,48 +19,95 @@ import {
   X
 } from 'lucide-react';
 
-// TODO: Delete after API integration - START
-  const fallbackChatProperties = [
-    {
-      property_id: "1",
-      suburb: "Bondi Beach",
-      address: "123 Ocean Drive",
-      postcode: "2026",
-      listing_type: "buy",
-      property_type: "House",
-      buy_price: 2850000,
-      bedrooms: 4,
-      bathrooms: 3,
-      carspaces: 2,
-      color: '#3b82f6'
-    },
-    {
-      property_id: "2", 
-      suburb: "Sydney CBD",
-      address: "456 George Street",
-      postcode: "2000",
-      listing_type: "rent",
-      property_type: "Apartment",
-      rent_price: 800,
-      bedrooms: 2,
-      bathrooms: 2,
-      carspaces: 1,
-      color: '#10b981'
-    },
-    {
-      property_id: "3",
-      suburb: "Wollongong",
-      address: "789 Crown Street", 
-      postcode: "2500",
-      listing_type: "buy",
-      property_type: "Townhouse",
-      buy_price: 750000,
-      bedrooms: 3,
-      bathrooms: 2,
-      carspaces: 1,
-      color: '#f59e0b'
-    }
-  ];
+
+
+const fallbackChatProperties = [
+  {
+    id: "550e8400-e29b-41d4-a716-446655440001",
+    suburb: "Bondi Beach",
+    address: "123 Ocean Drive",
+    postcode: "2026",
+    property_type: "buy",
+    category: "House",
+    company: "Elite Realty",
+    created_at: "2025-01-01T10:00:00Z",
+    updated_at: "2025-01-01T10:00:00Z",
+    buy_price: 2850000,
+    rent_price: null,
+    bedrooms_num: 4,
+    bathrooms_num: 3,
+    carspaces: 2,
+    landsize: 450,
+    year_built: 2020,
+    lat: -33.8915,
+    lng: 151.2767,
+    images: [
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      }
+    ],
+    color: '#3b82f6',
+    match_score: 95
+  },
+  {
+    id: "550e8400-e29b-41d4-a716-446655440002",
+    suburb: "Sydney CBD",
+    address: "456 George Street",
+    postcode: "2000",
+    property_type: "rent",
+    category: "Apartment",
+    company: "City Properties",
+    created_at: "2025-01-01T10:00:00Z",
+    updated_at: "2025-01-01T10:00:00Z",
+    buy_price: null,
+    rent_price: 800,
+    bedrooms_num: 2,
+    bathrooms_num: 2,
+    carspaces: 1,
+    landsize: null,
+    year_built: 2018,
+    lat: -33.8688,
+    lng: 151.2093,
+    images: [
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      }
+    ],
+    color: '#10b981',
+    match_score: 89
+  },
+  {
+    id: "550e8400-e29b-41d4-a716-446655440003",
+    suburb: "Wollongong",
+    address: "789 Crown Street",
+    postcode: "2500",
+    property_type: "buy",
+    category: "Townhouse",
+    company: "Heritage Homes",
+    created_at: "2025-01-01T10:00:00Z",
+    updated_at: "2025-01-01T10:00:00Z",
+    buy_price: 750000,
+    rent_price: null,
+    bedrooms_num: 3,
+    bathrooms_num: 2,
+    carspaces: 1,
+    landsize: 680,
+    year_built: 1960,
+    lat: -33.8848,
+    lng: 151.2291,
+    images: [
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      }
+    ],
+    color: '#f59e0b',
+    match_score: 84
+  }
+];
+  const fallbackProperties = fallbackChatProperties;
   // TODO: Delete after API integration - END
   
 // Property Modal Component - Add this before CompactAIChat component
@@ -68,9 +115,9 @@ const PropertyModal = ({ isOpen, onClose, property }) => {
   if (!isOpen || !property) return null;
 
   // Build property detail URL
-  const pageUrl = property.listing_type === 'buy' 
-    ? `/buy/${property.property_id}?modal=true`
-    : `/rent/${property.property_id}?modal=true`;
+  const pageUrl = property.property_type === 'buy' 
+    ? `/buy/${property.id}?modal=true`
+    : `/rent/${property.id}?modal=true`;
   return (
     <div style={{
       position: 'fixed',
@@ -133,8 +180,6 @@ const PropertyModal = ({ isOpen, onClose, property }) => {
     </div>
   );
 };
-
-
 
 // Compact AI Chat
 const CompactAIChat = ({ isOpen, onClose, onPropertyView, properties = [], user = null }) => {
@@ -266,19 +311,19 @@ const CompactAIChat = ({ isOpen, onClose, onPropertyView, properties = [], user 
   const filterProperties = (properties, criteria) => {
     return properties.filter(property => {
       // Filter by bedrooms
-      if (criteria.bedrooms && property.bedrooms !== criteria.bedrooms) return false;
+      if (criteria.bedrooms && property.bedrooms_num !== criteria.bedrooms) return false;
       
       // Filter by bathrooms
-      if (criteria.bathrooms && property.bathrooms !== criteria.bathrooms) return false;
+      if (criteria.bathrooms && property.bathrooms_num !== criteria.bathrooms) return false;
       
       // Filter by property type
-      if (criteria.propertyType && property.property_type !== criteria.propertyType) return false;
+      if (criteria.propertyType && property.category !== criteria.propertyType) return false;
       
       // Filter by location
       if (criteria.location && !property.suburb.toLowerCase().includes(criteria.location)) return false;
       
       // Filter by listing type
-      if (criteria.listingType && property.listing_type !== criteria.listingType) return false;
+      if (criteria.listingType && property.property_type !== criteria.listingType) return false;
       
       // Filter by price
       if (criteria.priceMin) {
@@ -295,98 +340,73 @@ const CompactAIChat = ({ isOpen, onClose, onPropertyView, properties = [], user 
   };
 
   const handleSend = async () => {
-  if (!inputValue.trim()) return;
-  
-  const userMsg = {
-    id: Date.now(),
-    type: 'user',
-    text: inputValue,
-    timestamp: new Date()
-  };
-  setMessages(current => [...current, userMsg]);
-  
-  const currentInput = inputValue;
-  setInputValue('');
-  setIsTyping(true);
-
-  // Use local search logic temporarily, no API call
-  setTimeout(() => {
-    const criteria = parseQuery(currentInput);
-    const filteredProperties = filterProperties(availableProperties, criteria);
+    if (!inputValue.trim()) return;
     
-    const botMsg = {
-      id: Date.now() + 1,
-      type: 'bot',
-      text: `Found ${filteredProperties.length} properties matching your criteria`,
-      timestamp: new Date(),
-      properties: filteredProperties.length > 0 ? filteredProperties.slice(0, 3) : availableProperties.slice(0, 2)
+    const userMsg = {
+      id: Date.now(),
+      type: 'user',
+      text: inputValue,
+      timestamp: new Date()
     };
+    setMessages(current => [...current, userMsg]);
     
-    setMessages(current => [...current, botMsg]);
-    setIsTyping(false);
-  }, 1000);
-
-  // TODO: Delete setTimeout section above and uncomment code below when backend is ready
-  /*
-  try {
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      },
-      body: JSON.stringify({
-        message: currentInput,
-        properties: availableProperties,
-        conversationHistory: messages,
-        userId: user?.id
-      })
-    });
-
-    const responseText = await response.text();
-    console.log('Response status:', response.status);
-    console.log('Raw response:', responseText);
+    const currentInput = inputValue;
+    setInputValue('');
+    setIsTyping(true);
     
-    let aiResponse;
-    try {
-      aiResponse = JSON.parse(responseText);
-    } catch (parseError) {
-      throw new Error(`Invalid JSON: ${responseText}`);
-    }
-    
-    if (response.ok) {
+    // Temporarily disable API, use local search instead
+    setTimeout(() => {
+      const criteria = parseQuery(currentInput);
+      const filteredProperties = filterProperties(availableProperties, criteria);
+      
+      let botResponse = "I'm here to help you find properties.";
+      if (filteredProperties.length > 0) {
+        botResponse = `Based on your search "${currentInput}", I found ${filteredProperties.length} matching properties:`;
+      } else if (criteria.bedrooms || criteria.propertyType || criteria.location) {
+        botResponse = "Sorry, I couldn't find any properties matching your criteria. Try adjusting your search terms.";
+      } else {
+        botResponse = "I didn't quite understand your request. Try something like '2 bedroom apartment in Sydney' or 'houses in Wollongong'.";
+      }
+      
       const botMsg = {
         id: Date.now() + 1,
         type: 'bot',
-        text: aiResponse.message,
+        text: botResponse,
         timestamp: new Date(),
-        properties: aiResponse.recommendedProperties || null
+        properties: filteredProperties.length > 0 ? filteredProperties.slice(0, 3) : null
       };
       setMessages(current => [...current, botMsg]);
-    } else {
-      const errorMsg = {
-        id: Date.now() + 1,
-        type: 'bot',
-        text: `API Error: ${aiResponse.error || 'Unknown error'}`,
-        timestamp: new Date()
-      };
-      setMessages(current => [...current, errorMsg]);
+      setIsTyping(false);
+    }, 1000);
+
+    // TODO: When backend is ready, remove the above code and restore the API call below
+    /*
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          message: currentInput,
+          properties: availableProperties,
+          conversationHistory: messages,
+          userId: user?.id
+        })
+      });
+      // ... rest of API handling logic
+    } catch (error) {
+      // ... error handling
+    } finally {
+      setIsTyping(false);
     }
-  } catch (error) {
-    const errorMsg = {
-      id: Date.now() + 1,
-      type: 'bot', 
-      text: `Network Error: ${error.message}`,
-      timestamp: new Date()
-    };
-    setMessages(current => [...current, errorMsg]);
-  } finally {
-    setIsTyping(false);
-  }
-  */
-};
+    */
+  };
+    
+
   const quickActions = [
-    { text: "Show me 2 bedroom apartments", action: () => addMessage("Show me 2 bedroom apartments", "Here are some great 2-bedroom apartments:", availableProperties.filter(p => p.bedrooms === 2)) },
+    { text: "Show me 2 bedroom apartments", action: () => addMessage("Show me 2 bedroom apartments", "Here are some great 2-bedroom apartments:", availableProperties.filter(p => p.bedrooms_num === 2)) },
     { text: "Properties under $800k", action: () => addMessage("Properties under $800k", "I found these properties under $800k:", availableProperties.filter(p => p.buy_price && p.buy_price < 800000)) },
     { text: "Houses in Wollongong", action: () => addMessage("Houses in Wollongong", "Here are houses available in Wollongong:", availableProperties.filter(p => p.suburb.toLowerCase().includes('wollongong'))) },
     { text: "Rental properties", action: () => addMessage("Show me rental properties", "Here are available rental properties:", availableProperties.filter(p => p.listing_type === 'rent')) }
@@ -523,7 +543,7 @@ const CompactAIChat = ({ isOpen, onClose, onPropertyView, properties = [], user 
                 <div style={{ width: '100%', marginTop: '8px' }}>
                 {message.properties.map((property) => (
                   <PropertyCard 
-                    key={property.property_id} 
+                    key={property.id} 
                     property={property} 
                     onView={handlePropertyView}
                     showSaveButton={false}
@@ -683,32 +703,163 @@ const Homepage = () => {
   const [currentNewsSlide, setCurrentNewsSlide] = useState(0);
   const [isChatOpen, setIsChatOpen] = useState(false);
 
-  // ... (rest of the homepage code remains the same)
-  // Just replacing the old chat component with CompactAIChat
-  // TODO: Delete test file after integration
-  const featuredProperties = [
-    {
-      property_id: "test-1",
-      suburb: "Bondi Beach",
-      property_type: "House",
-      buy_price: 2850000,
-      bedrooms: 4,
-      bathrooms: 3,
-      carspaces: 2,
-      color: '#3b82f6'
-    },
-    {
-      property_id: "test-2",
-      suburb: "Sydney CBD",
-      property_type: "Apartment",
-      rent_price: 800,
-      bedrooms: 2,
-      bathrooms: 2,
-      carspaces: 1,
-      color: '#10b981'
-    }
-  ];
+  const [featuredProperties, setFeaturedProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [savedProperties, setSavedProperties] = useState([]);
+  const [hasUserActivity, setHasUserActivity] = useState(false);
+  const [error, setError] = useState(null);
 
+  // useEffect - Load featured properties
+useEffect(() => {
+  // Use fallback data temporarily, no API call
+  setFeaturedProperties(fallbackProperties);
+  setLoading(false);
+  
+  // TODO: Delete above two lines and uncomment code below when backend is ready
+  /*
+  const loadFeaturedProperties = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/properties/featured');
+      const data = await response.json();
+      
+      if (response.ok) {
+        setFeaturedProperties(data);
+      } else {
+        console.error('Failed to load featured properties');
+        setFeaturedProperties(fallbackProperties);
+      }
+    } catch (error) {
+      console.error('Failed to load featured properties:', error);
+      setFeaturedProperties(fallbackProperties);
+    } finally {
+      setLoading(false);
+    }
+  };
+  loadFeaturedProperties();
+  */
+}, []);
+
+// handleSearch function
+const handleSearch = async () => {
+  if (searchQuery.trim()) {
+    setHasUserActivity(true);
+    
+    // Navigate directly without API call
+    if (activeTab === 'rent') {
+      window.location.href = `/rent?location=${encodeURIComponent(searchQuery)}`;
+    } else if (activeTab === 'buy') {
+      window.location.href = `/buy?location=${encodeURIComponent(searchQuery)}`;
+    }
+    
+    // TODO: Delete above navigation code and uncomment API call below when backend is ready
+    /*
+    setLoading(true);
+    try {
+      const response = await fetch('/api/properties/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          query: searchQuery, 
+          type: activeTab 
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        if (activeTab === 'rent') {
+          window.location.href = `/rent?location=${encodeURIComponent(searchQuery)}`;
+        } else if (activeTab === 'buy') {
+          window.location.href = `/buy?location=${encodeURIComponent(searchQuery)}`;
+        }
+      } else {
+        setError('Search failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Search failed:', error);
+      setError('Search failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+    */
+  }
+};
+
+// handleSaveProperty function  
+const handleSaveProperty = async (propertyId) => {
+  if (!user) {
+    alert('Please log in to save properties!');
+    return;
+  }
+
+  setHasUserActivity(true);
+  
+  // Mock save functionality - just update local state
+  if (!savedProperties.includes(propertyId)) {
+    setSavedProperties([...savedProperties, propertyId]);
+  }
+  alert('Property saved to your favorites! (Mock functionality)');
+  
+  // TODO: Delete above mock code and uncomment API call below when backend is ready
+  /*
+  try {
+    const response = await fetch('/api/properties/save', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify({ propertyId })
+    });
+    
+    if (response.ok) {
+      if (!savedProperties.includes(propertyId)) {
+        setSavedProperties([...savedProperties, propertyId]);
+      }
+      alert('Property saved to your favorites!');
+    } else {
+      alert('Failed to save property. Please try again.');
+    }
+  } catch (error) {
+    console.error('Failed to save property:', error);
+    alert('Failed to save property. Please try again.');
+  }
+  */
+};
+
+// handleLogout function
+const handleLogout = async () => {
+  // Clear local state directly without API call
+  setUser(null);
+  setSavedProperties([]);
+  localStorage.removeItem('token');
+  
+  // TODO: Add API call when backend is ready
+  /*
+  try {
+    const response = await fetch('/api/auth/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+
+    setUser(null);
+    setSavedProperties([]);
+    localStorage.removeItem('token');
+  } catch (error) {
+    console.error('Logout failed:', error);
+    // Still clear local state
+    setUser(null);
+    setSavedProperties([]);
+    localStorage.removeItem('token');
+  }
+  */
+};
   return (
     <div>
       {/* Your existing homepage content goes here */}

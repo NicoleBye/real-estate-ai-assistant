@@ -135,87 +135,160 @@ const nearbyData = {
 
 // TODO: Delete after API integration - START
   const fallbackRentPropertyData = {
-    property_id: "550e8400-e29b-41d4-a716-446655440007",
-    suburb: "Melbourne",
-    address: "456 Collins Street",
-    postcode: "3000",
-    listing_type: "rent",
-    property_type: "Apartment",
-    method: "Property Management",
-    seller: "City Rentals",
-    distance: 0.1,
-    sale_date: "2025-09-01", // Available date
-    buy_price: null,
-    rent_price: 650,
-    bedrooms: 2,
-    bathrooms: 2,
-    carspaces: 1,
-    landsize: null,
-    year_built: 2020,
-    latitude: -37.8136,
-    longitude: 144.9631,
-    image_url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    created_at: "2025-01-01T10:00:00Z",
-    images: [
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-    ],
-    description: "Discover comfortable living in this modern 2-bedroom apartment located in the heart of Melbourne's CBD. Featuring contemporary finishes, plenty of natural light, and convenient city access."
-  };
+      id: 1,
+      suburb: "Melbourne",
+      address: "456 Collins Street",
+      postcode: "3000",
+      property_type: "rent",
+      category: "Apartment",
+      company: "City Rentals",
+      buy_price: null,
+      rent_price: 650,
+      bedrooms_num: 2,
+      bathrooms_num: 2,
+      carspaces: 1,
+      landsize: null,
+      year_built: 2020,
+      lat: -37.8136,
+      lng: 144.9631,
+      created_at: "2025-01-01T10:00:00Z",
+      updated_at: "2025-01-01T10:00:00Z",
+      agent: {
+        id: 1,
+        name: "Sarah Johnson",
+        phone: "+61 3 9000 1234",
+        email: "sarah.johnson@cityrentals.com",
+        photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+        rating: 4.8,
+        reviews_count: 156
+      },
+      images: [
+        {
+          id: 1,
+          url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+        },
+        {
+          id: 2,
+          url: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+        },
+        {
+          id: 3,
+          url: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+        },
+        {
+          id: 4,
+          url: "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+        }
+      ],
+      description: "Discover comfortable living in this modern 2-bedroom apartment located in the heart of Melbourne's CBD. Featuring contemporary finishes, plenty of natural light, and convenient city access."
+    };
 
-  // Similar properties using database schema
-  const fallbackRentSimilarProperties = [
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440008",
-      suburb: "Southbank",
-      address: "100 Southbank Promenade",
-      postcode: "3006",
-      listing_type: "rent",
-      rent_price: 580,
-      bedrooms: 2,
-      bathrooms: 1,
-      property_type: "Unit",
-      image_url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440009",
-      suburb: "Collingwood",
-      address: "789 Smith Street",
-      postcode: "3066",
-      listing_type: "rent",
-      rent_price: 520,
-      bedrooms: 2,
-      bathrooms: 1,
-      property_type: "Townhouse",
-      image_url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440010",
-      suburb: "Richmond",
-      address: "123 Bridge Road",
-      postcode: "3121",
-      rent_price: 720,
-      listing_type: "rent",
-      bedrooms: 2,
-      bathrooms: 2,
-      property_type: "Apartment",
-      image_url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      property_id: "550e8400-e29b-41d4-a716-446655440011",
-      suburb: "Carlton",
-      address: "456 Lygon Street",
-      postcode: "3053",
-      rent_price: 450,
-      listing_type: "rent",
-      bedrooms: 1,
-      bathrooms: 1,
-      property_type: "Apartment",
-      image_url: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-    }
-  ];
+    const fallbackRentSimilarProperties = [
+      {
+        id: 2,
+        suburb: "Southbank",
+        address: "100 Southbank Promenade",
+        postcode: "3006",
+        property_type: "rent",
+        category: "Unit",
+        company: "Barry Plant",
+        buy_price: null,
+        rent_price: 580,
+        bedrooms_num: 2,
+        bathrooms_num: 1,
+        carspaces: 1,
+        landsize: null,
+        year_built: 2021,
+        lat: -37.8220,
+        lng: 144.9633,
+        images: [
+          {
+            id: 5,
+            url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+          }
+        ],
+        created_at: "2025-01-02T10:00:00Z",
+        updated_at: "2025-01-02T10:00:00Z"
+      },
+      {
+        id: 3,
+        suburb: "Collingwood",
+        address: "789 Smith Street",
+        postcode: "3066",
+        property_type: "rent",
+        category: "Townhouse",
+        company: "Hocking Stuart",
+        buy_price: null,
+        rent_price: 520,
+        bedrooms_num: 2,
+        bathrooms_num: 1,
+        carspaces: 1,
+        landsize: 150,
+        year_built: 2019,
+        lat: -37.8043,
+        lng: 144.9848,
+        images: [
+          {
+            id: 6,
+            url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+          }
+        ],
+        created_at: "2025-01-03T10:00:00Z",
+        updated_at: "2025-01-03T10:00:00Z"
+      },
+      {
+        id: 4,
+        suburb: "Richmond",
+        address: "123 Bridge Road",
+        postcode: "3121",
+        property_type: "rent",
+        category: "Apartment",
+        company: "Nelson Alexander",
+        buy_price: null,
+        rent_price: 720,
+        bedrooms_num: 2,
+        bathrooms_num: 2,
+        carspaces: 1,
+        landsize: null,
+        year_built: 2015,
+        lat: -37.8197,
+        lng: 144.9864,
+        images: [
+          {
+            id: 7,
+            url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+          }
+        ],
+        created_at: "2025-01-04T10:00:00Z",
+        updated_at: "2025-01-04T10:00:00Z"
+      },
+      {
+        id: 5,
+        suburb: "Carlton",
+        address: "456 Lygon Street",
+        postcode: "3053",
+        property_type: "rent",
+        category: "Apartment",
+        company: "RT Edgar",
+        buy_price: null,
+        rent_price: 450,
+        bedrooms_num: 1,
+        bathrooms_num: 1,
+        carspaces: 0,
+        landsize: null,
+        year_built: 2020,
+        lat: -37.7979,
+        lng: 144.9810,
+        images: [
+          {
+            id: 8,
+            url: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+          }
+        ],
+        created_at: "2025-01-05T10:00:00Z",
+        updated_at: "2025-01-05T10:00:00Z"
+      }
+    ];
   // TODO: Delete after API integration - END
 
 // Helper component for property detail row
@@ -278,7 +351,7 @@ const PropertyHeader = ({ property }) => (
     
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
       <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: 'black', margin: 0 }}>
-        {property.property_type} in {property.suburb}
+        {property.category} in {property.suburb}
       </h1>
       <div style={{ width: '24px', height: '24px', backgroundColor: '#10b981', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '12px', fontWeight: 'bold' }}>✓</div>
     </div>
@@ -294,11 +367,11 @@ const PropertyStats = ({ property }) => (
   <div style={{ display: 'flex', alignItems: 'center', gap: '32px', marginBottom: '24px' }}>
     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
       <Bed style={{ width: '16px', height: '16px', color: '#666' }} />
-      <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.bedrooms}</span>
+      <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.bedrooms_num}</span>
     </div>
     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
       <Bath style={{ width: '16px', height: '16px', color: '#666' }} />
-      <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.bathrooms}</span>
+      <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.bathrooms_num}</span>
     </div>
     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
       <Car style={{ width: '16px', height: '16px', color: '#666' }} />
@@ -312,7 +385,7 @@ const PropertyStats = ({ property }) => (
     )}
     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
       <Home style={{ width: '16px', height: '16px', color: '#666' }} />
-      <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.property_type}</span>
+      <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.category}</span>
     </div>
   </div>
 );
@@ -333,9 +406,6 @@ const PropertyRentDetailPage = () => {
 
   const [activeLocationTab, setActiveLocationTab] = useState('transportation');
   const [isFavorited, setIsFavorited] = useState(false);
-  const [showContactModal, setShowContactModal] = useState(false);
-  const [showApplicationModal, setShowApplicationModal] = useState(false);
-  const [showInspectionModal, setShowInspectionModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -379,8 +449,8 @@ const PropertyRentDetailPage = () => {
   // Share functionality
   const handleShare = async () => {
     const shareData = {
-      title: `${property.property_type} in ${property.suburb}`,
-      text: `Check out this ${property.property_type} for $${property.rent_price}/week`,
+      title: `${property.category} in ${property.suburb}`,
+      text: `Check out this ${property.category} for $${property.rent_price}/week`,
       url: window.location.href
     };
 
@@ -464,7 +534,7 @@ const PropertyRentDetailPage = () => {
           <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '16px', height: '500px', marginBottom: '48px' }}>
             <div style={{ position: 'relative', height: '100%' }}>
               <img 
-                src={property.images[0]} 
+                src={property.images[0]?.url}
                 alt={`${property.property_type} in ${property.suburb}`}
                 style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '12px' }}
               />
@@ -473,7 +543,7 @@ const PropertyRentDetailPage = () => {
               {property.images.slice(1, 4).map((img, index) => (
                 <div key={index} style={{ position: 'relative' }}>
                   <img 
-                    src={img} 
+                    src={img.url}
                     alt=""
                     style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
                   />
@@ -500,7 +570,6 @@ const PropertyRentDetailPage = () => {
 
               <PropertyStats property={property} />
 
-              <PropertySummary property={property} />
 
               {/* Rental Details */}
               <div style={{ backgroundColor: 'white', border: '1px solid #e5e5e5', borderRadius: '12px', padding: '24px', marginBottom: '32px' }}>
@@ -510,27 +579,12 @@ const PropertyRentDetailPage = () => {
                   <PropertyDetailRow 
                     icon={<PropertyIcon />} 
                     label="Property Type" 
-                    value={property.property_type} 
-                  />
-                  <PropertyDetailRow 
-                    icon={<CalendarIcon />} 
-                    label="Available Date" 
-                    value={formatAvailableDate(property.sale_date)} 
-                  />
-                  <PropertyDetailRow 
-                    icon={<ClockIcon />} 
-                    label="Rental Method" 
-                    value={property.method} 
+                    value={property.category} 
                   />
                   <PropertyDetailRow 
                     icon={<CalendarIcon />} 
                     label="Built Year" 
                     value={property.year_built} 
-                  />
-                  <PropertyDetailRow 
-                    icon={<LocationIcon />} 
-                    label="Distance from CBD" 
-                    value={`${property.distance}km`} 
                   />
                   {property.landsize && (
                     <PropertyDetailRow 
@@ -566,7 +620,7 @@ const PropertyRentDetailPage = () => {
                 
                 <div style={{ backgroundColor: '#f9fafb', borderRadius: '12px', height: '400px', marginBottom: '16px', position: 'relative', overflow: 'hidden' }}>
                   <iframe
-                    src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.0169!2d${property.longitude}!3d${property.latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577ca2f8c89a90!2s${encodeURIComponent(property.address)}%2C%20${encodeURIComponent(property.suburb)}%20VIC%20${property.postcode}!5e0!3m2!1sen!2sau!4v1234567890`}
+                    src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.0169!2d${property.lng}!3d${property.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577ca2f8c89a90!2s${encodeURIComponent(property.address)}%2C%20${encodeURIComponent(property.suburb)}%20VIC%20${property.postcode}!5e0!3m2!1sen!2sau!4v1234567890`}
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
@@ -609,12 +663,12 @@ const PropertyRentDetailPage = () => {
                 <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'black', marginBottom: '24px' }}>Similar Properties</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
                   {similarProperties  
-                    .filter(prop => prop.listing_type === property.listing_type)
+                    .filter(prop => prop.property_type === property.property_type)
                     .map(prop => (
                       <PropertyCard 
-                        key={prop.property_id} 
+                        key={prop.id} 
                         property={prop} 
-                        onView={(property) => window.location.href = `/${property.listing_type}/${property.property_id}`}
+                        onView={(property) => window.location.href = `/${property.property_type}/${property.id}`}
                       />
                   ))}
                 </div>
@@ -624,173 +678,49 @@ const PropertyRentDetailPage = () => {
             {/* Sidebar */}
             <div>
               <div style={{ backgroundColor: 'white', border: '1px solid #e5e5e5', borderRadius: '12px', padding: '24px', position: 'sticky', top: '24px' }}>
-                
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  <button 
-                    onClick={() => setShowApplicationModal(true)}
-                    style={{ width: '100%', backgroundColor: '#3b82f6', color: 'white', padding: '16px', borderRadius: '8px', border: 'none', fontSize: '16px', fontWeight: '600', cursor: 'pointer' }}
-                  >
-                    Apply Now
-                  </button>
-                  
-                  <button 
-                    onClick={() => setShowInspectionModal(true)}
-                    style={{ width: '100%', border: '1px solid #10b981', color: '#10b981', padding: '16px', borderRadius: '8px', fontSize: '16px', fontWeight: '600', backgroundColor: 'white', cursor: 'pointer' }}
-                  >
-                    Book Inspection
-                  </button>
 
-                  <button 
-                    onClick={() => setShowContactModal(true)}
-                    style={{ width: '100%', border: '1px solid #6b7280', color: '#374151', padding: '16px', borderRadius: '8px', fontSize: '16px', fontWeight: '600', backgroundColor: 'white', cursor: 'pointer' }}
-                  >
+                {/* Agent information */}
+                <div>
+                  <h4 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px', color: 'black' }}>
                     Contact Agent
-                  </button>
+                  </h4>
+                  
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                    <img 
+                      src={property.agent?.photo}
+                      alt="Agent"
+                      style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }}
+                    />
+                    <div>
+                      <div style={{ fontWeight: '600', color: 'black' }}>{property.agent?.name}</div>
+                      <div style={{ fontSize: '14px', color: '#666' }}>{property.company}</div>
+                    </div>
+                  </div>
+
+                  <a 
+                    href={`tel:${property.agent?.phone}`}
+                    style={{ 
+                      display: 'block',
+                      width: '100%',
+                      backgroundColor: '#3b82f6', 
+                      color: 'white', 
+                      padding: '12px 16px', 
+                      borderRadius: '8px', 
+                      textDecoration: 'none',
+                      textAlign: 'center',
+                      fontWeight: '600'
+                    }}
+                  >
+                    Call {property.agent?.phone}
+                  </a>
                 </div>
+                
               </div>
             </div>
+
           </div>
         </div>
       </div>
-
-      {/* Contact Modal */}
-      {showContactModal && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
-          <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '24px', width: '100%', maxWidth: '448px', margin: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
-              <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'black', margin: 0 }}>Contact Agent</h3>
-              <button 
-                onClick={() => setShowContactModal(false)}
-                style={{ color: '#9ca3af', backgroundColor: 'transparent', border: 'none', fontSize: '24px', cursor: 'pointer' }}
-              >
-                ×
-              </button>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
-              <img 
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
-                alt="Agent"
-                style={{ width: '64px', height: '64px', borderRadius: '50%', objectFit: 'cover' }}
-              />
-              <div>
-                <h4 style={{ fontSize: '18px', fontWeight: '600', color: 'black', margin: 0 }}>Sarah Johnson</h4>
-                <p style={{ color: '#666', margin: 0 }}>{property.seller}</p>
-                <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>4.8 Rating (156 reviews)</p>
-              </div>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <a 
-                href="tel:+61390001234"
-                style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '16px', border: '1px solid #e5e5e5', borderRadius: '8px', textDecoration: 'none', color: 'inherit' }}
-              >
-                <span>📞</span>
-                <div>
-                  <div style={{ fontWeight: '500', color: 'black' }}>Call Now</div>
-                  <div style={{ fontSize: '14px', color: '#666' }}>+61 3 9000 1234</div>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Application Modal */}
-      {showApplicationModal && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
-          <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '24px', width: '100%', maxWidth: '448px', margin: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
-              <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'black', margin: 0 }}>Submit Application</h3>
-              <button 
-                onClick={() => setShowApplicationModal(false)}
-                style={{ color: '#9ca3af', backgroundColor: 'transparent', border: 'none', fontSize: '24px', cursor: 'pointer' }}
-              >
-                ×
-              </button>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <input
-                type="text"
-                placeholder="Full Name"
-                style={{ width: '100%', padding: '12px', border: '1px solid #e5e5e5', borderRadius: '8px', boxSizing: 'border-box' }}
-              />
-              <input
-                type="email"
-                placeholder="Email Address"
-                style={{ width: '100%', padding: '12px', border: '1px solid #e5e5e5', borderRadius: '8px', boxSizing: 'border-box' }}
-              />
-              <input
-                type="tel"
-                placeholder="Phone Number"
-                style={{ width: '100%', padding: '12px', border: '1px solid #e5e5e5', borderRadius: '8px', boxSizing: 'border-box' }}
-              />
-              <input
-                type="text"
-                placeholder="Annual Income"
-                style={{ width: '100%', padding: '12px', border: '1px solid #e5e5e5', borderRadius: '8px', boxSizing: 'border-box' }}
-              />
-              <select style={{ width: '100%', padding: '12px', border: '1px solid #e5e5e5', borderRadius: '8px', boxSizing: 'border-box' }}>
-                <option>Preferred Move-in Date</option>
-                <option>Immediately</option>
-                <option>Within 2 weeks</option>
-                <option>Within 1 month</option>
-              </select>
-              <button 
-                onClick={() => {
-                  alert('Application submitted!');
-                  setShowApplicationModal(false);
-                }}
-                style={{ width: '100%', backgroundColor: '#3b82f6', color: 'white', padding: '16px', borderRadius: '8px', border: 'none', fontSize: '16px', fontWeight: '600', cursor: 'pointer' }}
-              >
-                Submit Application
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Inspection Modal */}
-      {showInspectionModal && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
-          <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '24px', width: '100%', maxWidth: '448px', margin: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
-              <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'black', margin: 0 }}>Book Inspection</h3>
-              <button 
-                onClick={() => setShowInspectionModal(false)}
-                style={{ color: '#9ca3af', backgroundColor: 'transparent', border: 'none', fontSize: '24px', cursor: 'pointer' }}
-              >
-                ×
-              </button>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <input
-                type="text"
-                placeholder="Your Name"
-                style={{ width: '100%', padding: '12px', border: '1px solid #e5e5e5', borderRadius: '8px', boxSizing: 'border-box' }}
-              />
-              <input
-                type="email"
-                placeholder="Email Address"
-                style={{ width: '100%', padding: '12px', border: '1px solid #e5e5e5', borderRadius: '8px', boxSizing: 'border-box' }}
-              />
-              <select style={{ width: '100%', padding: '12px', border: '1px solid #e5e5e5', borderRadius: '8px', boxSizing: 'border-box' }}>
-                <option>Tomorrow 10:00 AM</option>
-                <option>Tomorrow 2:00 PM</option>
-                <option>Thursday 10:00 AM</option>
-                <option>Friday 11:00 AM</option>
-              </select>
-              <button 
-                onClick={() => {
-                  alert('Inspection booked!');
-                  setShowInspectionModal(false);
-                }}
-                style={{ width: '100%', backgroundColor: '#10b981', color: 'white', padding: '16px', borderRadius: '8px', border: 'none', fontSize: '16px', fontWeight: '600', cursor: 'pointer' }}
-              >
-                Confirm Booking
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

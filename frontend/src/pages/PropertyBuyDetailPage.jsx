@@ -156,92 +156,153 @@ const nearbyData = {
 };
 
 // TODO: Delete after API integration - START
-  const fallbackPropertyData = {
-    property_id: "550e8400-e29b-41d4-a716-446655440001",
+const fallbackPropertyData = {
+    id: 1,
     suburb: "Melbourne",
     address: "456 Collins Street",
     postcode: "3000",
-    listing_type: "buy",
-    property_type: "Apartment",
-    method: "Private Sale",
-    seller: "Premium Real Estate",
-    distance: 0.1,
-    sale_date: "2025-02-15",
+    property_type: "buy",
+    category: "Apartment",
+    company: "Premium Real Estate",
     buy_price: 850000,
     rent_price: null,
-    bedrooms: 3,
-    bathrooms: 2,
+    bedrooms_num: 3,
+    bathrooms_num: 2,
     carspaces: 2,
     landsize: null,
     year_built: 2020,
-    latitude: -37.8136,
-    longitude: 144.9631,
-    image_url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    lat: -37.8136,
+    lng: 144.9631,
     created_at: "2025-01-01T10:00:00Z",
+    updated_at: "2025-01-01T10:00:00Z",
     images: [
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-      "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        id: 2,
+        url: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        id: 3,
+        url: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        id: 4,
+        url: "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+      }
     ],
     description: "Experience luxury living in this stunning 3-bedroom penthouse located in the prestigious heart of Melbourne's CBD. This exceptional residence features premium finishes, floor-to-ceiling windows, and breathtaking city views."
   };
 
   const fallbackSimilarProperties = [
     {
-      property_id: "550e8400-e29b-41d4-a716-446655440002",
+      id: 2,
       suburb: "Southbank",
       address: "100 Southbank Promenade",
       postcode: "3006",
-      listing_type: "buy",
+      property_type: "buy",
+      category: "Apartment",
+      company: "Barry Plant",
       buy_price: 720000,
-      rent_price: null, 
-      bedrooms: 2,
-      bathrooms: 2,
-      property_type: "Apartment",
-      image_url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+      rent_price: null,
+      bedrooms_num: 2,
+      bathrooms_num: 2,
+      carspaces: 1,
+      landsize: null,
+      year_built: 2021,
+      lat: -37.8220,
+      lng: 144.9633,
+      images: [
+        {
+          id: 5,
+          url: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+        }
+      ],
+      created_at: "2025-01-02T10:00:00Z",
+      updated_at: "2025-01-02T10:00:00Z"
     },
     {
-      property_id: "550e8400-e29b-41d4-a716-446655440003",
+      id: 3,
       suburb: "Collingwood",
       address: "789 Smith Street",
       postcode: "3066",
-      listing_type: "buy",
+      property_type: "buy",
+      category: "Townhouse",
+      company: "Hocking Stuart",
       buy_price: 680000,
-      rent_price: null, 
-      bedrooms: 3,
-      bathrooms: 2,
-      property_type: "Townhouse",
-      image_url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+      rent_price: null,
+      bedrooms_num: 3,
+      bathrooms_num: 2,
+      carspaces: 1,
+      landsize: 150,
+      year_built: 2019,
+      lat: -37.8043,
+      lng: 144.9848,
+      images: [
+        {
+          id: 6,
+          url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+        }
+      ],
+      created_at: "2025-01-03T10:00:00Z",
+      updated_at: "2025-01-03T10:00:00Z"
     },
     {
-      property_id: "550e8400-e29b-41d4-a716-446655440004",
+      id: 4,
       suburb: "Richmond",
       address: "123 Bridge Road",
       postcode: "3121",
-      listing_type: "buy",
+      property_type: "buy", 
+      category: "Apartment",
+      company: "Nelson Alexander",
       buy_price: 950000,
-      rent_price: null, 
-      bedrooms: 3,
-      bathrooms: 2,
-      property_type: "Apartment",
-      image_url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+      rent_price: null,
+      bedrooms_num: 3,
+      bathrooms_num: 2,
+      carspaces: 1,
+      landsize: null,
+      year_built: 2015,
+      lat: -37.8197,
+      lng: 144.9864,
+      images: [
+        {
+          id: 7,
+          url: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+        }
+      ],
+      created_at: "2025-01-04T10:00:00Z",
+      updated_at: "2025-01-04T10:00:00Z"
     },
     {
-      property_id: "550e8400-e29b-41d4-a716-446655440005",
+      id: 5,
       suburb: "Carlton",
       address: "456 Lygon Street",
       postcode: "3053",
-      listing_type: "buy",
+      property_type: "buy",
+      category: "Apartment", 
+      company: "RT Edgar",
       buy_price: 780000,
-      rent_price: null, 
-      bedrooms: 2,
-      bathrooms: 1,
-      property_type: "Apartment",
-      image_url: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+      rent_price: null,
+      bedrooms_num: 2,
+      bathrooms_num: 1,
+      carspaces: 0,
+      landsize: null,
+      year_built: 2020,
+      lat: -37.7979,
+      lng: 144.9810,
+      images: [
+        {
+          id: 8,
+          url: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+        }
+      ],
+      created_at: "2025-01-05T10:00:00Z",
+      updated_at: "2025-01-05T10:00:00Z"
     }
   ];
-  // TODO: Delete after API integration - END
+// TODO: Delete after API integration - END
 
 // Helper component for property detail row
 const PropertyDetailRow = ({ icon, label, value }) => (
@@ -305,7 +366,7 @@ const PropertyHeader = ({ property }) => (
     
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
       <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: 'black', margin: 0 }}>
-        {property.property_type} in {property.suburb}
+        {property.category} in {property.suburb}
       </h1>
       <div style={{ width: '24px', height: '24px', backgroundColor: '#10b981', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '12px', fontWeight: 'bold' }}>✓</div>
     </div>
@@ -321,11 +382,11 @@ const PropertyStats = ({ property }) => (
   <div style={{ display: 'flex', alignItems: 'center', gap: '32px', marginBottom: '24px' }}>
     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
       <Bed style={{ width: '16px', height: '16px', color: '#666' }} />
-      <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.bedrooms}</span>
+      <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.bedrooms_num}</span>
     </div>
     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
       <Bath style={{ width: '16px', height: '16px', color: '#666' }} />
-      <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.bathrooms}</span>
+      <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.bathrooms_num}</span>
     </div>
     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
       <Car style={{ width: '16px', height: '16px', color: '#666' }} />
@@ -339,17 +400,8 @@ const PropertyStats = ({ property }) => (
     )}
     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
       <Home style={{ width: '16px', height: '16px', color: '#666' }} />
-      <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.property_type}</span>
+      <span style={{ fontSize: '24px', fontWeight: '600', color: 'black' }}>{property.category}</span>
     </div>
-  </div>
-);
-
-// Property summary component
-const PropertySummary = ({ property }) => (
-  <div style={{ display: 'flex', gap: '24px', fontSize: '14px', color: '#666', marginBottom: '32px', flexWrap: 'wrap' }}>
-    <span><strong>Distance from CBD:</strong> {property.distance}km</span>
-    <span><strong>Sale Method:</strong> {property.method}</span>
-    <span><strong>Agent:</strong> {property.seller}</span>
   </div>
 );
 
@@ -404,47 +456,46 @@ const PropertyBuyDetailPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-  // Use fallback data temporarily, no API call
-  setProperty(fallbackPropertyData);
-  setSimilarProperties(fallbackSimilarProperties);
-  setLoading(false);
-  
-  // TODO: Delete above lines and uncomment code below when backend is ready
-  /*
-  const loadPropertyDetails = async () => {
-    setLoading(true);
-    try {
-      const propertyId = window.location.pathname.split('/').pop();
-      
-      const response = await fetch(`/api/properties/buy/${propertyId}`);
-      const data = await response.json();
-      
-      if (response.ok) {
-        setProperty(data.property);
-        setSimilarProperties(data.similarProperties || []);
-      } else {
-        console.error('Failed to load property details');
+    // Use fallback data temporarily, no API call
+    setProperty(fallbackPropertyData);
+    setSimilarProperties(fallbackSimilarProperties);
+    setLoading(false);
+    
+    // TODO: Delete above lines and uncomment code below when backend is ready
+    /*
+    const loadPropertyDetails = async () => {
+      setLoading(true);
+      try {
+        const propertyId = window.location.pathname.split('/').pop();
+        
+        const response = await fetch(`/api/properties/buy/${propertyId}`);
+        const data = await response.json();
+        
+        if (response.ok) {
+          setProperty(data.property);
+          setSimilarProperties(data.similarProperties || []);
+        } else {
+          console.error('Failed to load property details');
+          setProperty(fallbackPropertyData);
+          setSimilarProperties(fallbackSimilarProperties);
+        }
+      } catch (error) {
+        console.error('Failed to load property details:', error);
         setProperty(fallbackPropertyData);
         setSimilarProperties(fallbackSimilarProperties);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Failed to load property details:', error);
-      setProperty(fallbackPropertyData);
-      setSimilarProperties(fallbackSimilarProperties);
-    } finally {
-      setLoading(false);
-    }
-  };
-  loadPropertyDetails();
-  */
-}, []);
-
+    };
+    loadPropertyDetails();
+    */
+  }, []);
 
     // Share functionality
   const handleShare = async () => {
     const shareData = {
-      title: `${property.property_type} in ${property.suburb}`,
-      text: `Check out this ${property.property_type} for $${property.buy_price.toLocaleString()}`,
+      title: `${property.category} in ${property.suburb}`,
+      text: `Check out this ${property.category} for $${property.buy_price.toLocaleString()}`,
       url: window.location.href
     };
 
@@ -459,8 +510,6 @@ const PropertyBuyDetailPage = () => {
       alert('Link copied to clipboard!');
     }
   };
-
-  
 
   const currentPrice = property.buy_price;
   const annualGrowthRate = 0.08;
@@ -596,7 +645,7 @@ const PropertyBuyDetailPage = () => {
           <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '16px', height: '500px', marginBottom: '48px' }}>
             <div style={{ position: 'relative', height: '100%' }}>
               <img 
-                src={property.images[0]} 
+                src={property.images[0]?.url} 
                 alt={`${property.property_type} in ${property.suburb}`}
                 style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '12px' }}
               />
@@ -605,7 +654,7 @@ const PropertyBuyDetailPage = () => {
               {property.images.slice(1, 4).map((img, index) => (
                 <div key={index} style={{ position: 'relative' }}>
                   <img 
-                    src={img} 
+                    src={img.url}
                     alt=""
                     style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
                   />
@@ -630,7 +679,6 @@ const PropertyBuyDetailPage = () => {
             <div>
               <PropertyHeader property={property} />
               <PropertyStats property={property} />
-              <PropertySummary property={property} />
 
               {/* Property Details */}
               <div style={{ backgroundColor: 'white', border: '1px solid #e5e5e5', borderRadius: '12px', padding: '24px', marginBottom: '32px' }}>
@@ -640,7 +688,7 @@ const PropertyBuyDetailPage = () => {
                   <PropertyDetailRow 
                     icon={<PropertyIcon />} 
                     label="Property Type" 
-                    value={property.property_type} 
+                    value={property.category} 
                   />
                   <PropertyDetailRow 
                     icon={<LandIcon />} 
@@ -651,21 +699,6 @@ const PropertyBuyDetailPage = () => {
                     icon={<CalendarIcon />} 
                     label="Built Year" 
                     value={property.year_built} 
-                  />
-                  <PropertyDetailRow 
-                    icon={<ClockIcon />} 
-                    label="Sale Method" 
-                    value={property.method} 
-                  />
-                  <PropertyDetailRow 
-                    icon={<ClockIcon />} 
-                    label="Settlement" 
-                    value={formatSettlementDate(property.sale_date)} 
-                  />
-                  <PropertyDetailRow 
-                    icon={<LocationIcon />} 
-                    label="Distance from CBD" 
-                    value={`${property.distance}km`} 
                   />
                 </div>
               </div>
@@ -820,7 +853,7 @@ const PropertyBuyDetailPage = () => {
                 
                 <div style={{ backgroundColor: '#f9fafb', borderRadius: '12px', height: '400px', marginBottom: '16px', position: 'relative', overflow: 'hidden' }}>
                   <iframe
-                    src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.0169!2d${property.longitude}!3d${property.latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577ca2f8c89a90!2s${encodeURIComponent(property.address)}%2C%20${encodeURIComponent(property.suburb)}%20VIC%20${property.postcode}!5e0!3m2!1sen!2sau!4v1234567890`}
+                    src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.0169!2d${property.lng}!3d${property.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf577ca2f8c89a90!2s${encodeURIComponent(property.address)}%2C%20${encodeURIComponent(property.suburb)}%20VIC%20${property.postcode}!5e0!3m2!1sen!2sau!4v1234567890`}
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
@@ -864,12 +897,12 @@ const PropertyBuyDetailPage = () => {
                 <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'black', marginBottom: '24px' }}>Similar Properties</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
                   {similarProperties  
-                    .filter(prop => prop.listing_type === property.listing_type)
+                    .filter(prop => prop.property_type === property.property_type)
                     .map(prop => (
                       <PropertyCard 
-                        key={prop.property_id} 
+                        key={prop.id} 
                         property={prop} 
-                        onView={(property) => window.location.href = `/${property.listing_type}/${property.property_id}`}
+                        onView={(property) => window.location.href = `/${property.property_type}/${property.id}`}
                       />
                   ))}
                 </div>
@@ -941,7 +974,7 @@ const PropertyBuyDetailPage = () => {
               />
               <div>
                 <h4 style={{ fontSize: '18px', fontWeight: '600', color: 'black', margin: 0 }}>Michael Chen</h4>
-                <p style={{ color: '#666', margin: 0 }}>{property.seller}</p>
+                <p style={{ color: '#666', margin: 0 }}>{property.company}</p>
                 <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>4.9 Rating (89 reviews)</p>
               </div>
             </div>
