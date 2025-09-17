@@ -3,7 +3,6 @@ import Logo from '../components/logo';
 import UserMenu from '../components/UserMenu';
 
 import FavoriteProperties from '../components/FavoriteProperties';
-import PropertyInspections from '../components/PropertyInspections';
 import UserProfile from '../components/UserProfile';
 import { 
   Heart, 

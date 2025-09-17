@@ -128,7 +128,7 @@ const PropertyCard = ({
               color: isSaved ? 'white' : '#6b7280',
               lineHeight: 1
             }}>
-              {isSaved ? 'â™? : 'â™?}
+              {isSaved ? 'â™¥' : 'â™¡'}
             </span>
           </button>
         )}
