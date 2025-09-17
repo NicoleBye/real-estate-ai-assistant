@@ -215,7 +215,7 @@ const AgentDashboard = () => {
           </div>
           
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px', color: '#6b7280' }}>
-            <span>{property.views} views â€¢ {property.inquiries} inquiries</span>
+            <span>{property.views} views â€?{property.inquiries} inquiries</span>
           </div>
         </div>
       </div>

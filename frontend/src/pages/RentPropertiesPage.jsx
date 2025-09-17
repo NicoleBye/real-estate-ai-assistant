@@ -314,7 +314,7 @@ const RentPropertiesPage = () => {
           cursor: 'pointer',
           color: '#374151',
           lineHeight: '1'
-        }}>âˆ’</button>
+        }}>âˆ?/button>
       </div>
       
       <div style={{ position: 'absolute', top: '16px', left: '16px', backgroundColor: 'rgba(255, 255, 255, 0.9)', padding: '8px 12px', borderRadius: '6px', fontSize: '14px', fontWeight: '500', color: '#374151' }}>
@@ -600,7 +600,7 @@ const RentPropertiesPage = () => {
                     }}
                   />
                 </div>
-                <span style={{ color: '#9ca3af', fontSize: '14px', marginTop: '16px' }}>â€”</span>
+                <span style={{ color: '#9ca3af', fontSize: '14px', marginTop: '16px' }}>â€?/span>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <span style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>Max</span>
                   <input 

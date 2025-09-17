@@ -929,7 +929,7 @@ const Homepage = () => {
                                 fontWeight: '500',
                                 cursor: 'pointer'
                               }}>
-                                Read more â†’
+                                Read more â†?
                               </span>
                             </div>
                           </div>

@@ -273,7 +273,7 @@ const PropertyInspections = () => {
             Property Inspections
           </h1>
           <p style={{ color: '#6b7280', margin: 0 }}>
-            {upcomingInspections.length} confirmed â€¢ {pendingInspections.length} pending
+            {upcomingInspections.length} confirmed â€?{pendingInspections.length} pending
           </p>
         </div>
         

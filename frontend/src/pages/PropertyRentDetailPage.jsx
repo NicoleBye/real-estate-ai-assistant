@@ -98,13 +98,13 @@ const headerData = {
     {
       type: 'save',
       text: 'Save',
-      icon: 'â™¡',
+      icon: 'â™?,
       favorited: false
     },
     {
       type: 'share', 
       text: 'Share',
-      icon: 'â†—'
+      icon: 'â†?
     }
   ]
 };
@@ -353,7 +353,7 @@ const PropertyHeader = ({ property }) => (
       <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: 'black', margin: 0 }}>
         {property.category} in {property.suburb}
       </h1>
-      <div style={{ width: '24px', height: '24px', backgroundColor: '#10b981', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '12px', fontWeight: 'bold' }}>âœ“</div>
+      <div style={{ width: '24px', height: '24px', backgroundColor: '#10b981', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '12px', fontWeight: 'bold' }}>âœ?/div>
     </div>
     
     <p style={{ color: '#666', marginBottom: '24px', fontSize: '16px' }}>
@@ -515,14 +515,14 @@ const PropertyRentDetailPage = () => {
 
                 <HeaderButton
                   text="Save"
-                  icon={isFavorited ? 'â™¥' : 'â™¡'}
+                  icon={isFavorited ? 'â™? : 'â™?}
                   active={isFavorited}
                   onClick={() => setIsFavorited(!isFavorited)}
                 />
 
                 <HeaderButton
                   text="Share"
-                  icon="â†—"
+                  icon="â†?
                   active={false}
                   onClick={handleShare}
                 />

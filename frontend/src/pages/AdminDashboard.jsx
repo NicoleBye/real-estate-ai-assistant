@@ -317,7 +317,7 @@ const AdminDashboard = () => {
         </td>
         <td style={{ padding: '16px' }}>
           <div style={{ fontSize: '13px', color: '#6b7280' }}>
-            <div>{property.bedrooms}bed â€¢ {property.bathrooms}bath â€¢ {property.carspaces}car</div>
+            <div>{property.bedrooms}bed â€?{property.bathrooms}bath â€?{property.carspaces}car</div>
           </div>
         </td>
         <td style={{ padding: '16px' }}>
@@ -950,7 +950,7 @@ const AdminDashboard = () => {
                               {property.address}
                             </p>
                             <p style={{ fontSize: '12px', color: '#6b7280', margin: 0 }}>
-                              {property.views} views â€¢ {property.inquiries} inquiries
+                              {property.views} views â€?{property.inquiries} inquiries
                             </p>
                           </div>
                           <span style={{

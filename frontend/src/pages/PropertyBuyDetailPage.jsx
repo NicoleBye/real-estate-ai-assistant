@@ -447,6 +447,7 @@ const PropertyBuyDetailPage = () => {
   const [activeLocationTab, setActiveLocationTab] = useState('transportation');
   const [isFavorited, setIsFavorited] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
+  const [showBookingModal, setShowBookingModal] = useState(false);
   const [showMortgageModal, setShowMortgageModal] = useState(false);
   const [loanAmount, setLoanAmount] = useState(720000);
   const [interestRate, setInterestRate] = useState(6.5);
@@ -926,6 +927,13 @@ const PropertyBuyDetailPage = () => {
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>               
                   <button 
+                    onClick={() => setShowBookingModal(true)}
+                    style={{ width: '100%', border: '1px solid #3b82f6', color: '#3b82f6', padding: '16px', borderRadius: '8px', fontSize: '16px', fontWeight: '600', backgroundColor: 'white', cursor: 'pointer' }}
+                  >
+                    Book Inspection
+                  </button>
+
+                  <button 
                     onClick={() => setShowMortgageModal(true)}
                     style={{ width: '100%', border: '1px solid #10b981', color: '#10b981', padding: '16px', borderRadius: '8px', fontSize: '16px', fontWeight: '600', backgroundColor: 'white', cursor: 'pointer' }}
                   >
@@ -985,6 +993,50 @@ const PropertyBuyDetailPage = () => {
           </div>
         </div>
       )}
+
+      {/* Booking Modal */}
+      {showBookingModal && (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
+          <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '24px', width: '100%', maxWidth: '448px', margin: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+              <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'black', margin: 0 }}>Book Inspection</h3>
+              <button 
+                onClick={() => setShowBookingModal(false)}
+                style={{ color: '#9ca3af', backgroundColor: 'transparent', border: 'none', fontSize: '24px', cursor: 'pointer' }}
+              >
+                ×
+              </button>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <input
+                type="text"
+                placeholder="Your Name"
+                style={{ width: '100%', padding: '12px', border: '1px solid #e5e5e5', borderRadius: '8px', boxSizing: 'border-box' }}
+              />
+              <input
+                type="email"
+                placeholder="Email Address"
+                style={{ width: '100%', padding: '12px', border: '1px solid #e5e5e5', borderRadius: '8px', boxSizing: 'border-box' }}
+              />
+              <select style={{ width: '100%', padding: '12px', border: '1px solid #e5e5e5', borderRadius: '8px', boxSizing: 'border-box' }}>
+                <option>Tomorrow 10:00 AM</option>
+                <option>Tomorrow 2:00 PM</option>
+                <option>Thursday 10:00 AM</option>
+              </select>
+              <button 
+                onClick={() => {
+                  alert('Booking confirmed!');
+                  setShowBookingModal(false);
+                }}
+                style={{ width: '100%', backgroundColor: '#fbbf24', color: 'black', padding: '16px', borderRadius: '8px', border: 'none', fontSize: '16px', fontWeight: '600', cursor: 'pointer' }}
+              >
+                Confirm Booking
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
 
       {/* Mortgage Modal */}
       {showMortgageModal && (
