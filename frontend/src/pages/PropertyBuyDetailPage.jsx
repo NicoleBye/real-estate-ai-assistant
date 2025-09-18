@@ -175,6 +175,13 @@ const fallbackPropertyData = {
     lng: 144.9631,
     created_at: "2025-01-01T10:00:00Z",
     updated_at: "2025-01-01T10:00:00Z",
+    agent: {
+    id: 1,
+    name: "Michael Chen",
+    phone: "+61 3 9000 1567",
+    email: "michael.chen@premiumrealestate.com",
+    photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
+    },
     images: [
       {
         id: 1,
@@ -446,8 +453,6 @@ const PropertyBuyDetailPage = () => {
 
   const [activeLocationTab, setActiveLocationTab] = useState('transportation');
   const [isFavorited, setIsFavorited] = useState(false);
-  const [showContactModal, setShowContactModal] = useState(false);
-  const [showBookingModal, setShowBookingModal] = useState(false);
   const [showMortgageModal, setShowMortgageModal] = useState(false);
   const [loanAmount, setLoanAmount] = useState(720000);
   const [interestRate, setInterestRate] = useState(6.5);
@@ -890,23 +895,6 @@ const PropertyBuyDetailPage = () => {
                 {/* Tab Content */}
                 <TabContent items={nearbyData[activeLocationTab]} />
               </div>
-              
-
-              {/* Similar Properties */}
-              <div style={{ marginTop: '48px' }}>
-                <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'black', marginBottom: '24px' }}>Similar Properties</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
-                  {similarProperties  
-                    .filter(prop => prop.property_type === property.property_type)
-                    .map(prop => (
-                      <PropertyCard 
-                        key={prop.id} 
-                        property={prop} 
-                        onView={(property) => window.location.href = `/${property.property_type}/${property.id}`}
-                      />
-                  ))}
-                </div>
-              </div>
             </div>
 
             {/* Sidebar */}
@@ -926,12 +914,6 @@ const PropertyBuyDetailPage = () => {
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>               
-                  <button 
-                    onClick={() => setShowBookingModal(true)}
-                    style={{ width: '100%', border: '1px solid #3b82f6', color: '#3b82f6', padding: '16px', borderRadius: '8px', fontSize: '16px', fontWeight: '600', backgroundColor: 'white', cursor: 'pointer' }}
-                  >
-                    Book Inspection
-                  </button>
 
                   <button 
                     onClick={() => setShowMortgageModal(true)}
@@ -940,103 +922,61 @@ const PropertyBuyDetailPage = () => {
                     Mortgage Calculator
                   </button>
 
-                  <button 
-                    onClick={() => setShowContactModal(true)}
-                    style={{ width: '100%', border: '1px solid #6b7280', color: '#374151', padding: '16px', borderRadius: '8px', fontSize: '16px', fontWeight: '600', backgroundColor: 'white', cursor: 'pointer' }}
-                  >
-                    Contact Agent
-                  </button>
+                  <div style={{ marginTop: '24px' }}>
+                    <h4 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px', color: 'black' }}>
+                      Contact Agent
+                    </h4>
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                      <img 
+                        src={property.agent?.photo}
+                        alt="Agent"
+                        style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }}
+                      />
+                      <div>
+                        <div style={{ fontWeight: '600', color: 'black' }}>{property.agent?.name}</div>
+                        <div style={{ fontSize: '14px', color: '#666' }}>{property.company}</div>
+                      </div>
+                    </div>
+
+                    <a 
+                      href={`tel:${property.agent?.phone}`}
+                      style={{ 
+                        display: 'block',
+                        width: '100%',
+                        backgroundColor: '#3b82f6', 
+                        color: 'white', 
+                        padding: '12px 16px', 
+                        borderRadius: '8px', 
+                        textDecoration: 'none',
+                        textAlign: 'center',
+                        fontWeight: '600'
+                      }}
+                    >
+                      Call {property.agent?.phone}
+                    </a>
+                  </div>
                 </div>
+              </div>
+            </div>
+            {/* Similar Properties */}
+            <div style={{ gridColumn: '1 / -1', marginTop: '48px' }}>
+              <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'black', marginBottom: '24px' }}>Similar Properties</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}>
+                {similarProperties  
+                  .filter(prop => prop.property_type === property.property_type)
+                  .map(prop => (
+                    <PropertyCard 
+                      key={prop.id} 
+                      property={prop} 
+                      onView={(property) => window.location.href = `/${property.property_type}/${property.id}`}
+                    />
+                ))}
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Contact Modal */}
-      {showContactModal && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
-          <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '24px', width: '100%', maxWidth: '448px', margin: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
-              <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'black', margin: 0 }}>Contact Agent</h3>
-              <button 
-                onClick={() => setShowContactModal(false)}
-                style={{ color: '#9ca3af', backgroundColor: 'transparent', border: 'none', fontSize: '24px', cursor: 'pointer' }}
-              >
-                ×
-              </button>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
-              <img 
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
-                alt="Agent"
-                style={{ width: '64px', height: '64px', borderRadius: '50%', objectFit: 'cover' }}
-              />
-              <div>
-                <h4 style={{ fontSize: '18px', fontWeight: '600', color: 'black', margin: 0 }}>Michael Chen</h4>
-                <p style={{ color: '#666', margin: 0 }}>{property.company}</p>
-                <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>4.9 Rating (89 reviews)</p>
-              </div>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <a 
-                href="tel:+61390001567"
-                style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '16px', border: '1px solid #e5e5e5', borderRadius: '8px', textDecoration: 'none', color: 'inherit' }}
-              >
-                <span>📞</span>
-                <div>
-                  <div style={{ fontWeight: '500', color: 'black' }}>Call Now</div>
-                  <div style={{ fontSize: '14px', color: '#666' }}>+61 3 9000 1567</div>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Booking Modal */}
-      {showBookingModal && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
-          <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '24px', width: '100%', maxWidth: '448px', margin: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
-              <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'black', margin: 0 }}>Book Inspection</h3>
-              <button 
-                onClick={() => setShowBookingModal(false)}
-                style={{ color: '#9ca3af', backgroundColor: 'transparent', border: 'none', fontSize: '24px', cursor: 'pointer' }}
-              >
-                ×
-              </button>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <input
-                type="text"
-                placeholder="Your Name"
-                style={{ width: '100%', padding: '12px', border: '1px solid #e5e5e5', borderRadius: '8px', boxSizing: 'border-box' }}
-              />
-              <input
-                type="email"
-                placeholder="Email Address"
-                style={{ width: '100%', padding: '12px', border: '1px solid #e5e5e5', borderRadius: '8px', boxSizing: 'border-box' }}
-              />
-              <select style={{ width: '100%', padding: '12px', border: '1px solid #e5e5e5', borderRadius: '8px', boxSizing: 'border-box' }}>
-                <option>Tomorrow 10:00 AM</option>
-                <option>Tomorrow 2:00 PM</option>
-                <option>Thursday 10:00 AM</option>
-              </select>
-              <button 
-                onClick={() => {
-                  alert('Booking confirmed!');
-                  setShowBookingModal(false);
-                }}
-                style={{ width: '100%', backgroundColor: '#fbbf24', color: 'black', padding: '16px', borderRadius: '8px', border: 'none', fontSize: '16px', fontWeight: '600', cursor: 'pointer' }}
-              >
-                Confirm Booking
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
 
       {/* Mortgage Modal */}
       {showMortgageModal && (
