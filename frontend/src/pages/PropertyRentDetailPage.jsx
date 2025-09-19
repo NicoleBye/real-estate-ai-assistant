@@ -655,23 +655,6 @@ const PropertyRentDetailPage = () => {
 
                 {/* Tab Content */}
                 <TabContent items={nearbyData[activeLocationTab]} />
-
-              </div>
-
-              {/* Similar Properties */}
-              <div style={{ marginTop: '48px' }}>
-                <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'black', marginBottom: '24px' }}>Similar Properties</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
-                  {similarProperties  
-                    .filter(prop => prop.property_type === property.property_type)
-                    .map(prop => (
-                      <PropertyCard 
-                        key={prop.id} 
-                        property={prop} 
-                        onView={(property) => window.location.href = `/${property.property_type}/${property.id}`}
-                      />
-                  ))}
-                </div>
               </div>
             </div>
 
@@ -715,6 +698,21 @@ const PropertyRentDetailPage = () => {
                   </a>
                 </div>
                 
+              </div>
+            </div>
+            {/* Similar Properties */}
+            <div style={{ gridColumn: '1 / -1', marginTop: '48px' }}>
+              <h3 style={{ fontSize: '20px', fontWeight: '600', color: 'black', marginBottom: '24px' }}>Similar Properties</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+                {similarProperties  
+                  .filter(prop => prop.property_type === property.property_type)
+                  .map(prop => (
+                    <PropertyCard 
+                      key={prop.id} 
+                      property={prop} 
+                      onView={(property) => window.location.href = `/${property.property_type}/${property.id}`}
+                    />
+                ))}
               </div>
             </div>
 
