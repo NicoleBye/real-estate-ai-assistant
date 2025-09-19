@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { 
   User, 
   Heart, 
-  Calendar, 
   Settings, 
   LogOut
 } from 'lucide-react';
@@ -93,7 +92,7 @@ const UserMenu = ({ user, onLogin, onSignup, onLogout }) => {
           <User style={{ width: '20px', height: '20px', color: 'white' }} />
         </div>
         <span style={{ color: '#111827', fontWeight: '500', fontSize: '14px' }}>
-          {user.name}
+          {user.username}
         </span>
       </div>
 
@@ -137,7 +136,7 @@ const UserMenu = ({ user, onLogin, onSignup, onLogout }) => {
                   color: '#111827', 
                   margin: '0 0 2px 0' 
                 }}>
-                  {user.name}
+                  {user.username}
                 </p>
                 <p style={{ 
                   fontSize: '12px', 
@@ -158,14 +157,6 @@ const UserMenu = ({ user, onLogin, onSignup, onLogout }) => {
               onClick={() => {
                 setIsOpen(false);
                 window.location.href = '/user?tab=favorites';
-              }}
-            />
-            <MenuItem 
-              icon={<Calendar />} 
-              text="Inspections" 
-              onClick={() => {
-                setIsOpen(false);
-                window.location.href = '/user?tab=inspections';
               }}
             />
             <MenuItem 

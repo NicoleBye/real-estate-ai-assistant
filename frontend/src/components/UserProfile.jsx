@@ -3,7 +3,7 @@ import { Camera, User, Mail, Phone, Calendar } from 'lucide-react';
 
 const UserProfile = ({ user, onUpdateUser }) => {
   const [formData, setFormData] = useState({
-    name: user.name,
+    name: user.username,
     email: user.email,
     phone: user.phone
   });
@@ -33,7 +33,7 @@ const UserProfile = ({ user, onUpdateUser }) => {
 
   const handleCancel = () => {
     setFormData({
-      name: user.name,
+      name: user.username,
       email: user.email,
       phone: user.phone
     });
@@ -87,7 +87,7 @@ const UserProfile = ({ user, onUpdateUser }) => {
                 <div style={{ position: 'relative' }}>
                   <img 
                     src={user.avatar}
-                    alt={user.name}
+                    alt={user.username}
                     style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #e5e7eb' }}
                   />
                   {isEditing && (

@@ -16,38 +16,60 @@ import {
 // TODO: Delete after API integration - START
 const fallbackFavoriteProperties = [
   {
-    property_id: "550e8400-e29b-41d4-a716-446655440001",
+    id: "550e8400-e29b-41d4-a716-446655440001",
     suburb: "Bondi Beach",
     address: "123 Ocean Drive",
     postcode: "2026",
-    listing_type: "buy",
-    property_type: "House",
-    seller: "Elite Realty",
-    distance: 12.5,
+    property_type: "buy",
+    category: "House",
+    company: "Elite Realty",
+    created_at: "2025-01-01T10:00:00Z",
+    updated_at: "2025-01-01T10:00:00Z",
     buy_price: 2850000,
     rent_price: null,
-    bedrooms: 4,
-    bathrooms: 3,
+    bedrooms_num: 4,
+    bathrooms_num: 3,
     carspaces: 2,
-    price_alert: true,
-    saved_date: "2025-01-15T10:00:00Z"
+    landsize: 450,
+    year_built: 2020,
+    lat: -33.8915,
+    lng: 151.2767,
+    images: [
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+      }
+    ],
+    color: '#3b82f6',
+    match_score: 95
   },
   {
-    property_id: "550e8400-e29b-41d4-a716-446655440002",
+    id: "550e8400-e29b-41d4-a716-446655440002",
     suburb: "Sydney CBD",
     address: "456 George Street",
     postcode: "2000",
-    listing_type: "rent",
-    property_type: "Apartment",
-    seller: "City Properties",
-    distance: 0.5,
+    property_type: "rent",
+    category: "Apartment",
+    company: "City Properties",
+    created_at: "2025-01-01T10:00:00Z",
+    updated_at: "2025-01-01T10:00:00Z",
     buy_price: null,
     rent_price: 800,
-    bedrooms: 2,
-    bathrooms: 2,
+    bedrooms_num: 2,
+    bathrooms_num: 2,
     carspaces: 1,
-    price_alert: false,
-    saved_date: "2025-01-20T10:00:00Z"
+    landsize: 180,
+    year_built: 2019,
+    lat: -33.8886,
+    lng: 151.2094,
+    images: [
+      {
+        id: 1,
+        url: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      }
+    ],
+    color: '#ef4444',
+    match_score: 78
   }
 ];
 // TODO: Delete after API integration - END
@@ -86,10 +108,10 @@ const FavoriteProperties = () => {
   };
   */
 
-  const handleRemoveProperty = (propertyId) => {
+  const handleRemoveProperty = (id) => {
     // TODO: Delete below direct state update and uncomment API call when backend is ready
     setFavoriteProperties(prev => 
-      prev.filter(property => property.property_id !== propertyId)
+      prev.filter(property => property.id !== id)
     );
     
     /*
@@ -104,7 +126,7 @@ const FavoriteProperties = () => {
         }
         
         setFavoriteProperties(prev => 
-          prev.filter(property => property.property_id !== propertyId)
+          prev.filter(property => property.id !== propertyId)
         );
       } catch (error) {
         console.error('Failed to remove favorite:', error);
@@ -196,7 +218,7 @@ const FavoriteProperties = () => {
           <button 
             onClick={(e) => {
               e.stopPropagation();
-              onRemove(property.property_id);
+              onRemove(property.id);
             }}
             style={{
               backgroundColor: 'rgba(239, 68, 68, 0.9)',
@@ -355,7 +377,7 @@ const FavoriteProperties = () => {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '24px' }}>
           {filteredProperties.map(property => (
             <PropertyCard 
-              key={property.property_id} 
+              key={property.id} 
               property={property} 
               onRemove={handleRemoveProperty}
             />
